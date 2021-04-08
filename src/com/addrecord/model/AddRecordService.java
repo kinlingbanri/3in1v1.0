@@ -32,6 +32,10 @@ public class AddRecordService {
 		return dao.getListByUsername(memVO);
 	}
 	
+	public List<AddRecordVO> getAfter30(MemVO memVO){
+		return dao.getAfter30(memVO);
+	}
+	
 	public List<AddRecordVO>getAll(){
 		return dao.getAll();
 	}

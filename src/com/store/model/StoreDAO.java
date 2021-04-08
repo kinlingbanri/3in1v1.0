@@ -12,8 +12,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.mem.model.MemVO;
-
 public class StoreDAO implements StoreDAO_interface{
 	
 	// 一個應用程式中,針對一個資料庫 ,共用一個DataSource即可

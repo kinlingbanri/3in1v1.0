@@ -3,10 +3,6 @@ package utils.singlenetty;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mem.model.MemJDBCClass;
-import com.mem.model.MemService;
-import com.mem.model.MemVO;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -14,7 +10,6 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 	
 	static final List<Channel> channels = new ArrayList<Channel>();
-	private MemJDBCClass memJDBCClass;
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {

@@ -2,8 +2,6 @@ package com.mem.model;
 
 import java.util.List;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-
 public class MemService {
 	private MemDAO_interface dao;
 	

@@ -59,6 +59,12 @@ public class AddRecordVO implements java.io.Serializable  {
 	
 	@Column(name = "cardid")
 	private String cardid;
+	
+	@Column(name = "storename")
+	private String storename;
+	
+	@Column(name = "city")
+	private String city;
 
 	public int getId() {
 		return id;
@@ -164,6 +170,20 @@ public class AddRecordVO implements java.io.Serializable  {
 		this.cardid = cardid;
 	}
 
-	
+	public String getStorename() {
+		return storename;
+	}
+
+	public void setStorename(String storename) {
+		this.storename = storename;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
 	
 }

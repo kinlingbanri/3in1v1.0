@@ -12,50 +12,36 @@
     
 <%
 	/*****	Online *****/
-// 	MemVO memVO = (MemVO) session.getAttribute("memVO");
-// 	System.out.println("Session username : " + memVO.getUsername());
-// 	Object objectDID = session.getAttribute("DID");
-// 	String DID = objectDID.toString();
-// 	System.out.println("Modify.jsp session DID : " +DID );
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
+	System.out.println("Session username : " + memVO.getUsername());
+	Object objectDID = session.getAttribute("DID");
+	String DID = objectDID.toString();
+	System.out.println("AddRecord.jsp session DID : " +DID );
 	
 	/*****	Test *****/
-	String DID = "12323";
-	System.out.println("Session DID : " + DID);
-	MemService memService = new MemService();
-	MemVO memVO = memService.getOneMem("Kim");
+// 	String DID = "12323";
+// 	System.out.println("Session DID : " + DID);
+// 	MemService memService = new MemService();
+// 	MemVO memVO = memService.getOneMem("Kim");
 	
 	String username = memVO.getUsername();
 	String email = memVO.getEmail();
 	String password = memVO.getPassword();
 	int point = memVO.getPoint();
 	
-
-	
 	// Query By Username
 	AddRecordService addRecordService = new AddRecordService();
-	List<AddRecordVO> addRecords = addRecordService.getListByUsername(memVO);
+	List<AddRecordVO> addRecords = addRecordService.getAfter30(memVO);
 	System.out.println("addRecords : " + addRecords.size());
 	for (AddRecordVO addRecord : addRecords) {
-		System.out.print(addRecord.getId() + ",");
 		System.out.print(addRecord.getStoredatetime() + ",");
-		System.out.print(addRecord.getCoin10() + ",");
-		System.out.print(addRecord.getCoin50() + ",");
-		System.out.print(addRecord.getPaper100() + ",");
-		System.out.print(addRecord.getPaper500() + ",");
-		System.out.print(addRecord.getPaper1000() + ",");
 		System.out.print(addRecord.getPoint() + ",");
-		System.out.print(addRecord.getErrorcode() + ",");
-		System.out.print(addRecord.getUsername() + ",");
-		System.out.print(addRecord.getDeviceid() + ",");
-		System.out.print(addRecord.getStoreid() + ",");
-		System.out.println(addRecord.getCardid());
+		System.out.print(addRecord.getCity() + ",");
+		System.out.println(addRecord.getStorename());
 	}	
 	System.out.println("Record.jsp !");
 	
 	request.setAttribute("addRecords",addRecords);
-	
-	
-	StoreService storeService = new StoreService();
 	
 %>
 
@@ -289,7 +275,7 @@
 						<th scope="row" style="text-align: center;">${id.count}</th>
 			      <td><fmt:formatDate value="${addRecord.storedatetime }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 			      <td style="text-align: center;">${addRecord.point }</td>
-			      <td>${stroeservice.getOneStore(addRecord.getStoreId).getDistrict() }</td>
+			      <td>${addRecord.city }${addRecord.storename }</td>
 			    </tr>
 	   		</c:forEach>
 		  </tbody>

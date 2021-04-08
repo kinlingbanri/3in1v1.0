@@ -20,6 +20,8 @@
         <property name="deviceid" column="deviceid"/>
         <property name="storeid" column="storeid"/>
         <property name="cardid" column="cardid"/>
+        <property name="name" column="name"/>
+        <property name="city" column="city"/>
 
     </class>
 </hibernate-mapping>

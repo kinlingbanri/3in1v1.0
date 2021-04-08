@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-import com.mem.model.MemDAO;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
