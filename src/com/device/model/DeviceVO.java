@@ -9,7 +9,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "device")
-public class DeviceVO {
+public class DeviceVO  implements java.io.Serializable  {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "did")

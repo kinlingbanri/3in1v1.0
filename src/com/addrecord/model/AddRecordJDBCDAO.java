@@ -285,13 +285,10 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 		PreparedStatement pstmt = null;
 
 		try {
-
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(DELETE_STMT);
-
 			pstmt.setInt(1, addRecordVO.getId());
-
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
@@ -399,7 +396,6 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 		ResultSet rs = null;
 		
 		try {
-
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_ALL_STMT);
@@ -470,7 +466,6 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 		ResultSet rs = null;
 		
 		try {
-
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_BYUSERNAME_STMT);
