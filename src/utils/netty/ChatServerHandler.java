@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.catalina.Pipeline;
 
+import com.addrecord.model.AddRecordService;
+import com.device.model.DeviceVO;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
@@ -14,8 +16,6 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
-	
-	private MemService memService = new MemService();
 
 	// List of connected client channels.
 	static final List<Channel> channels = new ArrayList<Channel>();
@@ -27,6 +27,8 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
 		System.out.println("Client joined - " + ctx);
+		System.out.println("ID : " + ctx.channel().id().asShortText());
+		System.out.println("Address : " + ctx.channel().remoteAddress().toString().substring(1, 16));
 		channels.add(ctx.channel());
 	}
 	

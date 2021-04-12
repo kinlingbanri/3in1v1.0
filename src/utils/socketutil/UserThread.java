@@ -5,10 +5,10 @@ import java.net.*;
 
 public class UserThread extends Thread {
     private Socket socket;
-    private ChatServer server;
+    private ChatServer1 server;
     private PrintWriter writer;
  
-    public UserThread(Socket socket, ChatServer server) {
+    public UserThread(Socket socket, ChatServer1 server) {
         this.socket = socket;
         this.server = server;
     }

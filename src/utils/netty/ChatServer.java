@@ -8,6 +8,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpRequestEncoder;
+import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
@@ -34,9 +37,15 @@ public class ChatServer {
 							 */
 							p.addLast(new StringDecoder());
 							p.addLast(new StringEncoder());
+							
+							//add HttpServer
+							p.addLast(new HttpServerCodec());
+							p.addLast("httpAggregator", new HttpObjectAggregator(512*1024));
+							p.addLast(new HttpRequestEncoder());
  
 							// This is our custom server handler which will have logic for chat.
 							p.addLast(new ChatServerHandler());
+							//p.addLast(new HttpServerInboundHandler());
 						}
 					});
  

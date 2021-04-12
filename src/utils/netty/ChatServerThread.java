@@ -8,6 +8,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpRequestDecoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
@@ -33,15 +35,19 @@ public class ChatServerThread extends Thread{
 							 */
 							p.addLast(new StringDecoder());
 							p.addLast(new StringEncoder());
+							
+							p.addLast(new HttpResponseEncoder());
+							p.addLast(new HttpRequestDecoder());
  
 							// This is our custom server handler which will have logic for chat.
 							p.addLast(new ChatServerHandler());
+							p.addLast(new HttpServerInboundHandler());
 						}
 					});
  
 			// Start the server.
 			ChannelFuture f = b.bind(6000).sync();
-			System.out.println("Chat Server started. Ready to accept chat clients.");
+			System.out.println("Chat Server Thread started. Ready to accept chat clients.");
  
 			// Wait until the server socket is closed.
 			f.channel().closeFuture().sync();

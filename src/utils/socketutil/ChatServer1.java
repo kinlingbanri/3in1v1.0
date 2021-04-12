@@ -4,13 +4,13 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class ChatServer {
+public class ChatServer1 {
 
 	private int port;
     private Set<String> userNames = new HashSet<>();
     private Set<UserThread> userThreads = new HashSet<>();
  
-    public ChatServer(int port) {
+    public ChatServer1(int port) {
         this.port = port;
     }
  
@@ -43,7 +43,7 @@ public class ChatServer {
  
         //int port = Integer.parseInt(args[0]);
  
-        ChatServer server = new ChatServer(6000);
+        ChatServer1 server = new ChatServer1(6000);
         server.execute();
     }
  
