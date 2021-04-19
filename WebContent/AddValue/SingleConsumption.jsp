@@ -1,14 +1,26 @@
+<%@page import="com.mem.model.MemService"%>
 <%@page import="com.mem.model.MemVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
     
 <%
-	MemVO memVO = (MemVO) session.getAttribute("memVO");
-	System.out.println("Session username : " + memVO.getUsername());
-	Object DID = session.getAttribute("DID");
-	System.out.println("Session DID : " + DID.toString());
-	System.out.println("SingleConsumption.jsp");
+
+	//online
+// 	MemVO memVO = (MemVO) session.getAttribute("memVO");
+// 	System.out.println("Session username : " + memVO.getUsername());
+// 	Object DID = session.getAttribute("DID");
+// 	System.out.println("Session DID : " + DID.toString());
+// 	System.out.println("SingleConsumption.jsp");
+	
+	//Test
+	MemService memService = new MemService();
+	MemVO memVO = memService.getOneMem("Van007");
+	session.setAttribute("memVO", memVO);
+	String DID = "TY00010";
+	int point = 1350;
+	session.setAttribute("DID", DID);
+	request.setAttribute("point", point);
 %>
 
 <!DOCTYPE html>
@@ -82,7 +94,7 @@
 
 		<div style="margin: 7% 0 0 0; text-align:center;">
 			<p style="margin: 0 0 0 0; font-size:16px;">本次消費需</p>
-			<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px; margin-bottom: 36px;">點</p>
+			<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px; margin-bottom: 36px;"><%=point %>點</p>
 			<p style="margin: 0 0 0 0; font-size:16px;">系統將於以下時間結束後自動完成服務</p>
 			<p style="margin: 0 0 0 0; font-size:16px;">或請按完成，手動完成服務</p>
 			<p id="timer" style="color:red; font-weight:bold; font-size:18px;">30秒</p>

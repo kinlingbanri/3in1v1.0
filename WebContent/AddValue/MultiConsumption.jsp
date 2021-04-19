@@ -1,13 +1,23 @@
+<%@page import="com.mem.model.MemService"%>
 <%@page import="com.mem.model.MemVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <%
-	MemVO memVO = (MemVO) session.getAttribute("memVO");
-	System.out.println("Session username : " + memVO.getUsername());
-	Object DID = session.getAttribute("DID");
-	System.out.println("Session DID : " + DID.toString());
-	System.out.println("MultiConsumption.jsp");
+// 	MemVO memVO = (MemVO) session.getAttribute("memVO");
+// 	System.out.println("Session username : " + memVO.getUsername());
+// 	Object DID = session.getAttribute("DID");
+// 	System.out.println("Session DID : " + DID.toString());
+// 	System.out.println("MultiConsumption.jsp");
+	
+	//Test
+	MemService memService = new MemService();
+	MemVO memVO = memService.getOneMem("Van007");
+	session.setAttribute("memVO", memVO);
+	String DID = "TY00010";
+	session.setAttribute("DID", DID);
+	
+	
 %>
 
 <!DOCTYPE html>

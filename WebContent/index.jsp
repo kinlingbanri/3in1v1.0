@@ -28,7 +28,7 @@
 	<style>
 		body{
 			margin:0;
-			color:#6a6f8c;
+			color:#3a3e3c;
 			background:#c8c8c8;
 			font:600 16px/18px 'Open Sans',sans-serif;
 		}
@@ -43,7 +43,7 @@
 			max-width:525px;
 			min-height:1080px;
 			position:relative;
-			background:url("./images/TongYa002.jpg") no-repeat center;
+			background:url("./images/bg-018.jpg") no-repeat center;
 			box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
 		}
 		.login-html{
@@ -51,7 +51,7 @@
 			height:100%;
 			position:absolute;
 			padding:90px 70px 50px 70px;
-			background:rgba(40,57,101,.9);
+			//background:rgba(40,57,101,.9);
 		}
 		.login-html .sign-in-htm,
 		.login-html .sign-up-htm{
