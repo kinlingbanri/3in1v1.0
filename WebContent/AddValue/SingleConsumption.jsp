@@ -18,7 +18,9 @@
 	MemVO memVO = memService.getOneMem("Van007");
 	session.setAttribute("memVO", memVO);
 	String DID = "TY00010";
-	int point = 1350;
+	
+	//消費一次費用
+	int point = 100;
 	session.setAttribute("DID", DID);
 	request.setAttribute("point", point);
 %>
@@ -121,6 +123,7 @@
 		function myTimer(){
 			if(count == 0){
 				clearInterval(myTimerVar);
+				window.location.href = "../logout.jsp";
 			}else{
 				count = count - 1;
 				console.log("count : " + count);

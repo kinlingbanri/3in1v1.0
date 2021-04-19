@@ -134,6 +134,7 @@
 		function myTimer(){
 			if(count == 0){
 				clearInterval(myTimerVar);
+				window.location.href = "../logout.jsp";
 			}else{
 				count = count - 1;
 				console.log("count : " + count);
@@ -146,7 +147,7 @@
 			count = 30;
 			var countStr = count + "秒";
 			document.getElementById("timer").innerText = countStr;
-			clearInterval(myTimerVar);		
+			clearInterval(myTimerVar);
 			myTimerVar= setInterval(function(){ myTimer()}, 1000);
 		}
 

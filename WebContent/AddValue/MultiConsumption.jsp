@@ -16,6 +16,8 @@
 	session.setAttribute("memVO", memVO);
 	String DID = "TY00010";
 	session.setAttribute("DID", DID);
+	int usePoint = 10;
+	int useMinute = 6;
 	
 	
 %>
@@ -112,7 +114,7 @@
 		</div>
 		<div>
 			<div style="margin: 7% 0 0 0; text-align:center;">
-				<p style="margin: 0 0 0 0; font-size:20px;" id="pointMinute">每10點可使用6分鐘</p>
+				<p style="margin: 0 0 0 0; font-size:20px;" id="pointMinute">每<%=usePoint %>點可使用<%=useMinute %>分鐘</p>
 			</div>
 		</div>
 		<div style="margin: 7% 0 0 0; text-align:center;">
@@ -179,12 +181,13 @@
 		$(".btn-warning").click(function(){
 			$("#CounterDiv").slideToggle();
 			var count = this.innerHTML;
-			var pointStr = (count * 10) + "點";
+			var pointStr = (count * <%=usePoint %>) + "點";
 			
 			$("#point").text(pointStr);
-			var minuteStr = (count * 6) + "分鐘";
+			var minuteStr = (count * <%=useMinute %>) + "分鐘";
 			$("#minute").text(minuteStr);
 			
+			resetTimer();
 		});
 		
 		
@@ -197,6 +200,7 @@
 		function myTimer(){
 			if(count == 0){
 				clearInterval(myTimerVar);
+				window.location.href = "../logout.jsp";
 			}else{
 				count = count - 1;
 				console.log("count : " + count);

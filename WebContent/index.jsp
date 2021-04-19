@@ -43,7 +43,7 @@
 			max-width:525px;
 			min-height:1080px;
 			position:relative;
-			background:url("./images/bg-018.jpg") no-repeat center;
+			background:url("./images/bg-021.jpg") no-repeat center;
 			box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
 		}
 		.login-html{
@@ -108,7 +108,7 @@
 			border:none;
 			padding:15px 20px;
 			border-radius:25px;
-			background:rgba(255,255,255,.1);
+			background:rgba(255,255,255,.5);
 		}
 		.login-form .group input[data-type="password"]{
 			text-security:circle;
@@ -376,13 +376,13 @@
 	document.getElementById('username').onfocus = function() {
 		if(this.style.color == "red"){
 			this.value = "";
-			this.style.color = "#DDDDDD";
+			this.style.color = "#AAAAAA";
 		}
 	}
 	document.getElementById('texLogintPwd').onfocus = function() {
 		if(this.style.color == "red"){
 			this.value = "";
-			this.style.color = "#DDDDDD";
+			this.style.color = "#AAAAAA";
 		}
 	}
 		
@@ -464,13 +464,13 @@
 	document.getElementById('registerUsername').onfocus = function() {
 		if(this.style.color == "red"){
 			this.value = "";
-			this.style.color = "#DDDDDD";
+			this.style.color = "#AAAAAA";
 		}
 	}
 	document.getElementById('registerEmail').onfocus = function() {
 		if(this.style.color == "red"){
 			this.value = "";
-			this.style.color = "#DDDDDD";
+			this.style.color = "#AAAAAA";
 		}
 	}
 	
@@ -478,19 +478,19 @@
 	document.getElementById('checkRegisterEmail').onfocus = function() {
 		if(this.style.color == "red"){
 			this.value = "";
-			this.style.color = "#DDDDDD";
+			this.style.color = "#AAAAAA";
 		}
 	}
 	document.getElementById('registerPassword').onfocus = function() {
 		if(this.style.color == "red"){
 			this.value = "";
-			this.style.color = "#DDDDDD";
+			this.style.color = "#AAAAAA";
 		}
 	}
 	document.getElementById('checkRegisterPassword').onfocus = function() {
 		if(this.style.color == "red"){
 			this.value = "";
-			this.style.color = "#DDDDDD";
+			this.style.color = "#AAAAAA";
 		}
 	}
 	

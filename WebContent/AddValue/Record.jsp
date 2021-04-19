@@ -266,7 +266,7 @@
 		      <th scope="col" style="text-align: center;">#</th>
 		      <th scope="col" style="width: 28%;">日期</th>
 		      <th scope="col" style="text-align: center;">交易點數</th>
-		      <th scope="col">設備名稱</th>
+		      <th scope="col">設備位置</th>
 				</tr>
 		  </thead>
 		  <tbody>
@@ -280,9 +280,7 @@
 	   		</c:forEach>
 		  </tbody>
 		</table>
-
   </section><!-- End Section -->  
-  
   
   <script>
   
