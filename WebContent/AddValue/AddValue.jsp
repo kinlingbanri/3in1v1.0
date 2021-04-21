@@ -28,6 +28,7 @@
 	<script src="../js/jquery-3.3.1.js"></script>
 	<script src="../js/bootstrap-4.0.0/bootstrap.js"></script>
 	<script src="../js/nicescroll.js"></script>
+	<script src="../js/sweetalert2.js"></script>
 </head>
 
 <body style="font-family: Microsoft JhengHei; background-image: url('../images/bg_bggenerator_com.png');">
@@ -104,14 +105,14 @@
 		</div>
 		<div style="margin: 7% 0 0 0; text-align:center;">
 			<p style="margin: 0 0 0 0; font-size:16px;">已投入金額</p>
-			<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px;">0元</p>
+			<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px;" id="addMoney">200元</p>
 			<p style="margin: 6px 0 0 0;">加值點數為</p>
-			<p style="font-weight: bold; color: #FF993C; font-size: 20px;">0點</p>
+			<p style="font-weight: bold; color: #FF993C; font-size: 20px;" id="addPoint">220點</p>
 			<p style="margin: 0 0 0 0; font-size:16px;">系統將於以下時間結束後自動完成加值</p>
 			<p style="margin: 0 0 0 0; font-size:16px;">或請按完成，手動完成加值</p>
 			<p id="timer" style="color:red; font-weight:bold; font-size:18px;">30秒</p>
 			<button class="btn btn-outline-success" style="font-weight:bold;" id="logoutBtn">
-				登出
+				確認
 			</button>
 		</div>
   </section><!-- End Section -->  
@@ -134,7 +135,27 @@
 		function myTimer(){
 			if(count == 0){
 				clearInterval(myTimerVar);
-				window.location.href = "../logout.jsp";
+				
+				/*
+				var totalPoint = 520;				
+				swal.fire({
+				    title: '加值成功！',
+				    text: '本次加值' + $("#addMoney").val() + '；' + $("#addPoint").val() + '；' + 
+				    					'剩餘點數' + totalPoint +  '；' + '3秒後自動關閉!',
+				    timer: 3000
+				}).then(
+				    function () {
+				    	// handling the promise rejection
+				    	window.location.href = "../logout.jsp";
+				    },		    	
+				    function (dismiss) {
+				        if (dismiss === 'timer') {
+				            console.log('I was closed by the timer')
+				        }
+				    }
+					)
+					*/
+				
 			}else{
 				count = count - 1;
 				console.log("count : " + count);
@@ -154,6 +175,14 @@
 		document.getElementById('logoutBtn').onclick = function(){
 			window.location.href = "../logout.jsp";
 		}
+		
+		
+		
+		
+		
+
+		
+		
 // 		document.getElementById('menuLogoutBtn').onclick = function(){
 // 			window.location.href = "../logout.jsp";
 // 		}

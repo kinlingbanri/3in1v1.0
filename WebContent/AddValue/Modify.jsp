@@ -243,7 +243,7 @@
 					<!-- Login form -->
 					<div class="sign-in-htm">
 						<div class="group">
-							<label for="user" class="label" style="font-size: 18px; ">原密碼</label>
+							<label for="user" class="label" style="font-size: 18px; ">舊密碼</label>
 							<input id="password" type="text" class="input" name="password" style="margin-top: 6px; font-size: 16px;">
 						</div>
 						<div class="group">
@@ -251,7 +251,7 @@
 							<input id="newPassword" type="text" class="input" name="newPassword" style="margin-top: 6px; font-size: 16px;">
 						</div>
 						<div class="group">
-							<label for="pass" class="label" style="font-size: 18px;">再輸一次新密碼</label>
+							<label for="pass" class="label" style="font-size: 18px;">再輸入一次新密碼</label>
 							<input id="checkNewPassword" type="text" class="input" name="checkNewPassword" style="margin-top: 6px; font-size: 16px;">
 						</div>
 						<div class="group" style="margin-top: 48px;">
@@ -263,7 +263,7 @@
 					
 					<div class="sign-up-htm">
 						<div class="group">
-							<label for="user" class="label" style="font-size: 20px;">原Email</label>
+							<label for="user" class="label" style="font-size: 20px;">舊Email</label>
 							<input id="email" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
 						</div>
 						<div class="group">

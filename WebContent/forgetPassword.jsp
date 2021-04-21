@@ -197,6 +197,9 @@
 					</div>
 					<input type="hidden" name="DID" value="<%=request.getAttribute("DID") %>" id="DID">
 					<input type="hidden" name="action" value="getOne_For_Display">
+					<div style="height: 48px;" id="userWarn">
+					
+					</div>
 					<div class="group">
 						<button class="button" id="sendUsernameBtn" style="font-size:16px; font-weight:bold; width:45%; float:left;">送出</button>
 						<button class="button" id="CancelBtn1" style="font-size:16px; font-weight:bold; width:45%; float:right; background-color: #D26900;">返回</button>
@@ -212,6 +215,9 @@
 					<div class="group" style="margin-bottom: 40px;">
 						<label for="pass" class="label" style="font-size: 20px;">Email</label>
 						<input id="email" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
+					</div>
+					<div style="height: 48px;" id="emailWarn">
+					
 					</div>
 					<div class="group" style="margin-top: 24px;">
 						<button class="button" id="sendEmailBtn" style="font-size:16px; font-weight:bold; width:45%; float:left;">送出</button>
@@ -245,6 +251,12 @@
 	});
 	
 	function ajaxSend(type, value){
+		console.log("type = " + type);
+		if(type == "email"){
+			$("#emailWarn").text("請稍後!").css("color", "red");
+		}else if(type == "name"){
+			$("#userWarn").text("請稍後!").css("color", "red");
+		}
 		
 		$.ajax({
 		    type: 'POST',                     //GET or POST
@@ -258,6 +270,19 @@
 		    	console.log("jsonObject.state : "+ jsonObject.state);
 		    	var validateState = jsonObject.state;
 		    	if(validateState == "send"){
+		    		
+		    		
+		    		if(type == "email"){
+		    			$("#emailWarn").text("密碼已送出，3秒後自動跳至登入頁面!").css("color", "red");
+		    		}else if(type == "name"){
+		    			$("#userWarn").text("密碼已送出，3秒後自動跳至登入頁面!").css("color", "red");
+		    		}
+		    		
+		    		
+		    		setTimeout(function(){
+		    			window.location.href = "./index.jsp";
+		    		}, 3000);
+		    		/*
 		    		swal.fire({
 		    		    title: '密碼已送出！',
 		    		    text: '3秒後自動關閉!',
@@ -273,6 +298,7 @@
 		    		        }
 		    		    }
 		    			)
+		    			*/
 					}else if(validateState == "nouser"){
 							$("#username").val("無此帳號!").css('color', 'red');
  					}else if(validateState == "noemail"){

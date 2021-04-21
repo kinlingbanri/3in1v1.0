@@ -101,7 +101,7 @@
 			<p style="margin: 0 0 0 0; font-size:16px;">或請按完成，手動完成服務</p>
 			<p id="timer" style="color:red; font-weight:bold; font-size:18px;">30秒</p>
 			<button class="btn btn-outline-success" style="font-weight:bold;" id="logoutBtn">
-				完成
+				確認
 			</button>
 		</div>
   </section><!-- End Section -->  

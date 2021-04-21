@@ -31,8 +31,11 @@ public class RegisterServlet extends HttpServlet {
 		
 		String RegisterState = req.getParameter("RegisterState");
 		String registerUsername = req.getParameter("registerUsername");
-		String DID = req.getParameter("DID");
-		req.getSession().setAttribute("DID", DID);
+		String reqDID = req.getParameter("DID");
+		System.out.println("Register req DID = " + reqDID);
+		String sessionDID = (String)req.getSession().getAttribute("DID");
+		System.out.println("Register sessionDID = " + sessionDID);
+		req.getSession().setAttribute("DID", sessionDID);
 		
 		MemService memService = new MemService();
 		MemVO memVO = memService.getOneMem(registerUsername);

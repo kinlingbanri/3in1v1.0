@@ -6,9 +6,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
 <%
-		String reqDID = request.getParameter("DID");			
+		String reqDID = request.getParameter("DID");	
+		String sessionDID = (String)session.getAttribute("DID");
+		System.out.println("index.jsp reqDID : " + reqDID);
+		System.out.println("index.jsp start sessionDID : " + sessionDID);
 		
-		if((reqDID != null)){
+		if((reqDID != null) && (!reqDID.equals(""))){
 			session.setAttribute("DID", reqDID);
 		}
 		System.out.println("index.jsp session DID : " + session.getAttribute("DID"));
