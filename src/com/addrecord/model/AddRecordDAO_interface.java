@@ -11,5 +11,6 @@ public interface AddRecordDAO_interface {
 	public AddRecordVO findByPrimaryId(int id);
 	public List<AddRecordVO> getListByUsername(MemVO memVO);
 	public List<AddRecordVO> getAfter30(MemVO memVO);
+	public TodayTotalVO getTodayAddValue();
 	public List<AddRecordVO> getAll();
 }

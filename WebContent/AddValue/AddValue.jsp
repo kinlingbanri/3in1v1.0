@@ -58,10 +58,10 @@
           <a class="nav-link" href="#" style="text-align: right; color: #FFFFFF;">加值服務<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./Record.jsp" style="text-align: right; color: #FFFFFF;">交易紀錄</a>
+          <a class="nav-link" href="./Record-A.jsp" style="text-align: right; color: #FFFFFF;">交易紀錄</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./Modify.jsp" style="text-align: right; color: #FFFFFF;">會員資料</a>
+          <a class="nav-link" href="./Modify-A.jsp" style="text-align: right; color: #FFFFFF;">會員資料</a>
         </li>
 				<li class="nav-item">
 					<a class="nav-link" href="../logout.jsp" style="text-align: right; color: #FFFFFF;">登出</a>
@@ -129,7 +129,7 @@
 		});
 
 		var count = 30;
-		var myTimerVar= setInterval(function(){ myTimer()}, 1000);
+		//var myTimerVar= setInterval(function(){ myTimer()}, 1000);
 		console.log("Into AddValue.jsp");
 		
 		function myTimer(){
@@ -155,6 +155,8 @@
 				    }
 					)
 					*/
+					
+				window.location.href = "../logout.jsp";
 				
 			}else{
 				count = count - 1;

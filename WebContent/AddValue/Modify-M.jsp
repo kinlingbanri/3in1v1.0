@@ -5,18 +5,18 @@
 
     
 <%
-	/*****	Online *****/
-	MemVO memVO = (MemVO) session.getAttribute("memVO");
-	System.out.println("Session username : " + memVO.getUsername());
-	Object objectDID = session.getAttribute("DID");
-	String DID = objectDID.toString();
-	System.out.println("Modify.jsp session DID : " +DID );
+// 	/*****	Online *****/
+// 	MemVO memVO = (MemVO) session.getAttribute("memVO");
+// 	System.out.println("Session username : " + memVO.getUsername());
+// 	Object objectDID = session.getAttribute("DID");
+// 	String DID = objectDID.toString();
+// 	System.out.println("Modify.jsp session DID : " +DID );
 	
 	/*****	Test *****/
-// 	String DID = "12323";
-// 	System.out.println("Session DID : " + DID);
-// 	MemService memService = new MemService();
-// 	MemVO memVO = memService.getOneMem("Van007");
+	String DID = "12323";
+	System.out.println("Session DID : " + DID);
+	MemService memService = new MemService();
+	MemVO memVO = memService.getOneMem("Van007");
 	
 	String username = memVO.getUsername();
 	String email = memVO.getEmail();
@@ -211,10 +211,10 @@
       <ul class="navbar-nav mr-auto">
         <!-- active表示當前頁面 -->
         <li class="nav-item active">
-          <a class="nav-link" href="./AddValue.jsp" style="text-align: right; color: #FFFFFF;">加值服務<span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="./MultiConsumption.jsp" style="text-align: right; color: #FFFFFF;">消費服務<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./Record.jsp" style="text-align: right; color: #FFFFFF;">交易紀錄</a>
+          <a class="nav-link" href="./Record-M.jsp" style="text-align: right; color: #FFFFFF;">交易紀錄</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#" style="text-align: right; color: #FFFFFF;">會員資料</a>
@@ -237,11 +237,13 @@
 
 		<div class="login-wrap" style="box-shadow: none;">
 			<div class="login-html" style="background: none;">
-				<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab" style="font-size: 20px; font-weight:bold;">修改密碼</label>
-				<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab" style="font-size: 20px; font-weight:bold;">修改Email</label>
+				<input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+				<label for="tab-1" class="tab" style="font-size: 20px; font-weight:bold;">修改密碼</label>
+				<input id="tab-2" type="radio" name="tab" class="sign-up">
+				<label for="tab-2" class="tab" style="font-size: 20px; font-weight:bold;">修改Email</label>
 				<div class="login-form" style="margin-top: 16px;">
 					<!-- Login form -->
-					<div class="sign-in-htm">
+					<div class="sign-in-htm" id="signin">
 						<div class="group">
 							<label for="user" class="label" style="font-size: 18px; ">舊密碼</label>
 							<input id="password" type="text" class="input" name="password" style="margin-top: 6px; font-size: 16px;">
@@ -261,7 +263,7 @@
 						</div>
 					</div>
 					
-					<div class="sign-up-htm">
+					<div class="sign-up-htm" id="signup">
 						<div class="group">
 							<label for="user" class="label" style="font-size: 20px;">舊Email</label>
 							<input id="email" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
@@ -299,6 +301,14 @@
 		
 		//初始化各元素
 		$(function(){
+			if($('#tab-1').is(":checked")){
+				$("#signin").show();
+				$("#signup").hide();
+			}else if($('#tab-2').is(":checked")){
+				$("#signin").hide();
+				$("#signup").show();
+			}
+			
 			$("#email").val("").css('color', '#aaa');
 			$("#newEmail").val("").css('color', '#aaa');
 			$("#checkNewEmail").val("").css('color', '#aaa');
@@ -506,7 +516,15 @@
 			}
 		}
 		
+		$("#tab-1").click(function(){
+			$("#signin").show('slow');
+			$("#signup").hide('slow');		
+		});
 		
+		$("#tab-2").click(function(){
+			$("#signin").hide('slow');
+			$("#signup").show('slow');		
+		});
 		
 		$("#switchPasswordBtn").click(function(){
 			var state = validatePassword();

@@ -4,10 +4,26 @@ Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
+
+<%@page import="com.addrecord.model.AddRecordService"%>
+<%@page import="com.addrecord.model.TodayTotalVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="java.util.List"%>
+
+
+<%
+	AddRecordService addRecordService = new AddRecordService();
+	TodayTotalVO todayTotalVO = addRecordService.getTodayTotal();
+	System.out.print(todayTotalVO.getTotalMoney() + ",");
+	System.out.println(todayTotalVO.getTotalPoint());
+%>
+
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>三合一加值後台管理</title>
+<title>三合一加值系統後台管理</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Pooled Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
@@ -21,15 +37,45 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- Graph CSS -->
 <link href="css/font-awesome.css" rel="stylesheet">
 <style>
+
+body{
+	font-family: Microsoft JhengHei;
+}
+
 .devicelist:hover {
 	  background: #f2f3ff;
 	  outline: none;
 	  cursor: pointer;
-	}
+}
+
+td {
+  text-align: center;
+  vertical-align: middle;
+}
+	
+.redCircle{
+	width:16px;height:16px;
+	border-radius:50%;
+	background-color:red;
+	margin: 0px auto;
+}
+
+.greenCircle{
+	width:16px;height:16px;
+	border-radius:50%;
+	background-color:green;
+	margin: 0px auto;
+}
+
+.yellowCircle{
+	width:16px;height:16px;
+	border-radius:50%;
+	background-color:yellow;
+	margin: 0px auto;
+}
+
+
 </style>
-
-
-
 
 <!-- jQuery -->
 <script src="js/jquery-2.1.4.min.js"></script>
@@ -41,6 +87,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- //lined-icons -->
 </head> 
 <body>
+
 <div class="page-container">
 	<!--/content-inner-->
 	<div class="left-content">
@@ -48,10 +95,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--header start here-->
 			<div class="header-main">
 				<div class="logo-w3-agile">
-					<h1><a href="index.html" style="font-size:20px; font-weight:bold;">三合一加值機管理系統</a></h1>
+					<h1><a href="index.html" style="font-size:20px; font-weight:bold;">三合一加值系統</a></h1>
 				</div>
 				
-				<div class="profile_details w3l" style="float:right; margin-right:20px;">		
+				<div class="profile_details w3l" style="float:right;">		
 					<ul>
 						<li class="dropdown profile_details_drop">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -84,7 +131,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item">
-				<a href="index.html">Home</a>
+				<a href="./index.jsp">Home</a>
 				<i class="fa fa-angle-right"></i>
 			</li>
     </ol>
@@ -97,8 +144,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
 					</div>
 					<div class="four-text">
-						<h3>會員</h3>
-						<h4>30</h4>
+						<h3>今日加值金額</h3>
+						<h4><%=todayTotalVO.getTotalMoney() %>元</h4>
 					</div>
 				</div>
 			</div>
@@ -108,8 +155,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
 					</div>
 					<div class="four-text">
-						<h3>本月加值</h3>
-						<h4>15,520</h4>
+						<h3>今日加值點數</h3>
+						<h4><%=todayTotalVO.getTotalPoint() %>點</h4>
 					</div>
 				</div>
 			</div>
@@ -119,7 +166,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<i class="glyphicon glyphicon-folder-open" aria-hidden="true"></i>
 					</div>
 					<div class="four-text">
-						<h3>本月消費</h3>
+						<h3>今日消費</h3>
 						<h4>12,430</h4>
 					</div>
 				</div>
@@ -130,7 +177,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<i class="glyphicon glyphicon-briefcase" aria-hidden="true"></i>
 					</div>
 					<div class="four-text">
-						<h3>店家數</h3>
+						<h3>今日兌幣</h3>
 						<h4>10</h4>
 					</div>
 				</div>
@@ -146,48 +193,48 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<div class="widget widget-report-table">
 							<header class="widget-header m-b-15"></header>
 							<div class="row m-0 md-bg-grey-100 p-l-20 p-r-20">
-								<div class="col-md-6 col-sm-6 col-xs-6 w3layouts-aug">
-									<h3 style="font-weight:bold;">設備清單(點擊該項進入設定)</h3>
-<!-- 									<p>設備清單</p> -->
-								</div>
-<!-- 								<div class="col-md-6 col-sm-6 col-xs-6 "> -->
-<!-- 									<h2 class="text-right c-teal f-300 m-t-20">$21,235</h2> -->
-<!-- 								</div> -->
+								<div class="col-md-6 col-sm-6 col-xs-6 w3layouts-aug" style="width: 100%;">
+									<h3 style="font-weight:bold;">設備清單(點選該列可進入設定頁面)</h3>
+<!--  									<p>圖 -->
+ 								</div>
+<!--  								<div class="col-md-6 col-sm-6 col-xs-6 "> -->
+<!--  									<h2 class="text-right c-teal f-300 m-t-20">$21,235</h2> -->
+<!--  								</div> -->
 							</div>
 							<div class="widget-body p-15">
 								<table class="table table-bordered">
 									<thead>
 										<tr>
-											<th>編號</th>
-											<th>所在店家</th>
-											<th>狀態</th>
+											<th>ID</th>
+											<th>店家名稱</th>
+											<th style="text-align: center;">狀態</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr class="devicelist">
 											<td>2356</td>
 											<td>dummy text </td>
-											<td>6,200.00</td>
+											<td><div class="greenCircle"></div></td>
 										</tr>
 										<tr class="devicelist">
 											<td>4589</td>
 											<td>Lorem Ipsum</td>
-											<td>6,500.00</td>
+											<td><div class="redCircle"></div></td>
 										</tr>
 										<tr class="devicelist">
 											<td>3269</td>
 											<td>specimen book</td>
-											<td>6,800.00</td>
+											<td><div class="yellowCircle"></div></td>
 										</tr>                                                    
 										<tr class="devicelist">
 											<td>5126</td>
 											<td>Letraset sheets</td>
-											<td>7,200.00</td>
+											<td><div class="greenCircle"></div></td>
 										</tr>
 										<tr class="devicelist">
 											<td>7425</td>
 											<td>PageMaker</td>
-											<td>5,900.00</td>
+											<td><div class="greenCircle"></div></td>
 										</tr>
 									</tbody>
 								</table>    
@@ -220,7 +267,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 			<!--COPY rights start here-->
 			<div class="copyrights">
-	 			<p>© 2016 Pooled. All Rights Reserved | Design by  <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
+	 			<p>Â© 2016 Pooled. All Rights Reserved | Design by  <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
 			</div>	
 			<!--COPY rights end here-->
 

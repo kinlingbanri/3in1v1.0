@@ -186,11 +186,13 @@
 <body id="body">
 	<div class="login-wrap">
 		<div class="login-html">
-			<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab" style="font-size: 24px;">用帳號</label>
-			<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab" style="font-size: 24px;">用Email</label>
+			<input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+			<label for="tab-1" class="tab" style="font-size: 24px;">用帳號</label>
+			<input id="tab-2" type="radio" name="tab" class="sign-up">
+			<label for="tab-2" class="tab" style="font-size: 24px;">用Email</label>
 			
 			<div class="login-form" style="margin-top: 16px;">
-				<div class="sign-in-htm">
+				<div class="sign-in-htm" id="signin">
 					<div class="group" style="margin-bottom: 40px;">
 						<label for="user" class="label" style="font-size: 20px; ">帳號</label>
 						<input id="username" type="text" class="input" name="username" style="margin-top: 6px; font-size: 16px;">
@@ -211,7 +213,7 @@
 					</div>
 				</div>				
 				
-				<div class="sign-up-htm">
+				<div class="sign-up-htm" id="signup">
 					<div class="group" style="margin-bottom: 40px;">
 						<label for="pass" class="label" style="font-size: 20px;">Email</label>
 						<input id="email" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
@@ -238,8 +240,25 @@
 	
 	//初始化各元素
 	$(function(){
+		if($('#tab-1').is(":checked")){
+			$("#signin").show();
+			$("#signup").hide();
+		}else if($('#tab-2').is(":checked")){
+			$("#signin").hide();
+			$("#signup").show();
+		}
 		$("#username").val("").css('color', '#aaa');
 		$("#email").val("").css('color', '#aaa');
+	});
+	
+	$("#tab-1").click(function(){
+		$("#signin").show('slow');
+		$("#signup").hide('slow');		
+	});
+	
+	$("#tab-2").click(function(){
+		$("#signin").hide('slow');
+		$("#signup").show('slow');		
 	});
 	
 	//Hide page right scrollbar

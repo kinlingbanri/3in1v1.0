@@ -20,6 +20,11 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 	private static final String GET_ALL_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
 			+ "point, errorcode, username, deviceid, storeid, cardid FROM addrecord order by id";
+	
+	private static final String GET_TodayTotal_STMT = 
+			"SELECT sum( (coin10*10) + (coin50*50) + (paper100*100) + (paper500*500) + (paper1000*1000)) totalMoney, (point) totalpoint "
+			+ "from addrecord where DATE(storedatetime) = curdate();";
+	
 	private static final String GET_ONE_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
 					+ "point, errorcode, username, deviceid, storeid, cardid FROM addrecord where id = ?";
@@ -120,16 +125,22 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 //		System.out.println(addRecordVO.getCardid());
 		
 		
-		// Query After 30 record
-		MemVO memVO = new MemVO();
-		memVO.setUsername("Kim");
-		List<AddRecordVO> list = dao.getAfter30(memVO);
-		for (AddRecordVO addRecord : list) {
-			System.out.print(addRecord.getStoredatetime() + ",");
-			System.out.print(addRecord.getPoint() + ",");
-			System.out.print(addRecord.getStorename() + ",");
-			System.out.println(addRecord.getCity());
-		}	
+//		// Query After 30 record
+//		MemVO memVO = new MemVO();
+//		memVO.setUsername("Kim");
+//		List<AddRecordVO> list = dao.getAfter30(memVO);
+//		for (AddRecordVO addRecord : list) {
+//			System.out.print(addRecord.getStoredatetime() + ",");
+//			System.out.print(addRecord.getPoint() + ",");
+//			System.out.print(addRecord.getStorename() + ",");
+//			System.out.println(addRecord.getCity());
+//		}
+		
+		
+		// Query Today Total value
+		TodayTotalVO todayTotalVO = dao.getTodayAddValue();
+		System.out.print(todayTotalVO.getTotalMoney() + ",");
+		System.out.println(todayTotalVO.getTotalPoint());
 		
 //		// Query By Username
 //		MemVO memVO = new MemVO();
@@ -589,4 +600,60 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 		return list;
 	}
 
+	@Override
+	public TodayTotalVO getTodayAddValue() {
+		TodayTotalVO todayTotalVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_TodayTotal_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// addRecordVO 也稱為 Domain objects
+				todayTotalVO = new TodayTotalVO();
+				todayTotalVO.setTotalMoney(rs.getInt("totalmoney"));
+				todayTotalVO.setTotalPoint(rs.getInt("totalpoint"));
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return todayTotalVO;
+	}	
+	
 }

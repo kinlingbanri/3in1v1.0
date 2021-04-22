@@ -188,7 +188,6 @@
 	<script src="./js/nicescroll.js"></script>
 	<script src="./js/core.js"></script>
 	<script src="./js/sweetalert2.js"></script>
-<!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script> -->
 
 </head>
 
@@ -279,14 +278,8 @@
 	
 	//初始化各元素
 	$(function(){
-		if($('#tab-1').is(":checked")){
-			$("#signin").show();
-			$("#signup").hide();
-		}else if($('#tab-2').is(":checked")){
-			$("#signin").hide();
-			$("#signup").show();
-		}
-
+		$("#signin").show();
+		$("#signup").hide();
 		$("#texLogintPwd").hide();
 		document.getElementById('checkboxPwd').checked = false;
 		$("#username").val("").css('color', '#aaa');

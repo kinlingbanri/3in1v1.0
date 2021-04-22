@@ -30,6 +30,11 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 	private static final String GET_ALL_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
 			+ "point, errorcode, username, deviceid, storeid, cardid FROM addrecord order by id";
+	
+	private static final String GET_TodayTotal_STMT = 
+			"SELECT sum( (coin10*10) + (coin50*50) + (paper100*100) + (paper500*500) + (paper1000*1000)) totalMoney, (point) totalpoint "
+			+ "from addrecord where DATE(storedatetime) = curdate();";
+	
 	private static final String GET_BYUSERNAME_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
 					+ "point, errorcode, username, deviceid, storeid, cardid FROM addrecord where username = ?"
@@ -429,6 +434,57 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public TodayTotalVO getTodayAddValue() {
+		TodayTotalVO todayTotalVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_TodayTotal_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// addRecordVO 也稱為 Domain objects
+				todayTotalVO = new TodayTotalVO();
+				todayTotalVO.setTotalMoney(rs.getInt("totalmoney"));
+				todayTotalVO.setTotalPoint(rs.getInt("totalpoint"));
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return todayTotalVO;
 	}
 
 }
