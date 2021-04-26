@@ -3,26 +3,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-    
 <%
 
 	//online
-// 	MemVO memVO = (MemVO) session.getAttribute("memVO");
-// 	System.out.println("Session username : " + memVO.getUsername());
-// 	Object DID = session.getAttribute("DID");
-// 	System.out.println("Session DID : " + DID.toString());
-// 	System.out.println("SingleConsumption.jsp");
+ 	MemVO memVO = (MemVO) session.getAttribute("memVO");
+	String username = memVO.getUsername();
+	int memPoint = memVO.getPoint();
+	String DID = (String)session.getAttribute("DID");
+	String MAID = (String)session.getAttribute("MAID");
+	int machineNumber =  Integer.parseInt(MAID.substring(3, 8));
+	System.out.println("Session username : " + username);
+	System.out.println("Session memPoint : " + memPoint);
+	System.out.println("Session DID : " + DID);
+	System.out.println("Session MAID : " + MAID);
+	System.out.println("Session machineNumber : " + machineNumber);
+	System.out.println("SingleConsumption.jsp");
+	
+	
+	int point = 100;						//消費一次費用
+	request.setAttribute("point", point);
 	
 	//Test
-	MemService memService = new MemService();
-	MemVO memVO = memService.getOneMem("Van007");
-	session.setAttribute("memVO", memVO);
-	String DID = "TY00010";
-	
-	//消費一次費用
-	int point = 100;
-	session.setAttribute("DID", DID);
-	request.setAttribute("point", point);
+// 	MemService memService = new MemService();
+// 	MemVO memVO = memService.getOneMem("Van007");
+// 	session.setAttribute("memVO", memVO);
+// 	String DID = "TY00010";	
+// 	int point = 100;						//消費一次費用
+// 	session.setAttribute("DID", DID);
+// 	request.setAttribute("point", point);
 %>
 
 <!DOCTYPE html>
@@ -90,7 +98,7 @@
   <section style="height: 1080px;">
 		<div style="text-align: center;">
 			<h2 id="storeInfo">
-				中山店洗衣機1號
+				中山店洗衣機<%=machineNumber %>號
 			</h2>
 		</div>
 
@@ -118,7 +126,7 @@
 		});
 
 		var count = 30;
-		var myTimerVar= setInterval(function(){ myTimer()}, 1000);
+		//var myTimerVar= setInterval(function(){ myTimer()}, 1000);
 		
 		function myTimer(){
 			if(count == 0){

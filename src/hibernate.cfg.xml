@@ -32,5 +32,6 @@
 	<mapping class="com.mem.model.MemVO"/>
 	<mapping class="com.addrecord.model.AddRecordVO"/>
 	
+	
  </session-factory>
 </hibernate-configuration>

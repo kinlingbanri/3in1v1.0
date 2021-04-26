@@ -43,10 +43,10 @@ public class RegisterServlet extends HttpServlet {
 			System.out.println("RegisterState : registert");
 			
 			if(RegisterState.equals("2")) {
-				String registerEmail = req.getParameter("registerEmail");
-				String registerPassword = req.getParameter("registerPassword");
+				//String registerEmail = req.getParameter("registerEmail");
+				//String registerPassword = req.getParameter("registerPassword");
 				
-				MemVO newMemVO = memService.addMem(registerUsername, registerEmail, registerPassword, 0);
+				//MemVO newMemVO = memService.addMem(registerUsername, registerEmail, registerPassword, 0);
 				System.out.println("Register Success!!!");
 			}
 			

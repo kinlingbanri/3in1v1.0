@@ -6,15 +6,26 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
 <%
-		String reqDID = request.getParameter("DID");	
-		String sessionDID = (String)session.getAttribute("DID");
+		String reqDID = request.getParameter("DID");
+		String reqMAID = request.getParameter("MAID");	
 		System.out.println("index.jsp reqDID : " + reqDID);
+		System.out.println("index.jsp reqMAID : " + reqMAID);
+		
+		String sessionDID = (String)session.getAttribute("DID");
+		String sessionMAID = (String)session.getAttribute("MAID");
+		
+		
 		System.out.println("index.jsp start sessionDID : " + sessionDID);
+		System.out.println("index.jsp start sessionMAID : " + sessionMAID);
 		
 		if((reqDID != null) && (!reqDID.equals(""))){
 			session.setAttribute("DID", reqDID);
 		}
+		if((reqMAID != null) && (!reqMAID.equals(""))){
+			session.setAttribute("MAID", reqMAID);
+		}
 		System.out.println("index.jsp session DID : " + session.getAttribute("DID"));
+		System.out.println("index.jsp session MAID : " + session.getAttribute("MAID"));
 		
     MemService memSvc = new MemService();
 		List<MemVO> list = memSvc.getAll();
@@ -217,6 +228,7 @@
 						</label>
 					</div>					
 					<input type="hidden" name="DID" value="<%=request.getAttribute("DID") %>" id="DID">
+					<input type="hidden" name="MAID" value="<%=request.getAttribute("MAID") %>" id="MAID">
 					<input type="hidden" name="action" value="getOne_For_Display">
 					<div class="group">
 						<button class="button" id="loginBtn" style="font-size:16px; font-weight:bold;">登入</button>
@@ -266,6 +278,7 @@
 	<script>
 	
 	var DID = $("#DID").val();
+	var MAID = $("#MAID").val();
 	
 	//隠藏右側scrollbar
 	$("#body").niceScroll({
@@ -441,6 +454,7 @@
 			var username = $("#username").val();
 			var password = $("#password").val();
 			var DID = $("#DID").val();
+			var MAID = $("#MAID").val();
 			
 			$.ajax({
 			  type: 'POST',                     //GET or POST
@@ -449,14 +463,23 @@
 			  data: {      											//要傳送到頁面的參數
 			  	username : username,
 					password : password,
-					DID : DID
+					DID : DID,
+					MAID : MAID
 			  },
 			  success: function (jsonObject) {         //當請求成功後此事件會被呼叫
 			  	console.log("jsonObject.state : "+ jsonObject.state);
 			  	var validateState = jsonObject.state;
 			  	if(validateState == "1"){
 			  		console.log("Login success!");
-						window.location.href = "./AddValue/AddValue.jsp";
+			  		var type = jsonObject.type;
+			  		console.log("type length : " + type.length);
+			  		if(type == "NOT"){
+			  			window.location.href = "./AddValue/AddValue.jsp";
+			  		}else if(type == "DRY"){
+			  			window.location.href = "./AddValue/MultiConsumption.jsp";
+			  		}else if(type == "WAH"){
+			  			window.location.href = "./AddValue/SingleConsumption.jsp";
+			  		}
 					}else if(validateState == "2"){
  						$("#username").val("無此帳號!").css('color', 'red');
 	 				}else if(validateState == "3"){
@@ -536,7 +559,8 @@
 			  data: {
 			  	RegisterState:RegisterState,
 			  	registerUsername:registerUsername,
-			  	DID : DID
+			  	DID : DID,
+			  	MAID : MAID
 			  },
 			  success: function (jsonObject) {         //當請求成功後此事件會被呼叫
 			  	var state = jsonObject.state;
@@ -579,6 +603,7 @@
 			var registerEmail = $("#registerEmail").val();
 			var registerPassword = $("#registerPassword").val();
 			var DID = $("#DID").val();
+			var MAID = $("#MAID").val();
 			
 			var registerUsername = $("#registerUsername").val();
 			
@@ -599,7 +624,8 @@
 				  	registerUsername:registerUsername,
 				  	registerEmail:registerEmail,
 				  	registerPassword:registerPassword,
-				  	DID : DID
+				  	DID : DID,
+				  	MAID : MAID
 				  },
 				  success: function (jsonObject) {         //當請求成功後此事件會被呼叫
 				  	var state = jsonObject.state;

@@ -35,6 +35,12 @@ public class HistoryVO  implements java.io.Serializable  {
 	@Column(name = "did")
 	private int did;
 	
+	@Column(name = "maid")
+	private int maid;
+	
+	@Column(name = "mid")
+	private int mid;
+	
 	@Column(name = "refundcount")
 	private int refundcount;
 	

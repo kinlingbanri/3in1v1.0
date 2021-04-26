@@ -5,6 +5,10 @@ License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 
+<%@page import="com.store.model.StoreVO"%>
+<%@page import="com.store.model.StoreService"%>
+<%@page import="com.device.model.DeviceVO"%>
+<%@page import="com.device.model.DeviceService"%>
 <%@page import="com.addrecord.model.AddRecordService"%>
 <%@page import="com.addrecord.model.TodayTotalVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -18,6 +22,58 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	TodayTotalVO todayTotalVO = addRecordService.getTodayTotal();
 	System.out.print(todayTotalVO.getTotalMoney() + ",");
 	System.out.println(todayTotalVO.getTotalPoint());
+	
+	
+	DeviceService deviceService = new DeviceService();
+// 	List<DeviceVO> devices = deviceService.getAll();
+// 	for (DeviceVO device : devices) {
+// 		System.out.print(device.getDid() + ",");
+// 		System.out.print(device.getNumber() + ",");
+// 		System.out.print(device.getCoin() + ",");
+// 		System.out.print(device.getPaper() + ",");
+// 		System.out.print(device.getLocation() + ",");
+// 		System.out.print(device.getRefund() + ",");
+// 		System.out.print(device.getUid() + ",");
+// 		System.out.print(device.getStatus() + ",");
+// 		System.out.print(device.getError() + ",");
+// 		System.out.print(device.getMachid() + ",");
+// 		System.out.print(device.getFreecount() + ",");
+// 		System.out.println(device.getFreecountset());
+// 	}
+
+// 	DeviceVO device = deviceService.getOneDevice("TY00001");
+// 	System.out.print(device.getDid() + ",");
+// 	System.out.print(device.getNumber() + ",");
+// 	System.out.print(device.getCoin() + ",");
+// 	System.out.print(device.getPaper() + ",");
+// 	System.out.print(device.getLocation() + ",");
+// 	System.out.print(device.getRefund() + ",");
+// 	System.out.print(device.getUid() + ",");
+// 	System.out.print(device.getStatus() + ",");
+// 	System.out.print(device.getError() + ",");
+// 	System.out.print(device.getMachid() + ",");
+// 	System.out.print(device.getFreecount() + ",");
+// 	System.out.println(device.getFreecountset());
+
+// 	DeviceVO deviceVO = new DeviceVO();	
+// 	deviceVO.setCoin(10);
+// 	deviceVO.setPaper(1);
+// 	deviceVO.setLocation(new String("三峽北大店".getBytes("ISO-8859-1"), "UTF-8"));
+// 	deviceVO.setRefund(0);
+// 	deviceVO.setUid(2);
+// 	deviceVO.setStatus(0);
+// 	deviceVO.setError(0);
+// 	deviceVO.setMachid(1);
+// 	deviceVO.setFreecount(0);
+// 	deviceVO.setFreecountset(20);	
+// 	deviceVO.setNumber("TY00031");
+// 	deviceVO.setDid(33);
+// 	deviceService.updateDeivce(deviceVO);
+
+	DeviceVO deviceVO = new DeviceVO();
+	deviceVO.setNumber("TY00031");
+	deviceService.deleteDevice(deviceVO);
+	
 %>
 
 <!DOCTYPE HTML>

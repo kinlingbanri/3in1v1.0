@@ -8,13 +8,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeviceJDBCDAO implements DeviceDAO_interface{
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+public class DeviceService {
+	private DeviceDAO_interface dao;
 	
-	String driver = "com.mysql.cj.jdbc.Driver";
-	String url = "jdbc:mysql://211.21.93.170:3306/RM_58";
-	String userid = "van";
-	String passwd = "34182958";
-	
+	// 一個應用程式中,針對一個資料庫 ,共用一個DataSource即可
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/rm_58");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
+		
 	private static final String GET_ALL_STMT = 
 			"SELECT did, number, coin, paper, location, refund, uid, status, error, machid,"
 					+ "freecount, freecountset FROM device";
@@ -25,93 +37,18 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 			"INSERT INTO device (number, coin, paper, location, refund, uid, status, error,"
 					+ "machid, freecount, freecountset) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
-			"UPDATE device set number=?, coin=?, paper=?, location=?,refund=?, uid=?,"
-					+ "status=?, error=?, machid=?, freecount=?, freecountset=? where did = ?";
+			"UPDATE device set coin=?, paper=?, location=?,refund=?, uid=?,"
+					+ "status=?, error=?, machid=?, freecount=?, freecountset=?, number=? where did = ?";
 	private static final String DELETE_STMT = 
-			"DELETE FROM device where did = ?";
-
-	public static void main(String[] args) {
-		DeviceDAO_interface dao = new DeviceJDBCDAO();
+			"DELETE FROM device where number = ?";
 		
-//		//Add
-//		DeviceVO deviceVO = new DeviceVO();
-//		deviceVO.setNumber("TY00031");
-//		deviceVO.setCoin(0);
-//		deviceVO.setPaper(0);
-//		deviceVO.setLocation("RD-31");
-//		deviceVO.setRefund(0);
-//		deviceVO.setDid(1);
-//		deviceVO.setStatus(1);
-//		deviceVO.setError(0);
-//		deviceVO.setMachid(0);
-//		deviceVO.setFreecount(0);
-//		deviceVO.setFreecountset(1);
-//		dao.insert(deviceVO);
-		
-//		//Update
-//		DeviceVO deviceVO = new DeviceVO();
-//		deviceVO.setNumber("TY00031");
-//		deviceVO.setCoin(1);
-//		deviceVO.setPaper(1);
-//		deviceVO.setLocation("RD-31");
-//		deviceVO.setRefund(0);
-//		deviceVO.setDid(1);
-//		deviceVO.setStatus(1);
-//		deviceVO.setError(0);
-//		deviceVO.setMachid(0);
-//		deviceVO.setFreecount(0);
-//		deviceVO.setFreecountset(1);
-//		deviceVO.setDid(31);
-//		dao.update(deviceVO);
-		
-//		// Delete
-//		DeviceVO deviceVO = new DeviceVO();
-//		deviceVO.setDid(31);
-//		dao.delete(deviceVO);
-		
-		
-//		// Query One
-//		DeviceVO deviceVO = dao.findByPrimaryId("TY00030");
-//		System.out.print(deviceVO.getDid() + ",");
-//		System.out.print(deviceVO.getNumber() + ",");
-//		System.out.print(deviceVO.getCoin() + ",");
-//		System.out.print(deviceVO.getPaper() + ",");
-//		System.out.print(deviceVO.getLocation() + ",");
-//		System.out.print(deviceVO.getRefund() + ",");
-//		System.out.print(deviceVO.getUid() + ",");
-//		System.out.print(deviceVO.getStatus() + ",");
-//		System.out.print(deviceVO.getError() + ",");
-//		System.out.print(deviceVO.getMachid() + ",");
-//		System.out.print(deviceVO.getFreecount() + ",");
-//		System.out.println(deviceVO.getFreecountset());
-		
-		// Query All
-		List<DeviceVO> list = dao.getAll();
-		for (DeviceVO device : list) {
-			System.out.print(device.getDid() + ",");
-			System.out.print(device.getNumber() + ",");
-			System.out.print(device.getCoin() + ",");
-			System.out.print(device.getPaper() + ",");
-			System.out.print(device.getLocation() + ",");
-			System.out.print(device.getRefund() + ",");
-			System.out.print(device.getUid() + ",");
-			System.out.print(device.getStatus() + ",");
-			System.out.print(device.getError() + ",");
-			System.out.print(device.getMachid() + ",");
-			System.out.print(device.getFreecount() + ",");
-			System.out.println(device.getFreecountset());
-		}
-	}
-
-	@Override
-	public void insert(DeviceVO deviceVO) {
+	public void insertDevice(DeviceVO deviceVO) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
-			pstmt = con.prepareStatement(INSERT_STMT);
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(INSERT_STMT);			
 			pstmt.setString(1, 	deviceVO.getNumber());
 			pstmt.setInt(2, 		deviceVO.getCoin());
 			pstmt.setInt(3, 		deviceVO.getPaper());
@@ -123,13 +60,8 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 			pstmt.setInt(9,		deviceVO.getMachid());
 			pstmt.setInt(10,		deviceVO.getFreecount());
 			pstmt.setInt(11, 	deviceVO.getFreecountset());
-			pstmt.setInt(12,		deviceVO.getDid());
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
@@ -152,34 +84,28 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 			}
 		}
 	}
-
-	@Override
-	public void update(DeviceVO deviceVO) {
+	
+	public void updateDeivce(DeviceVO deviceVO) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE_STMT);
-			pstmt.setString(1, 	deviceVO.getNumber());
-			pstmt.setInt(2, 		deviceVO.getCoin());
-			pstmt.setInt(3, 		deviceVO.getPaper());
-			pstmt.setString(4, 	deviceVO.getLocation());
-			pstmt.setInt(5, 		deviceVO.getRefund());
-			pstmt.setInt(6, 		deviceVO.getUid());
-			pstmt.setInt(7, 		deviceVO.getStatus());
-			pstmt.setInt(8,			deviceVO.getError());
-			pstmt.setInt(9,			deviceVO.getMachid());
-			pstmt.setInt(10,		deviceVO.getFreecount());
-			pstmt.setInt(11,		deviceVO.getFreecountset());
-			pstmt.setInt(12,		deviceVO.getDid());
+			pstmt.setInt(1, 		deviceVO.getCoin());
+			pstmt.setInt(2, 		deviceVO.getPaper());
+			pstmt.setString(3, 	deviceVO.getLocation());
+			pstmt.setInt(4, 		deviceVO.getRefund());
+			pstmt.setInt(5, 		deviceVO.getUid());
+			pstmt.setInt(6, 		deviceVO.getStatus());
+			pstmt.setInt(7,		deviceVO.getError());
+			pstmt.setInt(8,		deviceVO.getMachid());
+			pstmt.setInt(9,		deviceVO.getFreecount());
+			pstmt.setInt(10, 	deviceVO.getFreecountset());
+			pstmt.setString(11, deviceVO.getNumber());
+			pstmt.setInt(12, 	deviceVO.getDid());
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
@@ -202,23 +128,19 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 			}
 		}
 	}
-
-	@Override
-	public void delete(DeviceVO deviceVO) {
+	
+	public void deleteDevice(DeviceVO deviceVO) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(DELETE_STMT);
-			pstmt.setInt(1, deviceVO.getDid());
+
+			pstmt.setString(1, deviceVO.getNumber());
+
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
@@ -241,18 +163,16 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 			}
 		}
 	}
-
-	@Override
-	public DeviceVO findByPrimaryId(String number) {
+	
+	public DeviceVO getOneDevice(String number) {
 		DeviceVO deviceVO = null;		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
-			pstmt = con.prepareStatement(GET_ONE_STMT);			
+		try {			
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ONE_STMT);
 			pstmt.setString(1, number);
 			rs = pstmt.executeQuery();
 
@@ -274,10 +194,6 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -307,26 +223,23 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 		}
 		return deviceVO;
 	}
-
-	@Override
-	public List<DeviceVO> getAll() {
+	
+	public List<DeviceVO>getAll(){		
 		List<DeviceVO> list = new ArrayList<DeviceVO>();
-		DeviceVO deviceVO = null;
-		
+		DeviceVO deviceVO = null;	
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				// deviceVO 也稱為 Domain objects
+				// addRecordVO 也稱為 Domain objects
 				deviceVO = new DeviceVO();
-				deviceVO.setDid(rs.getInt("DID"));
+				deviceVO.setDid(rs.getInt("did"));
 				deviceVO.setNumber(rs.getString("number"));
 				deviceVO.setCoin(rs.getInt("coin"));
 				deviceVO.setPaper(rs.getInt("paper"));
@@ -343,10 +256,6 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 			}
 
 			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
-			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -374,7 +283,7 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 				}
 			}
 		}
-		return list;
+		return list;			
 	}
 
 }
