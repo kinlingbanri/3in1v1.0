@@ -11,6 +11,8 @@ public class DeviceVO  implements java.io.Serializable  {
 	private String location;
 	private int refund;
 	private int uid;
+	private int maid;
+	private String mid;
 	private int status;
 	private int error;
 	private int machid;
@@ -58,6 +60,18 @@ public class DeviceVO  implements java.io.Serializable  {
 	}
 	public void setUid(int uid) {
 		this.uid = uid;
+	}
+	public int getMaid() {
+		return maid;
+	}
+	public void setMaid(int maid) {
+		this.maid = maid;
+	}
+	public String getMid() {
+		return mid;
+	}
+	public void setMid(String mid) {
+		this.mid = mid;
 	}
 	public int getStatus() {
 		return status;

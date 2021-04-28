@@ -1,3 +1,5 @@
+<%@page import="com.history.model.HistoryVO"%>
+<%@page import="com.history.model.HistoryService"%>
 <%@page import="com.store.model.StoreService"%>
 <%@page import="com.addrecord.model.AddRecordVO"%>
 <%@page import="java.util.List"%>
@@ -38,7 +40,17 @@
 		System.out.print(addRecord.getPoint() + ",");
 		System.out.print(addRecord.getCity() + ",");
 		System.out.println(addRecord.getStorename());
-	}	
+	}
+	
+	HistoryService historyService = new HistoryService();
+	List<HistoryVO> historyVOs = historyService.getByMemberId(username);
+	for (HistoryVO history : historyVOs) {
+		System.out.print(history.getMid() + ",");
+		System.out.println(history.getTtime());
+	}
+	
+	
+	
 	System.out.println("Record.jsp !");
 	
 	request.setAttribute("addRecords",addRecords);

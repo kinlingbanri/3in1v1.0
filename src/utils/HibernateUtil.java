@@ -95,7 +95,7 @@ public class HibernateUtil {
 			tx.commit();
 			session.close();
 			
-			System.out.println("修改資料OK!請先用MySQL觀看結果！");
+			System.out.println("查詢資料OK!請先用MySQL觀看結果！");
 			
 			return list;
 			

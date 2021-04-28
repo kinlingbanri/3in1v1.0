@@ -41,5 +41,6 @@ public class MemHibernateDemo {
 			System.out.println(mem.getPoint());
 		});
 		
+		System.out.println("OKK");
 	}
 }

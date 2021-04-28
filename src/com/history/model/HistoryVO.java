@@ -39,7 +39,7 @@ public class HistoryVO  implements java.io.Serializable  {
 	private int maid;
 	
 	@Column(name = "mid")
-	private int mid;
+	private String mid;
 	
 	@Column(name = "refundcount")
 	private int refundcount;
@@ -83,6 +83,18 @@ public class HistoryVO  implements java.io.Serializable  {
 	}
 	public void setUid(int uid) {
 		this.uid = uid;
+	}
+	public int getMaid() {
+		return maid;
+	}
+	public void setMaid(int maid) {
+		this.maid = maid;
+	}
+	public String getMid() {
+		return mid;
+	}
+	public void setMid(String mid) {
+		this.mid = mid;
 	}
 	public int getDid() {
 		return did;

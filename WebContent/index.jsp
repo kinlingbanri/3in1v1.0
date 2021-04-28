@@ -29,6 +29,16 @@
 		
     MemService memSvc = new MemService();
 		List<MemVO> list = memSvc.getAll();
+		
+		for (MemVO mem : list) {
+			System.out.print(mem.getUsername() + ",");
+			System.out.print(mem.getEmail() + ",");
+			System.out.print(mem.getPassword() + ",");
+			System.out.print(mem.getPoint());
+			System.out.println();
+		}
+		
+		
 %>    
     
 <!DOCTYPE html>

@@ -24,7 +24,11 @@ public class RegisterServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
-		resp.setContentType("application/json");
+		resp.setCharacterEncoding("UTF-8");
+		//resp.setContentType("application/json; charset=UTF-8");
+		resp.setContentType("text/html; charset=UTF-8");
+		
+		
 		
 		PrintWriter out = resp.getWriter();
 		JSONObject jsonObject = new JSONObject();
@@ -43,10 +47,10 @@ public class RegisterServlet extends HttpServlet {
 			System.out.println("RegisterState : registert");
 			
 			if(RegisterState.equals("2")) {
-				//String registerEmail = req.getParameter("registerEmail");
-				//String registerPassword = req.getParameter("registerPassword");
+				String registerEmail = req.getParameter("registerEmail");
+				String registerPassword = req.getParameter("registerPassword");
 				
-				//MemVO newMemVO = memService.addMem(registerUsername, registerEmail, registerPassword, 0);
+				memService.addMem(registerUsername, registerEmail, registerPassword, 0);
 				System.out.println("Register Success!!!");
 			}
 			

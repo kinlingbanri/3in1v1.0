@@ -20,7 +20,7 @@ public class MemDAO implements MemDAO_interface {
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/threeinone");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/rm_58");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}

@@ -10,8 +10,8 @@ import java.util.List;
 
 public class MemJDBCDAO implements MemDAO_interface {
 	String driver = "com.mysql.cj.jdbc.Driver";
-	String url = "jdbc:mysql://localhost:3306/threeinone";
-	String userid = "root";
+	String url = "jdbc:mysql://211.21.93.170:3306/rm_58?useUnicode=true&characterEncoding=utf-8";
+	String userid = "van";
 	String passwd = "34182958";
 	
 	private static final String GET_ALL_STMT = 
@@ -350,30 +350,25 @@ public class MemJDBCDAO implements MemDAO_interface {
 	public static void main(String[] args) {
 		MemJDBCDAO dao = new MemJDBCDAO();
 		
-		/*
-		//Add
-		MemVO memVO = new MemVO();
-		memVO.setUsername("金城舞");
-		memVO.setEmail("Kim@hotmail.com");
-		memVO.setPassword("Test1234");
-		memVO.setPoint(3200);
-		dao.insert(memVO);
-		*/
+//		//Add
+//		MemVO memVO = new MemVO();
+//		memVO.setUsername("金城五");
+//		memVO.setEmail("Kim@hotmail.com");
+//		memVO.setPassword("123");
+//		memVO.setPoint(600);
+//		dao.insert(memVO);
 		
-		/*		
-		//Update
-		MemVO memVO = new MemVO();
-		memVO.setUsername("Kim");
-		memVO.setEmail("Kim2@hotmail.com");
-		memVO.setPassword("1234");
-		memVO.setPoint(1300);
-		dao.update(memVO);
-		*/
+
+//		//Update
+//		MemVO memVO = new MemVO();
+//		memVO.setUsername("金城五");
+//		memVO.setEmail("Kim2@hotmail.com");
+//		memVO.setPassword("1234");
+//		memVO.setPoint(500);
+//		dao.update(memVO);
 		
-		/*
-		// Delete
-		dao.delete("金城舞");
-		*/
+//		// Delete
+//		dao.delete("金城五");
 		
 		/*
 		// Query One
@@ -385,15 +380,15 @@ public class MemJDBCDAO implements MemDAO_interface {
 		System.out.println();
 		*/
 		
-		// Query Email All
-		List<MemVO> list = dao.findByEmail("Van@tongya.com.tw");
-		for (MemVO mem : list) {
-			System.out.print(mem.getUsername() + ",");
-			System.out.print(mem.getEmail() + ",");
-			System.out.print(mem.getPassword() + ",");
-			System.out.print(mem.getPoint());
-			System.out.println();
-		}	
+//		// Query Email All
+//		List<MemVO> list = dao.findByEmail("Van@tongya.com.tw");
+//		for (MemVO mem : list) {
+//			System.out.print(mem.getUsername() + ",");
+//			System.out.print(mem.getEmail() + ",");
+//			System.out.print(mem.getPassword() + ",");
+//			System.out.print(mem.getPoint());
+//			System.out.println();
+//		}
 		
 //		// Query All
 //		List<MemVO> list = dao.getAll();
