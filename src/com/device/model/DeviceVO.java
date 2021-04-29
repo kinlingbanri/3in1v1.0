@@ -1,22 +1,60 @@
 package com.device.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "device")
 public class DeviceVO  implements java.io.Serializable  {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@Column(name = "did")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int did;
+	
+	@Column(name = "number")
 	private String number;
+	
+	@Column(name = "coin")
 	private int coin;
+	
+	@Column(name = "paper")
 	private int paper;
+	
+	@Column(name = "location")
 	private String location;
+	
+	@Column(name = "refund")
 	private int refund;
+	
+	@Column(name = "uid")
 	private int uid;
+	
+	@Column(name = "maid")
 	private int maid;
+	
+	@Column(name = "mid")
 	private String mid;
+	
+	@Column(name = "status")
 	private int status;
+	
+	@Column(name = "error")
 	private int error;
+	
+	@Column(name = "machid")
 	private int machid;
+	
+	@Column(name = "freecount")
 	private int freecount;
+	
+	@Column(name = "freecountset")
 	private int freecountset;	
 	
 	public int getDid() {

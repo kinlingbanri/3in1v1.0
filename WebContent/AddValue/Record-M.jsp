@@ -1,3 +1,7 @@
+<%@page import="com.record.model.TransactionRecordVO"%>
+<%@page import="com.record.model.TransactionRecordService"%>
+<%@page import="com.history.model.HistoryVO"%>
+<%@page import="com.history.model.HistoryService"%>
 <%@page import="com.store.model.StoreService"%>
 <%@page import="com.addrecord.model.AddRecordVO"%>
 <%@page import="java.util.List"%>
@@ -29,19 +33,16 @@
 	String password = memVO.getPassword();
 	int point = memVO.getPoint();
 	
-	// Query By Username
-	AddRecordService addRecordService = new AddRecordService();
-	List<AddRecordVO> addRecords = addRecordService.getAfter30(memVO);
-	System.out.println("addRecords : " + addRecords.size());
-	for (AddRecordVO addRecord : addRecords) {
-		System.out.print(addRecord.getStoredatetime() + ",");
-		System.out.print(addRecord.getPoint() + ",");
-		System.out.print(addRecord.getCity() + ",");
-		System.out.println(addRecord.getStorename());
-	}	
-	System.out.println("Record.jsp !");
+	TransactionRecordService trService = new TransactionRecordService();
+	List<TransactionRecordVO> transactionRecordVOs = trService.get30Records(username);
+	for(TransactionRecordVO transactionRecordVO : transactionRecordVOs) {
+		System.out.print(transactionRecordVO.getRecordTimeStamp() + ",");
+		System.out.print(transactionRecordVO.getType() + ",");
+		System.out.print(transactionRecordVO.getPoint() + ",");
+		System.out.println(transactionRecordVO.getLocation());
+	}
 	
-	request.setAttribute("addRecords",addRecords);
+	request.setAttribute("transactionRecordVOs", transactionRecordVOs);
 	
 %>
 
@@ -270,12 +271,14 @@
 				</tr>
 		  </thead>
 		  <tbody>
-		  	<c:forEach items="${addRecords}" var="addRecord" varStatus="id">
+		  	<c:forEach items="${transactionRecordVOs}" var="transactionRecord" varStatus="id">
 					<tr>
 						<th scope="row" style="text-align: center;">${id.count}</th>
-			      <td><fmt:formatDate value="${addRecord.storedatetime }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-			      <td style="text-align: center;">${addRecord.point }</td>
-			      <td>${addRecord.city }${addRecord.storename }</td>
+			      <td><fmt:formatDate value="${transactionRecord.recordTimeStamp }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+			      <td style="text-align: center;">
+			      	${transactionRecord.type }${transactionRecord.point }
+			      </td>
+			      <td>${transactionRecord.location }</td>
 			    </tr>
 	   		</c:forEach>
 		  </tbody>

@@ -2,11 +2,6 @@ package com.history.model;
 
 import java.util.List;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 public class HistoryService {
 	
 	public HistoryDAO_interface dao;

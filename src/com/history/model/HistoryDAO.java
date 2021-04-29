@@ -1,6 +1,7 @@
 package com.history.model;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -53,8 +54,57 @@ public class HistoryDAO implements HistoryDAO_interface{
 		}
 		@Override
 		public void update(HistoryVO historyVO) {
-			// TODO Auto-generated method stub
-			
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			try {
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(UPDATE_STMT);
+
+				pstmt.setTimestamp(1, historyVO.getTtime());
+				pstmt.setString(2, historyVO.getEvent());
+				pstmt.setString(3, historyVO.getIp());
+				pstmt.setInt(4, historyVO.getUid());
+				pstmt.setInt(5, historyVO.getDid());
+				pstmt.setInt(6, historyVO.getMaid());
+				pstmt.setString(7, historyVO.getMid());
+				pstmt.setInt(8, historyVO.getRefundcount());
+				pstmt.setInt(9, historyVO.getFreecount());
+				pstmt.setInt(10, historyVO.getExchangecount());
+				pstmt.setInt(11, historyVO.getPapercount());
+				pstmt.setInt(12, historyVO.getHid());
+
+				pstmt.executeUpdate();
+
+				// Handle any driver errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
 		}
 		@Override
 		public void delete(HistoryVO historyVO) {
@@ -142,7 +192,6 @@ public class HistoryDAO implements HistoryDAO_interface{
 
 				while (rs.next()) {
 					// addRecordVO 也稱為 Domain objects
-					System.out.println("test:" + rs.getString("mid"));
 					historyVO = new HistoryVO();
 					historyVO.setHid(rs.getInt("hid"));
 					historyVO.setTtime(rs.getTimestamp("ttime"));

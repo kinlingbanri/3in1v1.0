@@ -47,11 +47,17 @@ public class HistoryVO  implements java.io.Serializable  {
 	@Column(name = "freecount")
 	private int freecount;
 	
+	@Column(name = "point")
+	private int point;
+	
 	@Column(name = "exchangecount")
 	private int exchangecount;
 	
 	@Column(name = "papercount")
 	private int papercount;
+	
+	@Column(name = "location")
+	private String location;
 	
 
 	public int getHid() {
@@ -114,6 +120,12 @@ public class HistoryVO  implements java.io.Serializable  {
 	public void setFreecount(int freecount) {
 		this.freecount = freecount;
 	}
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
+	}
 	public int getExchangecount() {
 		return exchangecount;
 	}
@@ -125,6 +137,12 @@ public class HistoryVO  implements java.io.Serializable  {
 	}
 	public void setPapercount(int papercount){
 		this.papercount = papercount;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 }

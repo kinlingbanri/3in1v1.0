@@ -11,7 +11,7 @@ import java.util.List;
 public class DeviceJDBCDAO implements DeviceDAO_interface{
 	
 	String driver = "com.mysql.cj.jdbc.Driver";
-	String url = "jdbc:mysql://211.21.93.170:3306/RM_58";
+	String url = "jdbc:mysql://211.21.93.170:3306/rm_58?useUnicode=true&characterEncoding=utf-8";
 	String userid = "van";
 	String passwd = "34182958";
 	

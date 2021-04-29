@@ -19,6 +19,7 @@
         <property name="machid" column="machid"/>
         <property name="freecount" column="freecount"/>
         <property name="freecountset" column="freecountset"/>
+        <property name="location" column="location"/>
 
     </class>
 </hibernate-mapping>

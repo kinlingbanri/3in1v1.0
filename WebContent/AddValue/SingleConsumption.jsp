@@ -1,3 +1,8 @@
+<%@page import="com.history.model.HistoryVO"%>
+<%@page import="com.history.model.HistoryService"%>
+<%@page import="com.device.model.DeviceVO"%>
+<%@page import="java.util.List"%>
+<%@page import="com.device.model.DeviceService"%>
 <%@page import="com.mem.model.MemService"%>
 <%@page import="com.mem.model.MemVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -9,19 +14,53 @@
  	MemVO memVO = (MemVO) session.getAttribute("memVO");
 	String username = memVO.getUsername();
 	int memPoint = memVO.getPoint();
+	//memPoint = 90;
 	String DID = (String)session.getAttribute("DID");
-	String MAID = (String)session.getAttribute("MAID");
-	int machineNumber =  Integer.parseInt(MAID.substring(3, 8));
+	String MACHID = (String)session.getAttribute("MAID");
+	int machineNumber =  Integer.parseInt(MACHID.substring(3, 8));
 	System.out.println("Session username : " + username);
 	System.out.println("Session memPoint : " + memPoint);
 	System.out.println("Session DID : " + DID);
-	System.out.println("Session MAID : " + MAID);
+	System.out.println("Session MAID : " + MACHID);
 	System.out.println("Session machineNumber : " + machineNumber);
-	System.out.println("SingleConsumption.jsp");
+	System.out.println("SingleConsumption.jsp");	
 	
+	int consumptionPoint = 100;						//消費一次費用
+	request.setAttribute("consumptionPoint", consumptionPoint);
 	
-	int point = 100;						//消費一次費用
-	request.setAttribute("point", point);
+// 	HistoryService historyService = new HistoryService();
+// 	List<HistoryVO> historys = historyService.getByMemberId("陳啟展");
+// 	for (HistoryVO history : historys) {
+// 		System.out.print(history.getHid() + ",");
+// 		System.out.print(history.getTtime() + ",");
+// 		System.out.print(history.getEvent() + ",");
+// 		System.out.print(history.getIp() + ",");
+// 		System.out.print(history.getUid() + ",");
+// 		System.out.print(history.getDid() + ",");
+// 		System.out.print(history.getMaid() + ",");
+// 		System.out.print(history.getMid() + ",");
+// 		System.out.print(history.getRefundcount() + ",");
+// 		System.out.print(history.getFreecount() + ",");
+// 		System.out.print(history.getExchangecount() + ",");
+// 		System.out.println(history.getPapercount());
+// 	}
+	
+		DeviceService deviceService = new DeviceService();
+		DeviceVO device = deviceService.getOneDevice(DID);
+		System.out.print(device.getDid() + ",");
+		System.out.print(device.getNumber() + ",");
+		System.out.print(device.getCoin() + ",");
+		System.out.print(device.getPaper() + ",");
+		System.out.print(device.getLocation() + ",");
+		System.out.print(device.getRefund() + ",");
+		System.out.print(device.getUid() + ",");
+		System.out.print(device.getMaid() + ",");
+		System.out.print(device.getMid() + ",");
+		System.out.print(device.getStatus() + ",");
+		System.out.print(device.getError() + ",");
+		System.out.print(device.getMachid() + ",");
+		System.out.print(device.getFreecount() + ",");
+		System.out.println(device.getFreecountset());
 	
 	//Test
 // 	MemService memService = new MemService();
@@ -87,9 +126,6 @@
         </li>
 				<li class="nav-item">
 					<a class="nav-link" href="../logout.jsp" style="text-align: right; color: #FFFFFF;">登出</a>
-<!-- 					<button id="menuLogoutBtn" class="nav-link" -->
-<!-- 						style="float:right; color: #FFFFFF; padding-top: 6px]; border: none; -->
-<!-- 	 						background: none;">登出</button> -->
         </li>
       </ul>
     </div>
@@ -101,32 +137,40 @@
 				中山店洗衣機<%=machineNumber %>號
 			</h2>
 		</div>
-
 		<div style="margin: 7% 0 0 0; text-align:center;">
-			<p style="margin: 0 0 0 0; font-size:16px;">本次消費需</p>
-			<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px; margin-bottom: 36px;"><%=point %>點</p>
-			<p style="margin: 0 0 0 0; font-size:16px;">系統將於以下時間結束後自動完成服務</p>
-			<p style="margin: 0 0 0 0; font-size:16px;">或請按完成，手動完成服務</p>
-			<p id="timer" style="color:red; font-weight:bold; font-size:18px;">30秒</p>
-			<button class="btn btn-outline-success" style="font-weight:bold;" id="logoutBtn">
-				確認
-			</button>
+			<div id="divInfo">
+				<p style="margin: 0 0 0 0; font-size:16px;">現有點數</p>
+				<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px; margin-bottom: 36px;" id="memPoint"><%=memPoint %>點</p>
+				<p style="margin: 0 0 0 0; font-size:16px;">本次消費需</p>
+				<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px; margin-bottom: 36px;" id="consumptionPoint"><%=consumptionPoint %>點</p>
+			</div>
+			<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold; color:red;" id="lack">您的餘額不足，請先加值</p>
+			<div id="divSuccess">
+				<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold;">完成消費，您的餘額為</p>
+				<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold; color:red;" id="balance"></p>
+			</div>
+			<div id="timerDiv" style="margin: 0 0 12px 0;">
+				<p style="margin: 0 0 0 0; font-size:16px;">請按確認交易，手動完成服務</p>
+				<p style="margin: 0 0 0 0; font-size:16px;">或於時間結束後由系統自動完成服務</p>
+				<p id="timer" style="color:red; font-weight:bold; font-size:18px;">30秒</p>
+			</div>
+		  <input type="hidden" name="DID" value="<%=DID %>" id="inputDIid">
+		  <input type="hidden" name="MACHID" value="2" id="inputMachid">
+		  <input type="hidden" name="username" value="<%=username %>" id="inputUsername">
+		  <input type="hidden" name="status" value="0" id="inputStatus">
+		  <input type="hidden" name="memPoint" value="<%=memPoint %>" id="inputMemPoint">
+		  <input type="hidden" name="consumptionPoint" value="<%=consumptionPoint %>" id="inputConsumptionPoint">
+		  <input type="hidden" name="freecount" value="10" id="inputFreecount">
+		  <input type="hidden" name="number" value="<%=MACHID %>" id="inputNumber">
+			<button type="submit" class="btn btn-success" style="font-weight:bold; margin-right:12px;" id="confirmBtn">確認交易</button>
+			<button class="btn btn-warning" style="font-weight:bold; margin-left:12px;" id="logoutBtn">取消交易</button>
 		</div>
   </section><!-- End Section -->  
   
   
   <script>
-  
-		//隠藏右側scrollbar
-		$("#body").niceScroll({
-		  cursorcolor: "#0026BF",
-		  cursorborder: "1px solid #30BAFF", 
-		  autohidemode: "hidden",
-		  cursorwidth: "10px"
-		});
-
+		var DID = $("#DID").val();
 		var count = 30;
-		//var myTimerVar= setInterval(function(){ myTimer()}, 1000);
 		
 		function myTimer(){
 			if(count == 0){
@@ -148,12 +192,109 @@
 			myTimerVar= setInterval(function(){ myTimer()}, 1000);
 		}
 
+
+		function Consumption(username, did, machid, freecount, mempoint, status, consumptionPoint, number){
+			
+			$.ajax({
+				  type: 'POST',                     //GET or POST
+				  url: "../FreeCountServlet",       //請求的頁面
+				  cache: false,                    //防止抓到快取的回應
+				  data: {
+					  username : username,
+					  did : did,
+					  machid : machid,
+				  	freecount : freecount,
+				  	mempoint : mempoint,
+				  	status : status,
+				  	consumptionPoint : consumptionPoint,
+				  	number : number
+				  },
+				  success: function (jsonObject) {         //當請求成功後此事件會被呼叫
+				  	var state = jsonObject.state;
+				  	var balance =  jsonObject.balance;
+				  	if(state == 1){
+					  	$("#balance").text(balance + '點');
+				  		$("#lack").hide();
+							$("#timerDiv").hide();
+							$("#logoutBtn").hide();
+							$("#confirmBtn").hide();
+							$("#successInfo").show();
+							$("#divInfo").hide();
+							$("#divSuccess").show();
+							
+							count = 3;
+							//myTimerVar= setInterval(function(){ myTimer()}, 1000);
+					  }
+				  },
+				  error: function(e){
+				  	console.log("e: " + e);
+				  },            //當請求失敗後此事件會被呼叫
+				  statusCode: {                     //狀態碼處理
+				    404: function() {
+				      alert("page not found");
+				    }
+				  }
+				});
+		}
+
+		
+		
+		
+		//初始化各元素
+		$(function(){
+			var memPointStr = $("#memPoint").text();
+			var consumptionPoint = $("#consumptionPoint").text();
+			memPointStr = memPointStr.substring(0, memPointStr.length-1);
+			consumptionPoint = consumptionPoint.substring(0, consumptionPoint.length-1);
+			var memPointValue = parseInt(memPointStr, 10);
+			var consumptionValue = parseInt(consumptionPoint, 10);
+
+			$("#divSuccess").hide();
+			$("#successInfo").hide();
+			$("#logoutBtn").show();
+			
+
+			if(consumptionValue > memPointValue){
+				$("#lack").show();
+				$("#timerDiv").hide();
+				$("#confirmBtn").hide();
+			}else{
+				$("#lack").hide();
+				$("#timerDiv").show();
+				$("#confirmBtn").show();
+				
+				//var myTimerVar= setInterval(function(){ myTimer()}, 1000);
+			}			
+		});
+  
+		//隠藏右側scrollbar
+		$("#body").niceScroll({
+		  cursorcolor: "#0026BF",
+		  cursorborder: "1px solid #30BAFF", 
+		  autohidemode: "hidden",
+		  cursorwidth: "10px"
+		});
+
 		document.getElementById('logoutBtn').onclick = function(){
 			window.location.href = "../logout.jsp";
 		}
-// 		document.getElementById('menuLogoutBtn').onclick = function(){
-// 			window.location.href = "../logout.jsp";
-// 		}
+
+
+
+		$("#confirmBtn").click(function(){
+			var did =  $("#inputDIid").val();
+			var machid =  $("#inputMachid").val();
+			var username =  $("#inputUsername").val();
+			var status =  $("#inputStatus").val();
+			var mempoint =  $("#inputMemPoint").val();
+			var consumptionPoint =  $("#inputConsumptionPoint").val();
+			var freecount =  $("#inputFreecount").val();
+			var number =  $("#inputNumber").val();
+
+			console.log(did + ";" + machid + ";"+ username + ";"+ status + ";"+ mempoint + ";" +consumptionPoint + ";"+ freecount + ";" + number + ";");
+			
+			//Consumption(username, did, machid, freecount, mempoint, status, consumptionPoint, number);
+		});
  
   </script>
 </body>

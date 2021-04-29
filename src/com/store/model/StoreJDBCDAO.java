@@ -11,8 +11,8 @@ import java.util.List;
 public class StoreJDBCDAO implements StoreDAO_interface{
 	
 	String driver = "com.mysql.cj.jdbc.Driver";
-	String url = "jdbc:mysql://localhost:3306/threeinone";
-	String userid = "root";
+	String url = "jdbc:mysql://211.21.93.170:3306/rm_58?useUnicode=true&characterEncoding=utf-8";
+	String userid = "van";
 	String passwd = "34182958";
 	
 	private static final String GET_ALL_STMT = 

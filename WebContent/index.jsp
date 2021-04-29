@@ -6,10 +6,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
 <%
-		String reqDID = request.getParameter("DID");
-		String reqMAID = request.getParameter("MAID");	
-		System.out.println("index.jsp reqDID : " + reqDID);
-		System.out.println("index.jsp reqMAID : " + reqMAID);
+		String DID = request.getParameter("DID");
+		String MAID = request.getParameter("MAID");	
+		System.out.println("index.jsp reqDID : " + DID);
+		System.out.println("index.jsp reqMAID : " + MAID);
 		
 		String sessionDID = (String)session.getAttribute("DID");
 		String sessionMAID = (String)session.getAttribute("MAID");
@@ -18,11 +18,11 @@
 		System.out.println("index.jsp start sessionDID : " + sessionDID);
 		System.out.println("index.jsp start sessionMAID : " + sessionMAID);
 		
-		if((reqDID != null) && (!reqDID.equals(""))){
-			session.setAttribute("DID", reqDID);
+		if((DID != null) && (!DID.equals(""))){
+			session.setAttribute("DID", DID);
 		}
-		if((reqMAID != null) && (!reqMAID.equals(""))){
-			session.setAttribute("MAID", reqMAID);
+		if((MAID != null) && (!MAID.equals(""))){
+			session.setAttribute("MAID", MAID);
 		}
 		System.out.println("index.jsp session DID : " + session.getAttribute("DID"));
 		System.out.println("index.jsp session MAID : " + session.getAttribute("MAID"));
@@ -237,8 +237,8 @@
 							<input type="checkbox" name="showPwd" id="checkboxPwd">顯示密碼
 						</label>
 					</div>					
-					<input type="hidden" name="DID" value="<%=request.getAttribute("DID") %>" id="DID">
-					<input type="hidden" name="MAID" value="<%=request.getAttribute("MAID") %>" id="MAID">
+					<input type="hidden" name="DID" value="<%=DID %>" id="DID">
+					<input type="hidden" name="MAID" value="<%=MAID %>" id="MAID">
 					<input type="hidden" name="action" value="getOne_For_Display">
 					<div class="group">
 						<button class="button" id="loginBtn" style="font-size:16px; font-weight:bold;">登入</button>
@@ -251,34 +251,42 @@
 				</div>
 				
 				<!-- Register form -->
+				
 				<div class="sign-up-htm" id="signup">
-					<div class="group">
-						<label for="user" class="label" style="font-size: 20px;">帳號</label>
-						<input id="registerUsername" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
+					<div class="group" id="signupSuccess"  style="text-align: center;font-size: 24px;font-weight: bold;color: red;margin-top: 24px;">
+						<p>註冊成功！</p>
+						<p>請稍後，即將返回登入頁面</p>
 					</div>
-					<div class="group">
-						<label for="pass" class="label" style="font-size: 20px;">Email</label>
-						<input id="registerEmail" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
+					<div id="signupForm">
+						<div class="group">
+							<label for="user" class="label" style="font-size: 20px;">帳號</label>
+							<input id="registerUsername" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
+						</div>
+						<div class="group">
+							<label for="pass" class="label" style="font-size: 20px;">Email</label>
+							<input id="registerEmail" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
+						</div>
+						<div class="group">
+							<label for="pass" class="label" style="font-size: 20px;">再輸入一次Email</label>
+							<input id="checkRegisterEmail" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
+						</div>
+						<div class="group">
+							<label for="pass" class="label" style="font-size: 20px;">密碼</label>
+							<input id="registerPassword" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
+						</div>
+						<div class="group">
+							<label for="pass" class="label" style="font-size: 20px;">再輸入一次密碼</label>
+							<input id="checkRegisterPassword" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
+						</div>
+						<div class="group" style="margin-top: 24px;">
+							<button class="button" id="registerBtn" style="font-size:16px; font-weight:bold;">註冊</button>
+						</div>
+						<div class="hr"></div>
+						<div class="foot-lnk">
+							<label for="tab-1">已有帳號?</label>
+						</div>
 					</div>
-					<div class="group">
-						<label for="pass" class="label" style="font-size: 20px;">再輸入一次Email</label>
-						<input id="checkRegisterEmail" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
-					</div>
-					<div class="group">
-						<label for="pass" class="label" style="font-size: 20px;">密碼</label>
-						<input id="registerPassword" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
-					</div>
-					<div class="group">
-						<label for="pass" class="label" style="font-size: 20px;">再輸入一次密碼</label>
-						<input id="checkRegisterPassword" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
-					</div>
-					<div class="group" style="margin-top: 24px;">
-						<button class="button" id="registerBtn" style="font-size:16px; font-weight:bold;">註冊</button>
-					</div>
-					<div class="hr"></div>
-					<div class="foot-lnk">
-						<label for="tab-1">已有帳號?</label>
-					</div>
+					
 				</div>				
 
 			</div>
@@ -289,6 +297,7 @@
 	
 	var DID = $("#DID").val();
 	var MAID = $("#MAID").val();
+	console.log("DID=" + DID + ";MAID=" + MAID);
 	
 	//隠藏右側scrollbar
 	$("#body").niceScroll({
@@ -299,6 +308,16 @@
 	});
 	
 	console.log("Into index.jsp!!!");
+
+	function myTimer(){
+		if(count == 0){
+			clearInterval(myTimerVar);
+			window.location.href = "../3in1/index.jsp?DID=" + DID + "&MAID=" + MAID;
+		}else{
+			count = count - 1;
+			console.log("count : " + count);
+		}
+	}
 	
 	//初始化各元素
 	$(function(){
@@ -321,6 +340,10 @@
 		$("#checkRegisterEmail").val("").css('color', '#aaa');
 		$("#registerPassword").val("").css('color', '#aaa');
 		$("#checkRegisterPassword").val("").css('color', '#aaa');
+
+		$("#signupSuccess").hide();
+		$("#signupForm").show();
+		
 	});
 	
 	//用於登入確認帳號和密碼是否為空白,再提交後台驗證
@@ -644,6 +667,17 @@
 				  		$("#registerUsername").val("此帳號已註冊!").css('color', 'red');
 				  	}else if(state == "register"){
 				  		console.log("註冊成功!");
+
+				  		$("#signupForm").hide();
+							$("#signupSuccess").show();
+							
+							count = 3;
+							myTimerVar= setInterval(function(){ myTimer()}, 1000);
+				  		
+
+				  		
+
+				  		/*
 				  		swal.fire({
 				  		    title: '註冊成功！',
 				  		    text: '3秒後自動關閉!',
@@ -651,7 +685,7 @@
 				  		}).then(
 				  		    function () {
 				  		    	// handling the promise rejection
-				  		    	window.location.href = "../3in1/index.jsp";
+				  		    	//window.location.href = "../3in1/index.jsp?DID=" + DID + "&MAID=" + MAID;
 				  		    },		    	
 				  		    function (dismiss) {
 				  		        if (dismiss === 'timer') {
@@ -659,6 +693,7 @@
 				  		        }
 				  		    }
 				  			)
+			  				*/
 				  	}			    	
 				  },
 				  error: function(e){

@@ -364,7 +364,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 //		memVO.setUsername("金城五");
 //		memVO.setEmail("Kim2@hotmail.com");
 //		memVO.setPassword("1234");
-//		memVO.setPoint(500);
+//		memVO.setPoint(600);
 //		dao.update(memVO);
 		
 //		// Delete
