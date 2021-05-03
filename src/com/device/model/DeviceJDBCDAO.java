@@ -21,6 +21,8 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 	private static final String GET_ONE_STMT = 
 			"SELECT did, number, coin, paper, location, refund, uid, status, error, machid,"
 					+ "freecount, freecountset FROM device where number = ?";
+	private static final String GET_DEVICE_STATUS_STMT = 
+			"SELECT status FROM device where number = ?";
 	private static final String INSERT_STMT = 
 			"INSERT INTO device (number, coin, paper, location, refund, uid, status, error,"
 					+ "machid, freecount, freecountset) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -69,6 +71,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 //		deviceVO.setDid(31);
 //		dao.delete(deviceVO);
 		
+		//Query Device Status
+		boolean status = dao.getStatus("TY00001");
+		System.out.print("Device Status : " + status);
+		
 		
 //		// Query One
 //		DeviceVO deviceVO = dao.findByPrimaryId("TY00030");
@@ -85,22 +91,22 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 //		System.out.print(deviceVO.getFreecount() + ",");
 //		System.out.println(deviceVO.getFreecountset());
 		
-		// Query All
-		List<DeviceVO> list = dao.getAll();
-		for (DeviceVO device : list) {
-			System.out.print(device.getDid() + ",");
-			System.out.print(device.getNumber() + ",");
-			System.out.print(device.getCoin() + ",");
-			System.out.print(device.getPaper() + ",");
-			System.out.print(device.getLocation() + ",");
-			System.out.print(device.getRefund() + ",");
-			System.out.print(device.getUid() + ",");
-			System.out.print(device.getStatus() + ",");
-			System.out.print(device.getError() + ",");
-			System.out.print(device.getMachid() + ",");
-			System.out.print(device.getFreecount() + ",");
-			System.out.println(device.getFreecountset());
-		}
+//		// Query All
+//		List<DeviceVO> list = dao.getAll();
+//		for (DeviceVO device : list) {
+//			System.out.print(device.getDid() + ",");
+//			System.out.print(device.getNumber() + ",");
+//			System.out.print(device.getCoin() + ",");
+//			System.out.print(device.getPaper() + ",");
+//			System.out.print(device.getLocation() + ",");
+//			System.out.print(device.getRefund() + ",");
+//			System.out.print(device.getUid() + ",");
+//			System.out.print(device.getStatus() + ",");
+//			System.out.print(device.getError() + ",");
+//			System.out.print(device.getMachid() + ",");
+//			System.out.print(device.getFreecount() + ",");
+//			System.out.println(device.getFreecountset());
+//		}
 	}
 
 	@Override
@@ -375,6 +381,62 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public boolean getStatus(String number) {
+		boolean status = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_DEVICE_STATUS_STMT);			
+			pstmt.setString(1, number);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				int deviceStatus = rs.getInt("status");
+				if(deviceStatus == 1) {
+					status = true;
+				}
+			}			
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return status;
 	}
 
 }

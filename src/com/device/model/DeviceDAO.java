@@ -31,6 +31,8 @@ public class DeviceDAO implements DeviceDAO_interface{
 	private static final String GET_ONE_STMT = 
 			"SELECT did, number, coin, paper, location, refund, uid, maid, mid, status, error, machid,"
 					+ "freecount, freecountset FROM device where number = ?";
+	private static final String GET_DEVICE_STATUS_STMT = 
+			"SELECT status FROM device where number = ?";
 	private static final String INSERT_STMT = 
 			"INSERT INTO device (number, coin, paper, location, refund, uid, maid, mid, status, error,"
 					+ "machid, freecount, freecountset) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -228,6 +230,58 @@ public class DeviceDAO implements DeviceDAO_interface{
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public boolean getStatus(String number) {
+		boolean status = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ONE_STMT);
+			pstmt.setString(1, number);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				int deviceStatus = rs.getInt("status");
+				if(deviceStatus == 1) {
+					status = true;
+				}
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return status;
 	}
 
 }

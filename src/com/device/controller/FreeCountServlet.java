@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.formula.functions.Count;
 import org.json.JSONObject;
 
 import com.device.model.DeviceService;
@@ -16,12 +17,14 @@ import com.device.model.DeviceVO;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
+import java.util.Timer; 
+import java.util.TimerTask;
 
 @WebServlet("/FreeCountServlet")
 public class FreeCountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    public FreeCountServlet() {
+	public FreeCountServlet() {
         super();
     }
 
@@ -73,15 +76,11 @@ public class FreeCountServlet extends HttpServlet {
 		System.out.println("point:" + memVO.getPoint());
 		
 		new MemService().updateMem(memVO);
-		
+
 		jsonObject.put("state", "1");
 		jsonObject.put("balance", balance);
-		
-
-		
 		out.write(jsonObject.toString());
 		out.flush();
 		out.close();
 	}
-
 }

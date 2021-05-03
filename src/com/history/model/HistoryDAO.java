@@ -20,8 +20,8 @@ public class HistoryDAO implements HistoryDAO_interface{
 	HistoryDAO_interface dao;
 	
 	private static final String GET_ALL_STMT = 
-			"SELECT hid, ttime, event, ip, uid, did, refundcount, freecount, exchangecount,"
-					+ "papercount FROM history";
+			"SELECT hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, exchangecount,"
+					+ "papercount, location FROM history";
 	private static final String GET_MEMBERID_STMT = 
 			"SELECT hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, exchangecount,"
 					+ "papercount FROM history where mid = ?";

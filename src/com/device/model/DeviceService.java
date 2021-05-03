@@ -24,6 +24,10 @@ public class DeviceService {
 		dao.delete(deviceVO);
 	}
 	
+	public boolean getStatus(String number) {
+		return dao.getStatus(number);
+	}
+	
 	public DeviceVO getOneDevice(String number) {
 		return dao.findByPrimaryId(number);
 	}

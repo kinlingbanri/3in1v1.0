@@ -251,7 +251,7 @@
 				  	$("#balance").text(balance + '點'); 		
 						
 						count = 3;
-						//myTimerVar= setInterval(function(){ myTimer()}, 1000);
+						myTimerVar= setInterval(function(){ myTimer()}, 1000);
 				  }
 			  },
 			  error: function(e){

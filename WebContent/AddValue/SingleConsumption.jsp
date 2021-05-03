@@ -171,6 +171,7 @@
   <script>
 		var DID = $("#DID").val();
 		var count = 30;
+
 		
 		function myTimer(){
 			if(count == 0){
@@ -192,6 +193,10 @@
 			myTimerVar= setInterval(function(){ myTimer()}, 1000);
 		}
 
+		function resetStatusTimer(){
+			clearInterval(myCheckStatusTimerVar);	
+		}
+
 
 		function Consumption(username, did, machid, freecount, mempoint, status, consumptionPoint, number){
 			
@@ -199,6 +204,7 @@
 				  type: 'POST',                     //GET or POST
 				  url: "../FreeCountServlet",       //請求的頁面
 				  cache: false,                    //防止抓到快取的回應
+				  async:false,													//停止非同步
 				  data: {
 					  username : username,
 					  did : did,
@@ -222,7 +228,7 @@
 							$("#divInfo").hide();
 							$("#divSuccess").show();
 							
-							count = 3;
+							//count = 3;
 							//myTimerVar= setInterval(function(){ myTimer()}, 1000);
 					  }
 				  },
@@ -238,6 +244,35 @@
 		}
 
 		
+		function CheckStatus(did){
+			var deviceStatus = 0;
+				$.ajax({
+					  type: 'POST',                     		//GET or POST
+					  url: "../CheckDeviceStatusServlet",  //請求的頁面
+					  cache: false,                    		//防止抓到快取的回應
+					  async:false,													//停止非同步
+					  data: {
+						  did : did
+					  },
+					  success: function (jsonObject) {         //當請求成功後此事件會被呼叫
+					  	var status = jsonObject.status;
+					  	if(status == 1){
+					  		deviceStatus = 1;
+					  		console.log("CheckStatus : " + deviceStatus);
+						  }
+					  },
+					  error: function(e){
+					  	console.log("e: " + e);
+					  },            //當請求失敗後此事件會被呼叫
+					  statusCode: {                     //狀態碼處理
+					    404: function() {
+					      alert("page not found");
+					    }
+					  }
+					});
+			return deviceStatus;
+		}
+		
 		
 		
 		//初始化各元素
@@ -251,8 +286,7 @@
 
 			$("#divSuccess").hide();
 			$("#successInfo").hide();
-			$("#logoutBtn").show();
-			
+			$("#logoutBtn").show();			
 
 			if(consumptionValue > memPointValue){
 				$("#lack").show();
@@ -277,9 +311,7 @@
 
 		document.getElementById('logoutBtn').onclick = function(){
 			window.location.href = "../logout.jsp";
-		}
-
-
+		}		
 
 		$("#confirmBtn").click(function(){
 			var did =  $("#inputDIid").val();
@@ -293,8 +325,79 @@
 
 			console.log(did + ";" + machid + ";"+ username + ";"+ status + ";"+ mempoint + ";" +consumptionPoint + ";"+ freecount + ";" + number + ";");
 			
-			//Consumption(username, did, machid, freecount, mempoint, status, consumptionPoint, number);
-		});
+			Consumption(username, did, machid, freecount, mempoint, status, consumptionPoint, number);
+
+			delay('a',0).then(function(v){
+				  console.log(v[0],v[1]);   // 顯示 a 0
+				   var status = CheckStatus(did);
+				   console.log("status : " + status);
+				  return delay('b',1000);   // 延遲一秒之後，告訴後面的函示顯示 b 1000
+				}).then(function(v){
+				  console.log(v[0],v[1]);   // 顯示 b 1000
+				  var status = CheckStatus(did);
+				  console.log("status : " + status);
+				  return delay('c',1000);   // 延遲兩秒之後，告訴後面的函示顯示 c 1000
+				}).then(function(v){
+					  console.log(v[0],v[1]);   // 顯示 c 1000
+					  var status = CheckStatus(did);
+					  console.log("status : " + status);
+					  return delay('d',1000);
+				}).then(function(v){
+					  console.log(v[0],v[1]);
+					  var status = CheckStatus(did);
+					  console.log("status : " + status);
+					  return delay('e',1000);
+				}).then(function(v){
+					  console.log(v[0],v[1]);
+					  var status = CheckStatus(did);
+					  console.log("status : " + status);
+					  return delay('f',1000);
+				}).then(function(v){
+					  console.log(v[0],v[1]);
+					  var status = CheckStatus(did);
+					  console.log("status : " + status);
+					  return delay('g',1000);
+				}).then(function(v){
+					  console.log(v[0],v[1]);
+					  var status = CheckStatus(did);
+					  console.log("status : " + status);
+					  return delay('h',1000);
+				}).then(function(v){
+					  console.log(v[0],v[1]);
+					  var status = CheckStatus(did);
+					  console.log("status : " + status);
+					  return delay('i',1000);
+				}).then(function(v){
+					  console.log(v[0],v[1]);
+					  var status = CheckStatus(did);
+					  console.log("status : " + status);
+					  return delay('i',1000);
+				}).then(function(v){
+					  console.log(v[0],v[1]);
+					  var status = CheckStatus(did);
+					  console.log("status : " + status);
+					  if(status == 1){
+
+						}
+					  return delay('i',1000);
+				});
+
+
+
+			
+ 		});
+
+
+
+		
+
+		var delay = function(r,s){
+			return new Promise(function(resolve,reject){
+				setTimeout(function(){
+					resolve([r,s]);
+				},s); 
+			});
+		};
  
   </script>
 </body>
