@@ -7,6 +7,7 @@ public interface HistoryDAO_interface {
 	public void update(HistoryVO historyVO);
 	public void delete(HistoryVO historyVO);
 	public HistoryVO findByPrimaryId(int hid);
-	public List<HistoryVO> getByMemberId(String mid); 
+	public List<HistoryVO> getByMemberId(String mid);
+	public List<HistoryVO> get30(String mid);
 	public List<HistoryVO> getAll();
 }

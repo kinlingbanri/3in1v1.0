@@ -9,7 +9,6 @@
     pageEncoding="UTF-8"%>
     
 <%
-
 	//online
  	MemVO memVO = (MemVO) session.getAttribute("memVO");
 	String username = memVO.getUsername();
@@ -171,7 +170,6 @@
   <script>
 		var DID = $("#DID").val();
 		var count = 30;
-
 		
 		function myTimer(){
 			if(count == 0){
@@ -273,7 +271,34 @@
 			return deviceStatus;
 		}
 		
-		
+		function historyRecord(username, did, machid, freecount, consumptionPoint, number){
+			$.ajax({
+				  type: 'POST',                     		//POST
+				  url: "../HistoryRecordServlet",  //請求的頁面
+				  cache: false,                    		//防止抓到快取的回應
+				  async:false,													//停止非同步
+				  data: {
+					  username : username,
+					  did : did,
+					  machid : machid,
+					  point : consumptionPoint,
+					  freecount : freecount,
+					  number : number
+				  },
+				  success: function (jsonObject) {         //當請求成功後此事件會被呼叫
+				  	var status = jsonObject.status;
+			  		console.log("status : " + status);
+				  },
+				  error: function(e){
+				  	console.log("e: " + e);
+				  },            //當請求失敗後此事件會被呼叫
+				  statusCode: {                     //狀態碼處理
+				    404: function() {
+				      alert("page not found");
+				    }
+				  }
+			});
+		}
 		
 		//初始化各元素
 		$(function(){
@@ -286,7 +311,7 @@
 
 			$("#divSuccess").hide();
 			$("#successInfo").hide();
-			$("#logoutBtn").show();			
+			$("#logoutBtn").show();
 
 			if(consumptionValue > memPointValue){
 				$("#lack").show();
@@ -331,10 +356,11 @@
 				  console.log(v[0],v[1]);   // 顯示 a 0
 				   var status = CheckStatus(did);
 				   console.log("status : " + status);
-				  return delay('b',1000);   // 延遲一秒之後，告訴後面的函示顯示 b 1000
+				  return delay('b',100);   // 延遲一秒之後，告訴後面的函示顯示 b 1000
 				}).then(function(v){
 				  console.log(v[0],v[1]);   // 顯示 b 1000
 				  var status = CheckStatus(did);
+				  historyRecord(username, did, machid, freecount, consumptionPoint, number);
 				  console.log("status : " + status);
 				  return delay('c',1000);   // 延遲兩秒之後，告訴後面的函示顯示 c 1000
 				}).then(function(v){
@@ -377,20 +403,17 @@
 					  var status = CheckStatus(did);
 					  console.log("status : " + status);
 					  if(status == 1){
-
+						  //historyRecord(username, did, machid, freecount, consumptionPoint, number);
 						}
 					  return delay('i',1000);
-				});
-
-
-
-			
+				}).then(function(v){
+					  console.log(v[0],v[1]);
+					  console.log("status : " + status);
+					  //window.location.href = "../logout.jsp";
+					  return delay('i',1000);
+				});			
  		});
-
-
-
-		
-
+ 		
 		var delay = function(r,s){
 			return new Promise(function(resolve,reject){
 				setTimeout(function(){

@@ -25,12 +25,15 @@ public class HistoryDAO implements HistoryDAO_interface{
 	private static final String GET_MEMBERID_STMT = 
 			"SELECT hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, exchangecount,"
 					+ "papercount FROM history where mid = ?";
+	private static final String GET_30_STMT = 
+			"SELECT TTIME, MID, POINT, LOCATION FROM history "
+			+ "WHERE MID = ? AND FREECOUNT > 0 AND POINT > 0 ORDER BY TTIME DESC LIMIT 30;";
 	private static final String GET_ONE_STMT = 
 			"select hid, ttime, event, ip, uid, did, refundcount, freecount, exchangecount,"
 					+ "papercount from history where hid = ?";
 	private static final String INSERT_STMT = 
-			"INSERT INTO history (ttime, event, ip, uid, did, refundcount, freecount,"
-					+ "exchangecount, papercount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			"INSERT INTO history (ttime, event, ip, uid, did, maid, mid, refundcount, freecount,"
+					+ "point, exchangecount, papercount, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
 			"UPDATE history set ttime=?, event=?, ip=?, uid=?, did=?, refundcount=?,"
 					+ "freecount=?, exchangecount=?, papercount=? where hid = ?";
@@ -49,8 +52,50 @@ public class HistoryDAO implements HistoryDAO_interface{
 		}
 		@Override
 		public void insert(HistoryVO historyVO) {
-			// TODO Auto-generated method stub
-			
+			Connection con = null;
+			PreparedStatement pstmt = null;
+
+			try {
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(INSERT_STMT);
+
+				pstmt.setTimestamp(1, historyVO.getTtime());
+				pstmt.setString(2, historyVO.getEvent());
+				pstmt.setString(3, historyVO.getIp());
+				pstmt.setInt(4, historyVO.getUid());
+				pstmt.setInt(5, historyVO.getDid());
+				pstmt.setInt(6, historyVO.getMaid());
+				pstmt.setString(7, historyVO.getMid());
+				pstmt.setInt(8, historyVO.getRefundcount());
+				pstmt.setInt(9, historyVO.getFreecount());
+				pstmt.setInt(10, historyVO.getPoint());
+				pstmt.setInt(11, historyVO.getExchangecount());
+				pstmt.setInt(12, historyVO.getPapercount());
+				pstmt.setString(13, historyVO.getLocation());
+
+				pstmt.executeUpdate();				
+
+				// Handle any SQL errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
 		}
 		@Override
 		public void update(HistoryVO historyVO) {
@@ -236,6 +281,11 @@ public class HistoryDAO implements HistoryDAO_interface{
 				}
 			}
 			return list;
+		}
+		@Override
+		public List<HistoryVO> get30(String mid) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 }
