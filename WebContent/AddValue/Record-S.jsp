@@ -296,7 +296,7 @@
 		});
 		
 		$("#returnBtn").click(function(){
-			window.location.href = "./AddValue.jsp";
+			window.location.href = "./SingleConsumption.jsp";
 		});
 		
 		var memVOUsername = $("#memVOUsername").val();

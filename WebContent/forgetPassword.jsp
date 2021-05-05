@@ -299,7 +299,7 @@
 		    		
 		    		
 		    		setTimeout(function(){
-		    			window.location.href = "./index.jsp";
+		    			window.location.href = "./logout.jsp";
 		    		}, 3000);
 		    		/*
 		    		swal.fire({

@@ -53,7 +53,8 @@
 	System.out.print(device.getFreecount() + ",");
 	System.out.println(device.getFreecountset());
 	
-	
+	String machineName = device.getLocation() + " 洗衣機" + Integer.toString(machineNumber) + "號";
+	System.out.print("machineName : " + machineName);
 %>
 
 <!DOCTYPE html>
@@ -143,7 +144,7 @@
   <section style="height: 1080px;">
 		<div style="text-align: center;">
 			<h2 id="storeInfo">
-				中山店烘衣機<%=machineNumber %>號
+				<%=machineName %>
 			</h2>
 		</div>
 		<div>
@@ -193,7 +194,7 @@
 			<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold; color:red;" id="lack">您的餘額不足，請先加值</p>
 			
 			<div id="divSuccess">
-				<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold;">完成消費，您的餘額為</p>
+				<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold;">本次消費<%=consumptionPoint %>點</p>
 				<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold; color:red;" id="balance"></p>
 			</div>
 			
@@ -212,6 +213,9 @@
 		  <input type="hidden" name="number" value="<%=MACHID %>" id="inputNumber">
 			<button type="submit" class="btn btn-success" style="font-weight:bold; margin-right:12px;" id="confirmBtn">確認交易</button>
 			<button class="btn btn-warning" style="font-weight:bold; margin-left:12px;" id="logoutBtn">取消交易</button>
+		</div>
+		<div style="text-align: center; margin-top:24px;" id="successDiv">
+			<button class="btn btn-success" style="font-weight:bold; margin-left:12px;" id="successBtn">完成交易</button>
 		</div>
   </section><!-- End Section -->  
   
@@ -274,7 +278,7 @@
 						$("#confirmBtn").hide();
 						$("#logoutBtn").hide();
 						$("#divSuccess").show();
-				  	$("#balance").text(balance + '點'); 		
+				  	$("#balance").text('您的餘額為 ' + balance + '點'); 		
 						
 						//count = 3;
 						//myTimerVar= setInterval(function(){ myTimer()}, 1000);
@@ -365,8 +369,7 @@
 			$("#CounterDiv").hide();
 			$("#lack").hide();
 			$("#divSuccess").hide();
-
-			divSuccess
+			$("#successDiv").hide();
 		});
 		
 		$("#selectBtn").click(function(){
@@ -403,6 +406,9 @@
 			window.location.href = "../logout.jsp";
 		}
 
+		document.getElementById('successBtn').onclick = function(){
+			window.location.href = "../logout.jsp";
+		}
 
 		$("#confirmBtn").click(function(){
 			var did =  $("#inputDIid").val();
@@ -432,41 +438,65 @@
 				}).then(function(v){
 					  console.log(v[0],v[1]);   // 顯示 c 1000
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('d',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('e',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('f',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('g',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('h',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('i',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('i',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  if(status == 1){
 						  
@@ -475,6 +505,9 @@
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  if(status == 1){
 						  //window.location.href = "../logout.jsp";

@@ -13,8 +13,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <%@page import="com.addrecord.model.TodayTotalVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="java.util.List"%>
+
 
 
 <%
@@ -25,21 +27,23 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	
 	
 	DeviceService deviceService = new DeviceService();
-// 	List<DeviceVO> devices = deviceService.getAll();
-// 	for (DeviceVO device : devices) {
-// 		System.out.print(device.getDid() + ",");
-// 		System.out.print(device.getNumber() + ",");
-// 		System.out.print(device.getCoin() + ",");
-// 		System.out.print(device.getPaper() + ",");
-// 		System.out.print(device.getLocation() + ",");
-// 		System.out.print(device.getRefund() + ",");
-// 		System.out.print(device.getUid() + ",");
-// 		System.out.print(device.getStatus() + ",");
-// 		System.out.print(device.getError() + ",");
-// 		System.out.print(device.getMachid() + ",");
-// 		System.out.print(device.getFreecount() + ",");
-// 		System.out.println(device.getFreecountset());
-// 	}
+	List<DeviceVO> devices = deviceService.getAll();
+	for (DeviceVO device : devices) {
+		System.out.print(device.getDid() + ",");
+		System.out.print(device.getNumber() + ",");
+		System.out.print(device.getCoin() + ",");
+		System.out.print(device.getPaper() + ",");
+		System.out.print(device.getLocation() + ",");
+		System.out.print(device.getRefund() + ",");
+		System.out.print(device.getUid() + ",");
+		System.out.print(device.getStatus() + ",");
+		System.out.print(device.getError() + ",");
+		System.out.print(device.getMachid() + ",");
+		System.out.print(device.getFreecount() + ",");
+		System.out.println(device.getFreecountset());
+	}
+	
+	request.setAttribute("devices", devices);
 
 // 	DeviceVO device = deviceService.getOneDevice("TY00001");
 // 	System.out.print(device.getDid() + ",");
@@ -70,9 +74,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 // 	deviceVO.setDid(33);
 // 	deviceService.updateDeivce(deviceVO);
 
-	DeviceVO deviceVO = new DeviceVO();
-	deviceVO.setNumber("TY00031");
-	deviceService.deleteDevice(deviceVO);
+// 	DeviceVO deviceVO = new DeviceVO();
+// 	deviceVO.setNumber("TY00031");
+// 	deviceService.deleteDevice(deviceVO);
 	
 %>
 
@@ -80,6 +84,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <html>
 <head>
 <title>三合一加值系統後台管理</title>
+<link rel="shortcut icon" href="#" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="Pooled Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
@@ -262,36 +267,28 @@ td {
 									<thead>
 										<tr>
 											<th>ID</th>
-											<th>店家名稱</th>
+											<th>設備名稱</th>
 											<th style="text-align: center;">狀態</th>
 										</tr>
 									</thead>
-									<tbody>
-										<tr class="devicelist">
-											<td>2356</td>
-											<td>dummy text </td>
-											<td><div class="greenCircle"></div></td>
-										</tr>
-										<tr class="devicelist">
-											<td>4589</td>
-											<td>Lorem Ipsum</td>
-											<td><div class="redCircle"></div></td>
-										</tr>
-										<tr class="devicelist">
-											<td>3269</td>
-											<td>specimen book</td>
-											<td><div class="yellowCircle"></div></td>
-										</tr>                                                    
-										<tr class="devicelist">
-											<td>5126</td>
-											<td>Letraset sheets</td>
-											<td><div class="greenCircle"></div></td>
-										</tr>
-										<tr class="devicelist">
-											<td>7425</td>
-											<td>PageMaker</td>
-											<td><div class="greenCircle"></div></td>
-										</tr>
+									<tbody>										
+										<c:forEach items="${devices}" var="device" varStatus="id">
+											<tr  scope="row" style="text-align: center;" class="devicelist">
+												<td>${device.number}</td>
+												<td>${device.location}</td>												
+												<c:choose>
+												    <c:when test="${(device.error == 0) and (device.paper < 280)}">
+												       <td><div class="greenCircle"></div></td>
+												    </c:when>
+												    <c:when test="${device.error > 0}">
+												       	<td><div class="redCircle"></div></td>
+												    </c:when>
+												    <c:otherwise>
+												       <td><div class="yellowCircle"></div></td>
+												    </c:otherwise>
+												</c:choose>
+									    </tr>
+							   		</c:forEach>
 									</tbody>
 								</table>    
 							</div>

@@ -545,11 +545,11 @@
 		});
 		
 		$("#backBtn1").click(function(){
-			window.location.href = "./AddValue.jsp";
+			window.location.href = "./MultiConsumption.jsp";
 		});
 
 		$("#backBtn2").click(function(){
-			window.location.href = "./AddValue.jsp";
+			window.location.href = "./MultiConsumption.jsp";
 		});
 
 		

@@ -4,17 +4,21 @@
 <%@page import="com.mem.model.MemVO"%>
     
 <%
-	Object object = session.getAttribute("DID");
-	if(object != null){
-		String DID = object.toString();
+	Object objectDID = session.getAttribute("DID");
+	Object objectMAID = session.getAttribute("MAID");
+	if(objectDID != null){
+		String DID = objectDID.toString();
+		String MAID = objectMAID.toString();
 		System.out.println("Logout.jsp session DID : " +DID );
+		System.out.println("Logout.jsp session MAID : " +MAID );
 
 		//清除session資料
 		session.invalidate();
 		
 		request.getSession().setAttribute("DID", DID);
+		request.getSession().setAttribute("MAID", MAID);
 		//跳躍到登入畫面
-		String returnURL = "0;url=index.jsp?DID=" + DID;
+		String returnURL = "0;url=index.jsp?DID=" + DID + "&MAID=" + MAID;
 		response.setHeader("refresh", returnURL);
 	}
 

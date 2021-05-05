@@ -59,7 +59,11 @@
 		System.out.print(device.getError() + ",");
 		System.out.print(device.getMachid() + ",");
 		System.out.print(device.getFreecount() + ",");
-		System.out.println(device.getFreecountset());
+		System.out.print(device.getFreecountset() + ",");
+		System.out.println(device.getLocation());
+		
+		String machineName = device.getLocation() + " 洗衣機" + Integer.toString(machineNumber) + "號";
+		System.out.print("machineName : " + machineName);
 	
 	//Test
 // 	MemService memService = new MemService();
@@ -133,7 +137,7 @@
   <section style="height: 1080px;">
 		<div style="text-align: center;">
 			<h2 id="storeInfo">
-				中山店洗衣機<%=machineNumber %>號
+				<%=machineName %>
 			</h2>
 		</div>
 		<div style="margin: 7% 0 0 0; text-align:center;">
@@ -145,7 +149,7 @@
 			</div>
 			<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold; color:red;" id="lack">您的餘額不足，請先加值</p>
 			<div id="divSuccess">
-				<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold;">完成消費，您的餘額為</p>
+				<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold;">本次消費<%=consumptionPoint %>點</p>
 				<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold; color:red;" id="balance"></p>
 			</div>
 			<div id="timerDiv" style="margin: 0 0 12px 0;">
@@ -163,6 +167,9 @@
 		  <input type="hidden" name="number" value="<%=MACHID %>" id="inputNumber">
 			<button type="submit" class="btn btn-success" style="font-weight:bold; margin-right:12px;" id="confirmBtn">確認交易</button>
 			<button class="btn btn-warning" style="font-weight:bold; margin-left:12px;" id="logoutBtn">取消交易</button>
+		</div>
+		<div style="text-align: center; margin-top:24px;" id="successDiv">
+			<button class="btn btn-success" style="font-weight:bold; margin-left:12px;" id="successBtn">完成交易</button>
 		</div>
   </section><!-- End Section -->  
   
@@ -187,7 +194,7 @@
 			count = 30;
 			var countStr = count + "秒";
 			document.getElementById("timer").innerText = countStr;
-			clearInterval(myTimerVar);		
+			clearInterval(myTimerVar);
 			myTimerVar= setInterval(function(){ myTimer()}, 1000);
 		}
 
@@ -217,7 +224,7 @@
 				  	var state = jsonObject.state;
 				  	var balance =  jsonObject.balance;
 				  	if(state == 1){
-					  	$("#balance").text(balance + '點');
+					  	$("#balance").text('您的餘額為 ' + balance + '點');
 				  		$("#lack").hide();
 							$("#timerDiv").hide();
 							$("#logoutBtn").hide();
@@ -312,6 +319,7 @@
 			$("#divSuccess").hide();
 			$("#successInfo").hide();
 			$("#logoutBtn").show();
+			$("#successDiv").hide();
 
 			if(consumptionValue > memPointValue){
 				$("#lack").show();
@@ -336,7 +344,11 @@
 
 		document.getElementById('logoutBtn').onclick = function(){
 			window.location.href = "../logout.jsp";
-		}		
+		}
+
+		document.getElementById('successBtn').onclick = function(){
+			window.location.href = "../logout.jsp";
+		}
 
 		$("#confirmBtn").click(function(){
 			var did =  $("#inputDIid").val();
@@ -366,41 +378,65 @@
 				}).then(function(v){
 					  console.log(v[0],v[1]);   // 顯示 c 1000
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('d',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('e',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('f',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('g',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('h',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('i',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  return delay('i',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
 					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  if(status == 1){
 						  //historyRecord(username, did, machid, freecount, consumptionPoint, number);
@@ -408,6 +444,10 @@
 					  return delay('i',1000);
 				}).then(function(v){
 					  console.log(v[0],v[1]);
+					  var status = CheckStatus(did);
+					  if(status == 1){
+						  $("#successDiv").show();
+						}
 					  console.log("status : " + status);
 					  //window.location.href = "../logout.jsp";
 					  return delay('i',1000);
