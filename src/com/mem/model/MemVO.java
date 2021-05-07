@@ -24,6 +24,18 @@ public class MemVO implements java.io.Serializable {
 	@Column(name = "point")
 	private Integer point;
 	
+	@Column(name = "black")
+	private Integer black;
+	
+	@Column(name = "authority")
+	private Integer authority;
+	
+	@Column(name = "verification")
+	private Integer verification;
+	
+	@Column(name = "verificationcode")
+	private Integer verificationcode;
+	
 	public MemVO() {
 		super();
 	}
@@ -61,4 +73,37 @@ public class MemVO implements java.io.Serializable {
 	public void setPoint(Integer point) {
 		this.point = point;
 	}
+
+	public Integer getBlack() {
+		return black;
+	}
+
+	public void setBlack(Integer black) {
+		this.black = black;
+	}
+
+	public Integer getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(Integer authority) {
+		this.authority = authority;
+	}
+
+	public Integer getVerification() {
+		return verification;
+	}
+
+	public void setVerification(Integer verification) {
+		this.verification = verification;
+	}
+
+	public Integer getVerificationcode() {
+		return verificationcode;
+	}
+
+	public void setVerificationcode(Integer verificationcode) {
+		this.verificationcode = verificationcode;
+	}
+	
 }

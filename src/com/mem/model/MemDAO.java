@@ -27,7 +27,8 @@ public class MemDAO implements MemDAO_interface {
 	}
 	
 	private static final String GET_ALL_STMT = 
-			"SELECT username, email, password, point FROM mem order by username";
+			"SELECT username, email, password, point, black, authority, verification, verificationcode"
+			+ " FROM mem order by username";
 	private static final String GET_ONE_STMT = 
 			"SELECT username, email, password, point FROM mem where username = ?";
 	private static final String GET_ONEEMAIL_STMT = 
@@ -289,6 +290,10 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setEmail(rs.getString("email"));
 				memVO.setPassword(rs.getString("password"));
 				memVO.setPoint(rs.getInt("point"));
+				memVO.setBlack(rs.getInt("black"));
+				memVO.setAuthority(rs.getInt("authority"));
+				memVO.setVerification(rs.getInt("verification"));
+				memVO.setVerificationcode(rs.getInt("verificationcode"));
 				list.add(memVO); // Store the row in the list
 			}
 

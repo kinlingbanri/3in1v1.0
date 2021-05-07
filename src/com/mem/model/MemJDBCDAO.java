@@ -15,7 +15,8 @@ public class MemJDBCDAO implements MemDAO_interface {
 	String passwd = "34182958";
 	
 	private static final String GET_ALL_STMT = 
-			"SELECT username, email, password, point FROM mem order by username";
+			"SELECT username, email, password, point, black, authority, verification, verificationcode"
+			+ " FROM mem order by username";
 	private static final String GET_ONE_STMT = 
 			"SELECT username, email, password, point FROM mem where username = ?";
 	private static final String GET_ONEEMAIL_STMT = 
@@ -296,7 +297,6 @@ public class MemJDBCDAO implements MemDAO_interface {
 		ResultSet rs = null;
 		
 		try {
-
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_ALL_STMT);
@@ -309,6 +309,10 @@ public class MemJDBCDAO implements MemDAO_interface {
 				memVO.setEmail(rs.getString("email"));
 				memVO.setPassword(rs.getString("password"));
 				memVO.setPoint(rs.getInt("point"));
+				memVO.setBlack(rs.getInt("black"));
+				memVO.setAuthority(rs.getInt("authority"));
+				memVO.setVerification(rs.getInt("verification"));
+				memVO.setVerificationcode(rs.getInt("verificationcode"));
 				list.add(memVO); // Store the row in the list
 			}
 
@@ -390,15 +394,19 @@ public class MemJDBCDAO implements MemDAO_interface {
 //			System.out.println();
 //		}
 		
-//		// Query All
-//		List<MemVO> list = dao.getAll();
-//		for (MemVO mem : list) {
-//			System.out.print(mem.getUsername() + ",");
-//			System.out.print(mem.getEmail() + ",");
-//			System.out.print(mem.getPassword() + ",");
-//			System.out.print(mem.getPoint());
-//			System.out.println();
-//		}		
+		// Query All
+		List<MemVO> list = dao.getAll();
+		for (MemVO mem : list) {
+			System.out.print(mem.getUsername() + ",");
+			System.out.print(mem.getEmail() + ",");
+			System.out.print(mem.getPassword() + ",");
+			System.out.print(mem.getPoint() + ",");
+			System.out.print(mem.getBlack() + ",");
+			System.out.print(mem.getAuthority() + ",");
+			System.out.print(mem.getVerification() + ",");
+			System.out.print(mem.getVerificationcode());
+			System.out.println();
+		}		
 	}
 
 }

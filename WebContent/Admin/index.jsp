@@ -339,8 +339,8 @@ td {
 				<li><a href="index.html"><i class="fa fa-tachometer"></i>
 				<span>Dashboard</span>
 				<div class="clearfix"></div></a></li>
-				<li id="menu-academico" ><a href="inbox.html"><i class="fa fa-envelope nav_icon"></i><span>Inbox</span><div class="clearfix"></div></a></li>
-			<li><a href="gallery.html"><i class="fa fa-picture-o" aria-hidden="true"></i><span>Gallery</span><div class="clearfix"></div></a></li>
+				<li id="menu-academico" ><a href="inbox.html"><i class="fas fa-user-friends"></i><span>會員管理</span><div class="clearfix"></div></a></li>
+			<li><a href="gallery.html"><i class="fa fa-picture-o" aria-hidden="true"></i><span>設備管理</span><div class="clearfix"></div></a></li>
 			<li id="menu-academico" ><a href="charts.html"><i class="fa fa-bar-chart"></i><span>Charts</span><div class="clearfix"></div></a></li>
 			 <li id="menu-academico" ><a href="#"><i class="fa fa-list-ul" aria-hidden="true"></i><span> Short Codes</span> <span class="fa fa-angle-right" style="float: right"></span><div class="clearfix"></div></a>
 				   <ul id="menu-academico-sub" >
@@ -350,7 +350,13 @@ td {
 				  </ul>
 				</li>
 			<li id="menu-academico" ><a href="errorpage.html"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i><span>Error Page</span><div class="clearfix"></div></a></li>
-			  <li id="menu-academico" ><a href="#"><i class="fa fa-cogs" aria-hidden="true"></i><span> UI Components</span> <span class="fa fa-angle-right" style="float: right"></span><div class="clearfix"></div></a>
+			  <li id="menu-academico" >
+			  		<a href="#">
+			  			<link rel="icon" href="./images/user.png" type="image/png" sizes="24x24">
+				  		<span> UI Components</span>
+				  		<span class="fa fa-angle-right" style="float: right"></span>
+				  		<div class="clearfix"></div>
+			  		</a>
 				   <ul id="menu-academico-sub" >
 				   <li id="menu-academico-avaliacoes" ><a href="button.html">Buttons</a></li>
 					<li id="menu-academico-avaliacoes" ><a href="grid.html">Grids</a></li>
