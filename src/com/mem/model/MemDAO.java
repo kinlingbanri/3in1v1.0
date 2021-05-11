@@ -27,16 +27,20 @@ public class MemDAO implements MemDAO_interface {
 	}
 	
 	private static final String GET_ALL_STMT = 
-			"SELECT username, email, password, point, black, authority, verification, verificationcode"
-			+ " FROM mem order by username";
+			"SELECT username, email, password, point, black, authority, verification, verificationcode, "
+			+ "verificationdate, phone FROM mem order by username";
 	private static final String GET_ONE_STMT = 
-			"SELECT username, email, password, point FROM mem where username = ?";
+			"SELECT username, email, password, point, black, authority, verification, verificationcode," 
+			+"verificationdate, phone FROM mem where username = ?";
 	private static final String GET_ONEEMAIL_STMT = 
-			"SELECT username, email, password, point FROM mem where email = ?";
+			"SELECT username, email, password, point, black, authority, verification, verificationcode," + 
+			"verificationdate, phone FROM mem where email = ?";
 	private static final String INSERT_STMT = 
-			"INSERT INTO mem (username, email, password, point) VALUES (?, ?, ?, ?)";
+			"INSERT INTO mem (username, email, password, point, black, authority, verification, verificationcode," + 
+			"verificationdate, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE = 
-			"UPDATE mem set email=?, password=?, point=? where username = ?";
+			"UPDATE mem set email=?, password=?, point=?, black=?, authority=?, verification=?, " + 
+			"verificationcode=?, verificationdate=?, phone=? where username = ?";
 	private static final String DELETE = 
 			"DELETE FROM mem where username = ?";
 
@@ -53,6 +57,12 @@ public class MemDAO implements MemDAO_interface {
 			pstmt.setString(2, memVO.getEmail());
 			pstmt.setString(3, memVO.getPassword());
 			pstmt.setInt(4, memVO.getPoint());
+			pstmt.setInt(5, memVO.getBlack());
+			pstmt.setInt(6, memVO.getAuthority());
+			pstmt.setInt(7, memVO.getVerification());
+			pstmt.setInt(8, memVO.getVerificationcode());
+			pstmt.setTimestamp(9, memVO.getVerificationdate());
+			pstmt.setString(10, memVO.getPhone());
 
 			pstmt.executeUpdate();
 
@@ -93,6 +103,12 @@ public class MemDAO implements MemDAO_interface {
 			pstmt.setString(2, memVO.getPassword());
 			pstmt.setInt(3, memVO.getPoint());
 			pstmt.setString(4, memVO.getUsername());
+			pstmt.setInt(5, memVO.getAuthority());
+			pstmt.setInt(6, memVO.getVerification());
+			pstmt.setInt(7, memVO.getVerificationcode());
+			pstmt.setTimestamp(8, memVO.getVerificationdate());
+			pstmt.setString(9, memVO.getPhone());
+			pstmt.setString(10, memVO.getUsername());		
 
 			pstmt.executeUpdate();
 
@@ -179,6 +195,12 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setEmail(rs.getString("email"));
 				memVO.setPassword(rs.getString("password"));
 				memVO.setPoint(rs.getInt("point"));
+				memVO.setBlack(rs.getInt("black"));
+				memVO.setAuthority(rs.getInt("authority"));
+				memVO.setVerification(rs.getInt("verification"));
+				memVO.setVerificationcode(rs.getInt("verificationcode"));
+				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
+				memVO.setPhone(rs.getString("phone"));
 			}
 
 			// Handle any driver errors
@@ -237,6 +259,12 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setEmail(rs.getString("email"));
 				memVO.setPassword(rs.getString("password"));
 				memVO.setPoint(rs.getInt("point"));
+				memVO.setBlack(rs.getInt("black"));
+				memVO.setAuthority(rs.getInt("authority"));
+				memVO.setVerification(rs.getInt("verification"));
+				memVO.setVerificationcode(rs.getInt("verificationcode"));
+				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
+				memVO.setPhone(rs.getString("phone"));
 				list.add(memVO); // Store the row in the list
 			}
 			// Handle any driver errors
@@ -294,6 +322,8 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setAuthority(rs.getInt("authority"));
 				memVO.setVerification(rs.getInt("verification"));
 				memVO.setVerificationcode(rs.getInt("verificationcode"));
+				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
+				memVO.setPhone(rs.getString("phone"));
 				list.add(memVO); // Store the row in the list
 			}
 

@@ -8,8 +8,116 @@
   <link rel="shortcut icon" href="#" />
   <link rel="stylesheet" href="./Admin/css/bootstrap.min.css" type='text/css' />
   <link rel="stylesheet" href="./Admin/css/dataTables.bootstrap.min.css" type='text/css' />
-  
-  <style>
+
+
+
+	<style>
+	/*the menu nav bar start ------->*/
+.menu {
+    width: 100%;
+    display: flex;
+    background: #272626;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.15);
+}
+ 
+.menu li {
+    float: left;
+    list-style: none;
+    margin: 0px 50px 0px 0px;
+    font-size: 16px;
+}
+ 
+.menu li a {
+    text-decoration: none;
+    color: rgb(146, 151, 150);
+    transition: color linear 0.15s;
+    cursor: pointer;
+}
+ 
+.menu .menu-logo {
+    margin: auto;
+    margin-left: 0px;
+    padding: 10px 10px 10px 20px;
+}
+ 
+.menu .menu-logo a {
+    color: #fff;
+}
+ 
+.menu a:hover, .menu .current-active a {
+    text-decoration: none;
+    color: #FF9900;
+}
+ 
+.toggle-nav, .leftmenu {
+    display: none;
+}
+ 
+@media screen and (max-width: 767px) {
+    .menucontainer {
+        display: flex;
+    }
+    .menu {
+        position: relative;
+        display: inline-block;
+    }
+    .toggle-nav {
+        display: block;
+        position: absolute;
+        left: 4%;
+        color: #ffffff;
+        text-decoration: none;
+        line-height: 40px;
+    }
+    .menu .menu-logo {
+        position: relative;
+        left: 40%;
+    }
+    .menu ul {
+        display: none;
+    }
+    .closebtn {
+        position: relative;
+        margin: 16px;
+        left: 80%;
+        font-size: 1.5em;
+    }
+    .closebtn:hover {
+        cursor: pointer;
+        color: #FF9900;
+    }
+    .leftmenu {
+        display: block;
+        background-color: #272626;
+        color: white;
+        height: 100%;
+        width: 60vw;
+        z-index: 1;
+        position: fixed;
+        left: -100%;
+        transition: all 1s;
+    }
+    .leftmenu.active {
+        position: fixed;
+        top: 0;
+        left: 0%;
+        transition: all 1s;
+    }
+    .leftul li {
+        list-style: none;
+        margin: 32px auto;
+        font-size: 2em;
+    }
+    .leftul li.current-active, .leftul li:hover {
+        color: #FF9900;
+    }
+    .leftul li:hover {
+        cursor: pointer;
+    }
+}	
+	</style>
+	
+	<style>
 		#navbarToggleExternalContent{
 		  transform: translateX(-100%);
 		  transition: transform .35s ease;
@@ -27,36 +135,47 @@
   <script src="./Admin/js/jquery.dataTables.min.js"></script>
   <script src="./Admin/js/dataTables.bootstrap.min.js"></script>
   
-  <script>
-  const $menu = $('#navbarToggleExternalContent');
+	<script>
 
-  $menu.on('show.bs.collapse', function () {
-    $menu.addClass('menu-show');
-  });
+	  const $menu = $('#navbarToggleExternalContent');
 
-  $menu.on('hide.bs.collapse', function () {
-    $menu.removeClass('menu-show');
-  });
+	  $menu.on('show.bs.collapse', function () {
+	    $menu.addClass('menu-show');
+	  });
+	
+	  $menu.on('hide.bs.collapse', function () {
+	    $menu.removeClass('menu-show');
+	  });
   </script>
 </head>
 
 <body>
 
-<div class="pos-f-t">
-  <nav class="navbar navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent">
-      <span class="navbar-toggler-icon">TEST</span>
-    </button>
-  </nav>
-  <div class="bg-dark collapse position-fixed" id="#navbarToggleExternalContent">
-    <!-- https://stackoverflow.com/a/10055302/9265131 -->
-    <div class="py-4">
-      <h4 class="text-white mx-4">Collapsed content</h4>
-      <span class="text-muted mx-4">Toggleable via the navbar brand.</span>
-    </div>
-  </div>
-  <div class="bg-info p-4">I am a content. I would be covered when the toggler click.</div>
-</div>
+	<div class="menucontainer">
+		<div class="leftmenu">
+			<div class="closebtn">
+				X
+			</div>
+			<ul id="menuUl" class="leftul">
+				<li class="current-active"><a>home</a></li>
+				<li><a>new</a></li>
+				<li><a>products</a></li>
+				<li><a>about</a></li>
+			</ul>
+		</div>
+		<nav class="menu">
+				<a id="menubtn" class="toggle-nav" href="#">☰</a>
+				<div class="menu-logo"><a>LOGO</a></div>
+				<ul id="menuUl" class="">
+					<li class="current-active"><a>home</a></li>
+					<li><a>new</a></li>
+					<li><a>products</a></li>
+					<li><a>about</a></li>
+				</ul>
+		</nav>
+	</div>
+
+	<div style="height: 100vh;">
 
 
 	<table id="example" class="table table-striped table-bordered" style="width:100%">
@@ -538,12 +657,30 @@
 						<th>Salary</th>
 				</tr>
 		</tfoot>
-  </table>
+	</div>
 
-	<script>
-		$(document).ready(function() {
+<script>
+
+$('#menubtn').click(function () {
+    $('.leftmenu').toggleClass('active');
+})
+ 
+$('#menuUl li').click(function () {
+    $(this).parent().find('li').each(function () {
+        if ($(this).hasClass('current-active')) {
+            $(this).toggleClass('current-active');
+        }
+    })
+    $(this).toggleClass('current-active');
+})
+ 
+$('.closebtn').click(function () {
+    $('.leftmenu').toggleClass('active');
+})
+
+$(document).ready(function() {
 				$('#example').DataTable();
 		} );
-	</script>
+</script>
 </body>
 </html>

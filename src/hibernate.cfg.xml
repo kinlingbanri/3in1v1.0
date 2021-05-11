@@ -10,8 +10,9 @@
 		  <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		  <property name="hibernate.connection.password">34182958</property>
 		  <property name="hibernate.connection.url">jdbc:mysql://211.21.93.170:3306/RM_58?useUnicode=true&amp;characterEncoding=utf-8</property>
+<!-- 		  <property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306/threeinone?useUnicode=true&amp;characterEncoding=utf-8</property> -->
 		  <property name="hibernate.connection.username">van</property>
-		  <property name="hibernate.default_schema">rm_58</property>
+		  <property name="hibernate.default_schema">threeinone</property>
 		  <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		  <property name="hibernate.show_sql">true</property>
 		  <property name="hibernate.format_sql">true</property>

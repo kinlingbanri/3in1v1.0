@@ -1,5 +1,8 @@
 package com.mem.model;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -35,6 +38,12 @@ public class MemVO implements java.io.Serializable {
 	
 	@Column(name = "verificationcode")
 	private Integer verificationcode;
+	
+	@Column(name = "verificationdate")
+	private Timestamp verificationdate;
+	
+	@Column(name = "phone")
+	private String phone;
 	
 	public MemVO() {
 		super();
@@ -104,6 +113,22 @@ public class MemVO implements java.io.Serializable {
 
 	public void setVerificationcode(Integer verificationcode) {
 		this.verificationcode = verificationcode;
+	}
+
+	public Timestamp getVerificationdate() {
+		return verificationdate;
+	}
+
+	public void setVerificationdate(Timestamp verificationdate) {
+		this.verificationdate = verificationdate;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	
 }
