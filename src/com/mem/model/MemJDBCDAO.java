@@ -402,26 +402,28 @@ public class MemJDBCDAO implements MemDAO_interface {
 //		
 //		memVO.setVerificationdate(nousedate);
 //		memVO.setPhone("0935276906");
+//		memVO.setBlack(1);
 //		dao.insert(memVO);
 		
 
-//		//Update
-//		MemVO memVO = new MemVO();
-//		memVO.setUsername("金城六");
-//		memVO.setEmail("Kim2@hotmail.com");
-//		memVO.setPassword("123");
-//		memVO.setPoint(650);
-//		memVO.setBlack(0);
-//		memVO.setAuthority(0);
-//		memVO.setVerification(0);
-//		memVO.setVerificationcode(3418);
-//		
-//		Date date = new Date();       
-//		Timestamp nousedate = new Timestamp(date.getTime());
-//		
-//		memVO.setVerificationdate(nousedate);
-//		memVO.setPhone("0935276906");
-//		dao.update(memVO);
+		//Update
+		MemVO memVO = new MemVO();
+		memVO.setUsername("金城六");
+		memVO.setEmail("Kim2@hotmail.com");
+		memVO.setPassword("123");
+		memVO.setPoint(650);
+		memVO.setBlack(0);
+		memVO.setAuthority(0);
+		memVO.setVerification(0);
+		memVO.setVerificationcode(3418);
+		
+		Date date = new Date();       
+		Timestamp nousedate = new Timestamp(date.getTime());
+		
+		memVO.setVerificationdate(nousedate);
+		memVO.setPhone("0935276906");
+		memVO.setBlack(0);
+		dao.update(memVO);
 		
 //		// Delete
 //		dao.delete("金城六");
@@ -458,21 +460,21 @@ public class MemJDBCDAO implements MemDAO_interface {
 //			System.out.println();
 //		}
 		
-		// Query All
-		List<MemVO> list = dao.getAll();
-		for (MemVO mem : list) {
-			System.out.print(mem.getUsername() + ",");
-			System.out.print(mem.getEmail() + ",");
-			System.out.print(mem.getPassword() + ",");
-			System.out.print(mem.getPoint() + ",");
-			System.out.print(mem.getBlack() + ",");
-			System.out.print(mem.getAuthority() + ",");
-			System.out.print(mem.getVerification() + ",");
-			System.out.print(mem.getVerificationcode() + ",");
-			System.out.print(mem.getVerificationdate() + ",");
-			System.out.print(mem.getPhone());
-			System.out.println();
-		}
+//		// Query All
+//		List<MemVO> list = dao.getAll();
+//		for (MemVO mem : list) {
+//			System.out.print(mem.getUsername() + ",");
+//			System.out.print(mem.getEmail() + ",");
+//			System.out.print(mem.getPassword() + ",");
+//			System.out.print(mem.getPoint() + ",");
+//			System.out.print(mem.getBlack() + ",");
+//			System.out.print(mem.getAuthority() + ",");
+//			System.out.print(mem.getVerification() + ",");
+//			System.out.print(mem.getVerificationcode() + ",");
+//			System.out.print(mem.getVerificationdate() + ",");
+//			System.out.print(mem.getPhone());
+//			System.out.println();
+//		}
 		
 	}
 }

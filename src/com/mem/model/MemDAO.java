@@ -102,13 +102,13 @@ public class MemDAO implements MemDAO_interface {
 			pstmt.setString(1, memVO.getEmail());
 			pstmt.setString(2, memVO.getPassword());
 			pstmt.setInt(3, memVO.getPoint());
-			pstmt.setString(4, memVO.getUsername());
+			pstmt.setInt(4, memVO.getBlack());
 			pstmt.setInt(5, memVO.getAuthority());
 			pstmt.setInt(6, memVO.getVerification());
 			pstmt.setInt(7, memVO.getVerificationcode());
 			pstmt.setTimestamp(8, memVO.getVerificationdate());
 			pstmt.setString(9, memVO.getPhone());
-			pstmt.setString(10, memVO.getUsername());		
+			pstmt.setString(10, memVO.getUsername());	
 
 			pstmt.executeUpdate();
 

@@ -1,30 +1,203 @@
 <%@page import="java.util.List"%>
+<%@page import="java.util.Map" %>
+<%@page import="java.util.HashMap"%>
+<%@page import="com.device.model.DeviceVO"%>
+<%@page import="com.device.model.DeviceService"%>
+<%@page import="com.mem.model.MemVO"%>
+<%@page import="com.mem.model.MemService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%
+	DeviceService deviceService = new DeviceService();
+	List<DeviceVO> devices = deviceService.getAll();
+	for (DeviceVO device : devices) {
+		System.out.print(device.getDid() + ",");
+		System.out.print(device.getNumber() + ",");
+		System.out.print(device.getCoin() + ",");
+		System.out.print(device.getPaper() + ",");
+		System.out.print(device.getLocation() + ",");
+		System.out.print(device.getRefund() + ",");
+		System.out.print(device.getUid() + ",");
+		System.out.print(device.getStatus() + ",");
+		System.out.print(device.getError() + ",");
+		System.out.print(device.getMachid() + ",");
+		System.out.print(device.getFreecount() + ",");
+		System.out.println(device.getFreecountset());
+	}
+
+	request.setAttribute("devices", devices);
+	
+	Map<Integer, String> map = new HashMap<>();
+
+	MemService memSvc = new MemService();
+	List<MemVO> memberVOs = memSvc.getAll();
+	
+	for (MemVO mem : memberVOs) {
+		//nameList.add(mem.getUsername());
+
+		
+		System.out.print(mem.getUsername() + ",");
+		System.out.print(mem.getEmail() + ",");
+		System.out.print(mem.getPassword() + ",");
+		System.out.print(mem.getPoint());
+		System.out.print(mem.getBlack() + ",");
+		System.out.print(mem.getAuthority() + ",");
+		System.out.print(mem.getVerification() + ",");
+		System.out.print(mem.getVerificationcode() + ",");
+		System.out.print(mem.getVerificationdate() + ",");
+		System.out.print(mem.getPhone());
+		System.out.println();
+	}
+
+	
+	request.setAttribute("memberVOs", memberVOs);
+
+	
+%>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>三合一兌幣機後台管理</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="css/googlefont.css" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    
+    <style>
+				body{
+					font-family: Microsoft JhengHei;
+				}			
+				.devicelist:hover {
+					  background: #f2f3ff;
+					  outline: none;
+					  cursor: pointer;
+				}			
+				td {
+				  text-align: center;
+				  vertical-align: middle;
+				}				
+				.redCircle{
+					width:16px;height:16px;
+					border-radius:50%;
+					background-color:red;
+					margin: 0px auto;
+				}			
+				.greenCircle{
+					width:16px;height:16px;
+					border-radius:50%;
+					background-color:green;
+					margin: 0px auto;
+				}			
+				.yellowCircle{
+					width:16px;height:16px;
+					border-radius:50%;
+					background-color:yellow;
+					margin: 0px auto;
+				}
+				
+							{box-sizing: border-box;}
+			
+			/* Button used to open the contact form - fixed at the bottom of the page */
+			.open-button {
+			  background-color: #555;
+			  color: white;
+			  padding: 16px 20px;
+			  border: none;
+			  cursor: pointer;
+			  opacity: 0.8;
+			  position: fixed;
+			  bottom: 23px;
+			  right: 28px;
+			  width: 280px;
+			}
+			
+			/* The popup form - hidden by default */
+			.form-popup {
+			  display: none;
+			  position: fixed;
+			  bottom: 0;
+			  right: 15px;
+			  border: 3px solid #f1f1f1;
+			  z-index: 9;
+			}
+			
+			/* Add styles to the form container */
+			.form-container {
+			  max-width: 300px;
+			  padding: 10px;
+			  background-color: white;
+			}
+			
+			/* Full-width input fields */
+			.form-container input[type=text], .form-container input[type=password] {
+			  width: 100%;
+			  padding: 15px;
+			  margin: 5px 0 22px 0;
+			  border: none;
+			  background: #f1f1f1;
+			}
+			
+			/* When the inputs get focus, do something */
+			.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+			  background-color: #ddd;
+			  outline: none;
+			}
+			
+			/* Set a style for the submit/login button */
+			.form-container .btn {
+			  background-color: #04AA6D;
+			  color: white;
+			  padding: 16px 20px;
+			  border: none;
+			  cursor: pointer;
+			  width: 100%;
+			  margin-bottom:10px;
+			  opacity: 0.8;
+			}
+			
+			/* Add a red background color to the cancel button */
+			.form-container .cancel {
+			  background-color: red;
+			}
+			
+			/* Add some hover effects to buttons */
+			.form-container .btn:hover, .open-button:hover {
+			  opacity: 1;
+			}
+		</style>
+		
+		 <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/datatables-demo.js"></script>
+    
+    <script src="js/jquery.validate.js"></script>
+    <script src="js/additional-methods.js"></script>
 </head>
 
 <body id="page-top">
@@ -65,14 +238,16 @@
             <li class="nav-item">
                 <a class="nav-link" href="tables.html">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>表格</span></a>
+                    <span>表格</span>
+                </a>
             </li>
 						
 						<!-- Nav Item - Members -->
             <li class="nav-item">
                 <a class="nav-link" href="members.html">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>會員</span></a>
+                    <span>會員</span>
+                </a>
             </li>
 
             <!-- Divider -->
@@ -133,9 +308,7 @@
                                 </a>
                             </div>
                         </li>
-
                     </ul>
-
                 </nav>
                 <!-- End of Topbar -->
 
@@ -238,46 +411,103 @@
                             <!-- Project Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">設備狀態</h6>
                                 </div>
                                 <div class="card-body">
-                                    <h4 class="small font-weight-bold">Server Migration <span
-                                            class="float-right">20%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Sales Tracking <span
-                                            class="float-right">40%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Customer Database <span
-                                            class="float-right">60%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar" role="progressbar" style="width: 60%"
-                                            aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Payout Details <span
-                                            class="float-right">80%</span></h4>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <h4 class="small font-weight-bold">Account Setup <span
-                                            class="float-right">Complete!</span></h4>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
+																		<table class="table table-bordered">
+																			<thead>
+																				<tr>
+																					<th style="text-align: center;">ID</th>
+																					<th style="text-align: center;">設備名稱</th>
+																					<th style="text-align: center;">狀態</th>
+																				</tr>
+																			</thead>
+																			<tbody>										
+																				<c:forEach items="${devices}" var="device" varStatus="id">
+																					<tr  scope="row" style="text-align: center;" class="devicelist">
+																						<td>${device.number}</td>
+																						<td>${device.location}</td>												
+																						<c:choose>
+																						    <c:when test="${(device.error == 0) and (device.paper < 280)}">
+																						       <td><div class="greenCircle"></div></td>
+																						    </c:when>
+																						    <c:when test="${device.error > 0}">
+																						       	<td><div class="redCircle"></div></td>
+																						    </c:when>
+																						    <c:otherwise>
+																						       <td><div class="yellowCircle"></div></td>
+																						    </c:otherwise>
+																						</c:choose>
+																			    </tr>
+																	   		</c:forEach>
+																			</tbody>
+																		</table>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
+                    
+                    <!-- Content Row -->
+                    		<div id="record" style="background: #CCC; width:100%;">
+														<table class="table table-striped table-bordered display" id="dataTable" width="100%" cellspacing="0">
+                        		 		<thead>
+                                		<tr>
+                                	 			<th>帳號</th>
+                                	 			<th>Email</th>
+                                	 			<th>點數</th>
+                                	 			<th>電話</th>
+                                	 			<th>密碼</th>
+                                	 			<th>黑名單</th>
+                                	 			<th>權限</th>
+                                		</tr>
+                        		 		</thead>
+                        		 		<tbody>
+	                              		<c:url var="url" value="/AdminModifyMemberServlet" /> 
+																		<c:forEach items="${memberVOs}" var="member" varStatus="id">
+																				<tr id="tr${id.count}">
+<%-- 																						<th scope="row" style="text-align: center;">${id.count}</th> --%>
+																						<td id="thun${id.count}">${member.username }</td>
+																						<td id="them${id.count}">${member.email }</td>
+																						<td id="thpo${id.count}">${member.point }</td>
+																						<td id="thph${id.count}">${member.phone }</td>
+																						<td id="thpw${id.count}">${member.password }</td>
+																						<td id="thbl${id.count}">${member.black }</td>
+																						<td id="thau${id.count}">${member.authority }</td>
+																				</tr>
+																		</c:forEach>
+                        		 		</tbody>
+														</table>
+                    		</div>
+                    <!-- End Content Row -->
+                    
+                    
+                    
+                    
+                    
+                    
 
                 </div>
                 <!-- /.container-fluid -->
+                
+                
+                
+                
+                
+                
+                
+
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
 
             </div>
             <!-- End of Main Content -->
@@ -294,9 +524,31 @@
 
         </div>
         <!-- End of Content Wrapper -->
+        
+				
+				
+				
+
+				
+				
+				
+				
+				
+				
+				
+				
+				
 
     </div>
     <!-- End of Page Wrapper -->
+    
+    
+    
+    
+    
+    
+    
+    
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -322,16 +574,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
 
 </body>
 
