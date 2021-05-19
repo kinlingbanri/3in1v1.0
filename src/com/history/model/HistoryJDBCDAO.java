@@ -5,10 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class HistoryJDBCDAO implements HistoryDAO_interface{
@@ -18,6 +15,10 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 	String userid = "van";
 	String passwd = "34182958";
 	
+	private static final String GET_COUNT_STMT = 
+			"SELECT COUNT(*) FROM history WHERE did = ?";
+	private static final String GET_ALL_DID_STMT = 
+			"SELECT hid, ttime, event, ip, uid, did, maid, mid, point, location FROM history where did = ?  ORDER BY TTIME DESC LIMIT ?, ?;";
 	private static final String GET_ALL_STMT = 
 			"SELECT hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, exchangecount,"
 					+ "papercount FROM history";
@@ -43,26 +44,26 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 		
 		HistoryDAO_interface dao = new HistoryJDBCDAO();
 
-		//Add
-		HistoryVO historyVO = new HistoryVO();
-		Date date = new Date();	//Get now
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Timestamp ts = new Timestamp(date.getTime());
-		System.out.println(formatter.format(ts));
-		historyVO.setTtime(ts);
-		historyVO.setEvent("烘衣60分鐘");
-		historyVO.setIp("192.168.100.165");
-		historyVO.setUid(0);
-		historyVO.setDid(1);
-		historyVO.setMaid(2);
-		historyVO.setMid("陳啟展");
-		historyVO.setRefundcount(0);
-		historyVO.setFreecount(10);
-		historyVO.setPoint(100);
-		historyVO.setExchangecount(0);
-		historyVO.setPapercount(0);
-		historyVO.setLocation("樹林站前");
-		dao.insert(historyVO);
+//		//Add
+//		HistoryVO historyVO = new HistoryVO();
+//		Date date = new Date();	//Get now
+//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		Timestamp ts = new Timestamp(date.getTime());
+//		System.out.println(formatter.format(ts));
+//		historyVO.setTtime(ts);
+//		historyVO.setEvent("烘衣60分鐘");
+//		historyVO.setIp("192.168.100.165");
+//		historyVO.setUid(0);
+//		historyVO.setDid(1);
+//		historyVO.setMaid(2);
+//		historyVO.setMid("陳啟展");
+//		historyVO.setRefundcount(0);
+//		historyVO.setFreecount(10);
+//		historyVO.setPoint(100);
+//		historyVO.setExchangecount(0);
+//		historyVO.setPapercount(0);
+//		historyVO.setLocation("樹林站前");
+//		dao.insert(historyVO);
 		
 //		//Update
 //		HistoryVO historyVO = new HistoryVO();
@@ -142,6 +143,22 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 //			System.out.print(history.getExchangecount() + ",");
 //			System.out.println(history.getPapercount());
 //		}
+		
+		int count = dao.getCount(1);
+		System.out.println("count : " + count);
+		
+		int lastCount = count - 50;
+		
+		// Query By DID
+		List<HistoryVO> list = dao.getAllByDid(1, lastCount, 50);
+		for (HistoryVO history : list) {
+			System.out.print(history.getTtime() + ",");
+			System.out.print(history.getEvent() + ",");
+			System.out.print(history.getPoint() + ",");
+			System.out.println(history.getLocation());
+		}
+		
+
 
 	}
 
@@ -547,6 +564,122 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public List<HistoryVO> getAllByDid(int did, int index, int total){
+		List<HistoryVO> list = new ArrayList<HistoryVO>();
+		HistoryVO historyVO = null;		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_ALL_DID_STMT);
+			pstmt.setInt(1, did);
+			pstmt.setInt(2, index);
+			pstmt.setInt(3, total);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// historyVO 也稱為 Domain objects
+				historyVO = new HistoryVO();
+				historyVO.setTtime(rs.getTimestamp("ttime"));
+				historyVO.setEvent(rs.getString("event"));
+				historyVO.setPoint(rs.getInt("point"));
+				historyVO.setLocation(rs.getString("location"));
+				list.add(historyVO);
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public int getCount(int did) {
+	
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int count = 0;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_COUNT_STMT);
+			pstmt.setInt(1, did);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				count = rs.getInt(1);
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return count;
 	}
 
 }

@@ -1,4 +1,5 @@
-<%@page import="com.mem.model.MemVO"%>
+<%@page import="com.history.model.HistoryService"%>
+<%@page import="com.history.model.HistoryVO"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mem.model.MemService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -6,24 +7,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
-    MemService memSvc = new MemService();
-		List<MemVO> memberVOs = memSvc.getAll();
-		
-		for (MemVO mem : memberVOs) {
-			System.out.print(mem.getUsername() + ",");
-			System.out.print(mem.getEmail() + ",");
-			System.out.print(mem.getPassword() + ",");
-			System.out.print(mem.getPoint());
-			System.out.print(mem.getBlack() + ",");
-			System.out.print(mem.getAuthority() + ",");
-			System.out.print(mem.getVerification() + ",");
-			System.out.print(mem.getVerificationcode() + ",");
-			System.out.print(mem.getVerificationdate() + ",");
-			System.out.print(mem.getPhone());
-			System.out.println();
-		}
-		
-		request.setAttribute("memberVOs", memberVOs);
+String deviceNumber = "TY00001";
+String location = "RD-1";
+int did = 1;
+
+HistoryService historyService = new HistoryService();
+int totalCount = historyService.getCount(did);
+int lastCount = 0;
+if(totalCount > 50){
+	lastCount = totalCount - 50;
+}else{
+	lastCount = totalCount;
+}
+
+// List<HistoryVO> historyVOs = historyService.getAllByDid(did, lastCount, 50);
+// request.setAttribute("historyVOs", historyVOs);
 %>
 
 <!DOCTYPE html>
@@ -46,9 +44,9 @@
 
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="vendor/datatables/scroller.dataTables.css" rel="stylesheet">
     
-    
-        <!-- Bootstrap core JavaScript-->
+    <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -60,6 +58,7 @@
 
     <!-- Page level plugins -->
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.scroller.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
@@ -140,6 +139,9 @@
 			}
     </style>
     
+    <script>
+
+    </script>
 </head>
 
 <body id="page-top">
@@ -488,41 +490,32 @@
                                 <table class="table table-striped table-bordered display" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>帳號</th>
-                                            <th>Email</th>
-                                            <th>點數</th>
-                                            <th>電話</th>
-                                            <th>密碼</th>
-                                            <th>黑名單</th>
-                                            <th>權限</th>
+                                            <th>時間</th>
+                                            <th>訊息</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>帳號</th>
-                                            <th>Email</th>
-                                            <th>點數</th>
-                                            <th>電話</th>
-                                            <th>密碼</th>
-                                            <th>黑名單</th>
-                                            <th>權限</th>
+                                            <th>時間</th>
+                                            <th>訊息</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
                                     
-                                    <c:url var="url" value="/AdminModifyMemberServlet" /> 
-																				<c:forEach items="${memberVOs}" var="member" varStatus="id">
-																					<tr id="tr${id.count}">
-<%-- 																						<th scope="row" style="text-align: center;">${id.count}</th> --%>
-																						<td id="thun${id.count}">${member.username }</td>
-																						<td id="them${id.count}">${member.email }</td>
-																						<td id="thpo${id.count}">${member.point }</td>
-																						<td id="thph${id.count}">${member.phone }</td>
-																						<td id="thpw${id.count}">${member.password }</td>
-																						<td id="thbl${id.count}">${member.black }</td>
-																						<td id="thau${id.count}">${member.authority }</td>
-																					</tr>
-																				</c:forEach>
+                                    
+                                    
+<%--                                     		<c:url var="url" value="/AdminModifyMemberServlet" />  --%>
+<%-- 																				<c:forEach items="${memberVOs}" var="member" varStatus="id"> --%>
+<%-- 																					<tr id="tr${id.count}"> --%>
+<%-- 																						<td id="thun${id.count}">${member.username }</td> --%>
+<%-- 																						<td id="them${id.count}">${member.email }</td> --%>
+<%-- 																						<td id="thpo${id.count}">${member.point }</td> --%>
+<%-- 																						<td id="thph${id.count}">${member.phone }</td> --%>
+<%-- 																						<td id="thpw${id.count}">${member.password }</td> --%>
+<%-- 																						<td id="thbl${id.count}">${member.black }</td> --%>
+<%-- 																						<td id="thau${id.count}">${member.authority }</td> --%>
+<!-- 																					</tr> -->
+<%-- 																				</c:forEach> --%>
                                     </tbody>
                                 </table>
                             </div>
@@ -626,30 +619,55 @@
 
 		<script>
 
-		$(document).ready(function() {
-		    var table = $('#dataTable').DataTable();
-		     
-		    $('#dataTable tbody').on('click', 'tr', function (event) {
-					var id = $(this).attr('id');
-			    var num =  id.substring(2, id.length);
-			    $("#hiddenNumber").val(num);
-		    	
-					$("#username").text( $("#thun" + num).text() ) ;
-					$("#inputemail").val( $("#them" + num).text() );
-					$("#inputpoint").val( $("#thpo" + num).text() );
-					$("#inputphone").val( $("#thph" + num).text() );
-					$("#inputpassword").val( $("#thpw" + num).text() );
+	    $(document).ready(function() {
 
-					var blackVal = $("#thbl" + num).text();
-					if(blackVal == 0){
-						$("#cbblack").prop('checked', false);
-					}else if(blackVal == 1){
-						$("#cbblack").prop('checked', true);
-					}
+	        $('#dataTable').DataTable( {
+	            'processing': true,											//載入時在畫面會出現processing的訊息
+	            'serverSide': true,												//啟動server side模式,避免一次載入大量資料(50000)
+	            'cache':false,
+	            'serverMethod': 'post',
+	            //'retrieve': true,
+	            'ajax': {
+	                "url": '../DeviceHistorySevlet',
+	                type: 'POST',
+	                dataSrc:'',
+	                success:(data) => {
+										console.log("data : " + data);
+			            }
+	            },
+	             "columns":[
+										{"data":"ttime"},
+										{"data":"event"}
+								]
 
-					document.getElementById("myForm").style.display = "block";
-		    });
-		});
+	            
+//	             //"deferLoading": 0,										//預先用ajax載入
+//	             order: [[0, "desc"]],											//預設排序資料行(由0算起)
+//	             orderMulti : false,
+//	             "columns":[
+//	 							{"data":"ttime"},
+//	 							{"data":"event"}
+//	             ],
+//	             ajax: {
+//	                 method:"post",
+//	                 url: "../DeviceHistorySevlet", 
+//	                 data: function (d)
+//	                 {
+//	                 	console.log("d : " + d);
+//	                     //d.MyTitle = $("input[name=MyTitle]").val();
+//	                     //d.MyMoney = $("input[name=MyMoney]").val();
+//	                 }
+//	             }
+	            
+	        } );
+
+
+
+
+
+
+	        
+	    } );
 
 		function openForm() {
 				document.getElementById("myForm").style.display = "block";

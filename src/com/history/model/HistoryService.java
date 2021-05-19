@@ -30,5 +30,11 @@ public class HistoryService {
 		return dao.getAll();
 	}
 	
+	public List<HistoryVO> getAllByDid(int did, int index, int total){
+		return dao.getAllByDid(did, index, total);
+	}
 	
+	public int getCount(int did) {
+		return dao.getCount(did);
+	}
 }

@@ -1,7 +1,6 @@
 package com.history.model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,12 +12,14 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.addrecord.model.AddRecordVO;
-
 public class HistoryDAO implements HistoryDAO_interface{
 	
 	HistoryDAO_interface dao;
 	
+	private static final String GET_COUNT_STMT = 
+			"SELECT COUNT(*) FROM history WHERE did = ?";
+	private static final String GET_ALL_DID_STMT = 
+			"SELECT hid, ttime, event, ip, uid, did, maid, mid, point, location FROM history where did = ?  ORDER BY TTIME DESC LIMIT ?, ?;";
 	private static final String GET_ALL_STMT = 
 			"SELECT hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, exchangecount,"
 					+ "papercount, location FROM history";
@@ -286,6 +287,108 @@ public class HistoryDAO implements HistoryDAO_interface{
 		public List<HistoryVO> get30(String mid) {
 			// TODO Auto-generated method stub
 			return null;
+		}
+		@Override
+		public List<HistoryVO> getAllByDid(int did, int index, int total){
+			List<HistoryVO> list = new ArrayList<HistoryVO>();
+			HistoryVO historyVO = null;	
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			try {
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_ALL_DID_STMT);
+				pstmt.setInt(1, did);
+				pstmt.setInt(2, index);
+				pstmt.setInt(3, total);
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+					historyVO = new HistoryVO();
+					historyVO.setTtime(rs.getTimestamp("ttime"));
+					historyVO.setEvent(rs.getString("event"));
+					historyVO.setPoint(rs.getInt("point"));
+					historyVO.setLocation(rs.getString("location"));
+					list.add(historyVO);
+				}
+
+				// Handle any driver errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return list;
+		}
+		@Override
+		public int getCount(int did) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			int count = 0;
+			
+			try {
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_COUNT_STMT);
+				pstmt.setInt(1, did);
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+					count = rs.getInt(1);
+				}
+
+				// Handle any driver errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return count;
 		}
 
 }

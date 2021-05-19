@@ -1,3 +1,7 @@
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.Set"%>
+<%@page import="com.account.model.AccountVO"%>
+<%@page import="com.account.model.AccountService"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map" %>
 <%@page import="java.util.HashMap"%>
@@ -30,14 +34,13 @@
 
 	request.setAttribute("devices", devices);
 	
-	Map<Integer, String> map = new HashMap<>();
+	Map<Integer, String> map = new HashMap<Integer, String>();
 
 	MemService memSvc = new MemService();
 	List<MemVO> memberVOs = memSvc.getAll();
 	
 	for (MemVO mem : memberVOs) {
 		//nameList.add(mem.getUsername());
-
 		
 		System.out.print(mem.getUsername() + ",");
 		System.out.print(mem.getEmail() + ",");
@@ -51,11 +54,19 @@
 		System.out.print(mem.getPhone());
 		System.out.println();
 	}
-
 	
-	request.setAttribute("memberVOs", memberVOs);
-
+	AccountService accountService = new AccountService();
+	List<AccountVO> accountVOs = accountService.getAll();
+	for(AccountVO account : accountVOs){
+		map.put( Integer.valueOf(account.getUid()), account.getUser());
+	}
 	
+	for(Iterator<Map.Entry<Integer, String>> entries = map.entrySet().iterator(); entries.hasNext(); ){
+		Map.Entry<Integer, String> entry = entries.next();
+		System.out.println(entry.getKey() + ":" + entry.getValue());
+	}
+	
+	request.setAttribute("memberVOs", memberVOs);	
 %>
 
 <!DOCTYPE html>
@@ -446,69 +457,8 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
-                    <!-- Content Row -->
-                    		<div id="record" style="background: #CCC; width:100%;">
-														<table class="table table-striped table-bordered display" id="dataTable" width="100%" cellspacing="0">
-                        		 		<thead>
-                                		<tr>
-                                	 			<th>帳號</th>
-                                	 			<th>Email</th>
-                                	 			<th>點數</th>
-                                	 			<th>電話</th>
-                                	 			<th>密碼</th>
-                                	 			<th>黑名單</th>
-                                	 			<th>權限</th>
-                                		</tr>
-                        		 		</thead>
-                        		 		<tbody>
-	                              		<c:url var="url" value="/AdminModifyMemberServlet" /> 
-																		<c:forEach items="${memberVOs}" var="member" varStatus="id">
-																				<tr id="tr${id.count}">
-<%-- 																						<th scope="row" style="text-align: center;">${id.count}</th> --%>
-																						<td id="thun${id.count}">${member.username }</td>
-																						<td id="them${id.count}">${member.email }</td>
-																						<td id="thpo${id.count}">${member.point }</td>
-																						<td id="thph${id.count}">${member.phone }</td>
-																						<td id="thpw${id.count}">${member.password }</td>
-																						<td id="thbl${id.count}">${member.black }</td>
-																						<td id="thau${id.count}">${member.authority }</td>
-																				</tr>
-																		</c:forEach>
-                        		 		</tbody>
-														</table>
-                    		</div>
-                    <!-- End Content Row -->
-                    
-                    
-                    
-                    
-                    
-                    
-
                 </div>
                 <!-- /.container-fluid -->
-                
-                
-                
-                
-                
-                
-                
-
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-
             </div>
             <!-- End of Main Content -->
 
@@ -524,32 +474,9 @@
 
         </div>
         <!-- End of Content Wrapper -->
-        
-				
-				
-				
-
-				
-				
-				
-				
-				
-				
-				
-				
-				
-
     </div>
     <!-- End of Page Wrapper -->
     
-    
-    
-    
-    
-    
-    
-    
-
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
