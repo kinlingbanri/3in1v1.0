@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class HistoryDAO implements HistoryDAO_interface{
 	private static final String GET_COUNT_STMT = 
 			"SELECT COUNT(*) FROM history WHERE did = ?";
 	private static final String GET_ALL_DID_STMT = 
-			"SELECT hid, ttime, event, ip, uid, did, maid, mid, point, location FROM history where did = ?  ORDER BY TTIME DESC LIMIT ?, ?;";
+			"SELECT hid, ttime, event, ip, uid, did, maid, mid, point, location FROM history where did = ?  ORDER BY history.TTIME DESC LIMIT ?, ?;";
 	private static final String GET_ALL_STMT = 
 			"SELECT hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, exchangecount,"
 					+ "papercount, location FROM history";
@@ -289,9 +291,9 @@ public class HistoryDAO implements HistoryDAO_interface{
 			return null;
 		}
 		@Override
-		public List<HistoryVO> getAllByDid(int did, int index, int total){
-			List<HistoryVO> list = new ArrayList<HistoryVO>();
-			HistoryVO historyVO = null;	
+		public List<DeviceJsonObject> getAllByDid(int did, int index, int total){
+			List<DeviceJsonObject> list = new ArrayList<DeviceJsonObject>();
+			DeviceJsonObject deviceJsonObject = null;		
 			Connection con = null;
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
@@ -305,12 +307,19 @@ public class HistoryDAO implements HistoryDAO_interface{
 				rs = pstmt.executeQuery();
 
 				while (rs.next()) {
-					historyVO = new HistoryVO();
-					historyVO.setTtime(rs.getTimestamp("ttime"));
-					historyVO.setEvent(rs.getString("event"));
-					historyVO.setPoint(rs.getInt("point"));
-					historyVO.setLocation(rs.getString("location"));
-					list.add(historyVO);
+					// historyVO 也稱為 Domain objects
+					deviceJsonObject = new DeviceJsonObject();
+					DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+					String dateStr = null;
+					try {
+						dateStr = sdf.format( rs.getTimestamp("ttime") );
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					
+					deviceJsonObject.setTtime(dateStr);
+					deviceJsonObject.setEvent(rs.getString("event"));
+					list.add(deviceJsonObject);
 				}
 
 				// Handle any driver errors

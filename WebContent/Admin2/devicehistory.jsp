@@ -630,7 +630,7 @@ if(totalCount > 50){
 	            'ajax': {
 	                "url": '../DeviceHistorySevlet',
 	                type: 'POST',
-	                dataSrc:'',
+	                dataSrc:'historyVOs',
 	                success:(data) => {
 										console.log("data : " + data);
 			            }

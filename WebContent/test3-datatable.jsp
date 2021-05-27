@@ -1,13 +1,5 @@
-<%@page import="utils.Random4"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-    
-<%
-Random4.getRandomCharArray();
-
-%>
-    
 <!DOCTYPE html>
 <html>
 <head>

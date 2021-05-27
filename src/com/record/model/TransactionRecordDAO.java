@@ -21,7 +21,7 @@ public class TransactionRecordDAO implements TransactionRecordDAO_interface{
 	private static final String GET_30_ADDRECORD_STMT = 
 			"SELECT STOREDATETIME, POINT, LOCATION  FROM addrecord WHERE USERNAME = ? ORDER BY STOREDATETIME DESC LIMIT 30";
 	private static final String GET_30_HISTORY_STMT = 
-			"SELECT TTIME, POINT, LOCATION  FROM history WHERE MID = ? AND FREECOUNT > 0 AND POINT > 0 ORDER BY TTIME DESC LIMIT 30;";
+			"SELECT TTIME, POINT, LOCATION  FROM history WHERE MID = ? AND FREECOUNT > 0 AND POINT > 0 ORDER BY TTIME DESC LIMIT 30";
 	
 	// 一個應用程式中,針對一個資料庫 ,共用一個DataSource即可
 	private static DataSource ds = null;

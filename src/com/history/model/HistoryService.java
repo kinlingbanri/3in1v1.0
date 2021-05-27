@@ -30,7 +30,7 @@ public class HistoryService {
 		return dao.getAll();
 	}
 	
-	public List<HistoryVO> getAllByDid(int did, int index, int total){
+	public List<DeviceJsonObject> getAllByDid(int did, int index, int total){
 		return dao.getAllByDid(did, index, total);
 	}
 	

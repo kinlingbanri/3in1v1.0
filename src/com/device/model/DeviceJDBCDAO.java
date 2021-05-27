@@ -72,13 +72,13 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 //		deviceVO.setDid(31);
 //		dao.delete(deviceVO);
 		
-		//Query Device Status
-		boolean status = dao.getStatus("TY00001");
-		System.out.print("Device Status : " + status);
+//		//Query Device Status
+//		boolean status = dao.getStatus("TY00001");
+//		System.out.print("Device Status : " + status);
 		
 		
 //		// Query One
-//		DeviceVO deviceVO = dao.findByPrimaryId("TY00030");
+//		DeviceVO deviceVO = dao.findByPrimaryId("TY00001");
 //		System.out.print(deviceVO.getDid() + ",");
 //		System.out.print(deviceVO.getNumber() + ",");
 //		System.out.print(deviceVO.getCoin() + ",");

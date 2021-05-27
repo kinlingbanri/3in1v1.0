@@ -1,29 +1,27 @@
 package com.history.model;
 
-import java.util.List;
-
 public class DeviceJsonObject {
-	private int recordsTotal;
-	private int recordsFiltered;
-	private List<HistoryVO> data;
+	private int len;
+	private String ttime;
+	private String event;
 	
-	public int getRecordsTotal() {
-		return recordsTotal;
+	public int getLen() {
+		return len;
 	}
-	public void setRecordsTotal(int recordsTotal) {
-		this.recordsTotal = recordsTotal;
+	public void setLen(int len) {
+		this.len = len;
 	}
-	public int getRecordsFiltered() {
-		return recordsFiltered;
+	public String getTtime() {
+		return ttime;
 	}
-	public void setRecordsFiltered(int recordsFiltered) {
-		this.recordsFiltered = recordsFiltered;
+	public void setTtime(String ttime) {
+		this.ttime = ttime;
 	}
-	public List<HistoryVO> getHistoryVOs() {
-		return data;
+	public String getEvent() {
+		return event;
 	}
-	public void setHistoryVOs(List<HistoryVO> historyVOs) {
-		this.data = historyVOs;
+	public void setEvent(String event) {
+		this.event = event;
 	}
 
 }

@@ -16,14 +16,14 @@ import com.history.model.HistoryVO;
 public class TransactionRecordJDBCDAO implements TransactionRecordDAO_interface{
 	
 	String driver = "com.mysql.cj.jdbc.Driver";
-	String url = "jdbc:mysql://192.168.100.72:3306/rm_58?useUnicode=true&characterEncoding=utf-8";
+	String url = "jdbc:mysql://211.21.93.170:3306/rm_58?useUnicode=true&characterEncoding=utf-8";
 	String userid = "van";
 	String passwd = "34182958";
 	
 	private static final String GET_30_ADDRECORD_STMT = 
 			"SELECT STOREDATETIME, POINT, LOCATION  FROM addrecord WHERE USERNAME = ? ORDER BY STOREDATETIME DESC LIMIT 30";
 	private static final String GET_30_HISTORY_STMT = 
-			"SELECT TTIME, POINT, LOCATION  FROM history WHERE MID = ? AND FREECOUNT > 0 AND POINT > 0 ORDER BY TTIME DESC LIMIT 30;";
+			"SELECT TTIME, POINT, LOCATION  FROM history WHERE MID = ? AND FREECOUNT > 0 AND POINT > 0 ORDER BY TTIME DESC LIMIT 30";
 
 	public static void main(String[] args) {
 		TransactionRecordDAO_interface dao = new TransactionRecordJDBCDAO();
@@ -83,6 +83,16 @@ public class TransactionRecordJDBCDAO implements TransactionRecordDAO_interface{
 				transactionRecordVO.setType("加值");
 				transactionRecordVOs.add(transactionRecordVO);
 			}
+			
+			
+//			for(TransactionRecordVO vo : transactionRecordVOs) {
+//				System.out.print(vo.getRecordTimeStamp() + ",");
+//				System.out.print(vo.getType() + ",");
+//				System.out.print(vo.getPoint() + ",");
+//				System.out.println(vo.getLocation());
+//			}
+			
+			
 
 			transactionRecordVOs.sort(Comparator.comparing(TransactionRecordVO::getRecordTimeStamp));
 			int toSkip = Math.max(transactionRecordVOs.size() - 30, 0);

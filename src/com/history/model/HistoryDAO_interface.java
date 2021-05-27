@@ -11,5 +11,5 @@ public interface HistoryDAO_interface {
 	public List<HistoryVO> get30(String mid);
 	public List<HistoryVO> getAll();
 	public int getCount(int did);
-	public List<HistoryVO> getAllByDid(int did, int index, int total); 
+	public List<DeviceJsonObject> getAllByDid(int did, int index, int total); 
 }

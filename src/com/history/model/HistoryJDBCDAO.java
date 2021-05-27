@@ -5,13 +5,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryJDBCDAO implements HistoryDAO_interface{
 	
 	String driver = "com.mysql.cj.jdbc.Driver";
-	String url = "jdbc:mysql://192.168.100.72:3306/rm_58?useUnicode=true&characterEncoding=utf-8";
+	String url = "jdbc:mysql://192.168.100.165:3306/rm_58?useUnicode=true&characterEncoding=utf-8";
 	String userid = "van";
 	String passwd = "34182958";
 	
@@ -129,34 +131,32 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 //			System.out.println(history.getLocation());
 //		}
 		
-//		// Query All
-//		List<HistoryVO> list = dao.getAll();
-//		for (HistoryVO history : list) {
-//			System.out.print(history.getHid() + ",");
-//			System.out.print(history.getTtime() + ",");
-//			System.out.print(history.getEvent() + ",");
-//			System.out.print(history.getIp() + ",");
-//			System.out.print(history.getUid() + ",");
-//			System.out.print(history.getDid() + ",");
-//			System.out.print(history.getRefundcount() + ",");
-//			System.out.print(history.getFreecount() + ",");
-//			System.out.print(history.getExchangecount() + ",");
-//			System.out.println(history.getPapercount());
-//		}
-		
-		int count = dao.getCount(1);
-		System.out.println("count : " + count);
-		
-		int lastCount = count - 50;
-		
-		// Query By DID
-		List<HistoryVO> list = dao.getAllByDid(1, lastCount, 50);
+		// Query All
+		List<HistoryVO> list = dao.getAll();
 		for (HistoryVO history : list) {
+			System.out.print(history.getHid() + ",");
 			System.out.print(history.getTtime() + ",");
 			System.out.print(history.getEvent() + ",");
-			System.out.print(history.getPoint() + ",");
-			System.out.println(history.getLocation());
+			System.out.print(history.getIp() + ",");
+			System.out.print(history.getUid() + ",");
+			System.out.print(history.getDid() + ",");
+			System.out.print(history.getRefundcount() + ",");
+			System.out.print(history.getFreecount() + ",");
+			System.out.print(history.getExchangecount() + ",");
+			System.out.println(history.getPapercount());
 		}
+		
+//		int count = dao.getCount(1);
+//		System.out.println("count : " + count);
+//		
+//		int lastCount = count - 50;
+//		
+//		// Query By DID
+//		List<DeviceJsonObject> list = dao.getAllByDid(1, lastCount, 50);
+//		for (DeviceJsonObject deviceJsonObject : list) {
+//			System.out.print(deviceJsonObject.getTtime() + ",");
+//			System.out.print(deviceJsonObject.getEvent() + ",");
+//		}
 		
 
 
@@ -567,9 +567,9 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 	}
 
 	@Override
-	public List<HistoryVO> getAllByDid(int did, int index, int total){
-		List<HistoryVO> list = new ArrayList<HistoryVO>();
-		HistoryVO historyVO = null;		
+	public List<DeviceJsonObject> getAllByDid(int did, int index, int total){
+		List<DeviceJsonObject> list = new ArrayList<DeviceJsonObject>();
+		DeviceJsonObject deviceJsonObject = null;		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -585,12 +585,18 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 
 			while (rs.next()) {
 				// historyVO 也稱為 Domain objects
-				historyVO = new HistoryVO();
-				historyVO.setTtime(rs.getTimestamp("ttime"));
-				historyVO.setEvent(rs.getString("event"));
-				historyVO.setPoint(rs.getInt("point"));
-				historyVO.setLocation(rs.getString("location"));
-				list.add(historyVO);
+				deviceJsonObject = new DeviceJsonObject();
+				DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				String dateStr = null;
+				try {
+					dateStr = sdf.format( rs.getTimestamp("ttime") );
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
+				deviceJsonObject.setTtime(dateStr);
+				deviceJsonObject.setEvent(rs.getString("event"));
+				list.add(deviceJsonObject);
 			}
 
 			// Handle any driver errors
