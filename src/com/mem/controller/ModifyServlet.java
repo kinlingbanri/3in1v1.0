@@ -53,16 +53,14 @@ public class ModifyServlet extends HttpServlet {
 			System.out.println("ModifyServlet!");
 			
 			if(type.equals("password")) {
-				memVO.setPassword(value);
-				HibernateUtil.updateMemVO(memVO);
-				jsonObject.put("state", "ok");
+				memVO.setPassword(value);				
 				System.out.println("Modify Password Success!!!");
 			}else if(type.equals("email")) {
 				memVO.setEmail(value);
-				HibernateUtil.updateMemVO(memVO);
-				jsonObject.put("state", "ok");
 				System.out.println("Modify Password Success!!!");
 			}
+			new MemService().updateMem(memVO);
+			jsonObject.put("state", "ok");
 		}
 		
 		out.write(jsonObject.toString());

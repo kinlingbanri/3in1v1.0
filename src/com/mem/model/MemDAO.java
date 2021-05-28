@@ -60,7 +60,7 @@ public class MemDAO implements MemDAO_interface {
 			pstmt.setInt(5, memVO.getBlack());
 			pstmt.setInt(6, memVO.getAuthority());
 			pstmt.setInt(7, memVO.getVerification());
-			pstmt.setInt(8, memVO.getVerificationcode());
+			pstmt.setString(8, memVO.getVerificationcode());
 			pstmt.setTimestamp(9, memVO.getVerificationdate());
 			pstmt.setString(10, memVO.getPhone());
 
@@ -105,7 +105,7 @@ public class MemDAO implements MemDAO_interface {
 			pstmt.setInt(4, memVO.getBlack());
 			pstmt.setInt(5, memVO.getAuthority());
 			pstmt.setInt(6, memVO.getVerification());
-			pstmt.setInt(7, memVO.getVerificationcode());
+			pstmt.setString(7, memVO.getVerificationcode());
 			pstmt.setTimestamp(8, memVO.getVerificationdate());
 			pstmt.setString(9, memVO.getPhone());
 			pstmt.setString(10, memVO.getUsername());	
@@ -198,7 +198,7 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setBlack(rs.getInt("black"));
 				memVO.setAuthority(rs.getInt("authority"));
 				memVO.setVerification(rs.getInt("verification"));
-				memVO.setVerificationcode(rs.getInt("verificationcode"));
+				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
 			}
@@ -262,7 +262,7 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setBlack(rs.getInt("black"));
 				memVO.setAuthority(rs.getInt("authority"));
 				memVO.setVerification(rs.getInt("verification"));
-				memVO.setVerificationcode(rs.getInt("verificationcode"));
+				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
 				list.add(memVO); // Store the row in the list
@@ -321,7 +321,7 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setBlack(rs.getInt("black"));
 				memVO.setAuthority(rs.getInt("authority"));
 				memVO.setVerification(rs.getInt("verification"));
-				memVO.setVerificationcode(rs.getInt("verificationcode"));
+				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
 				list.add(memVO); // Store the row in the list

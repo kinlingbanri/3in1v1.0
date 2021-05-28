@@ -8,9 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.device.model.DeviceDAO_interface;
-import com.device.model.DeviceJDBCDAO;
-import com.store.model.StoreVO;
 
 public class AccountJDBCDAO implements AccountDAO_interface{
 	String driver = "com.mysql.cj.jdbc.Driver";
@@ -57,13 +54,13 @@ public class AccountJDBCDAO implements AccountDAO_interface{
 //		System.out.print(accountVO.getUser() + ",");
 //		System.out.println(accountVO.getPassword());
 		
-//		// Query All
-//		List<AccountVO> list = dao.getAll();
-//		for (AccountVO accountVO : list) {
-//			System.out.print(accountVO.getUid() + ",");
-//			System.out.print(accountVO.getUser() + ",");
-//			System.out.println(accountVO.getPassword());
-//		}
+		// Query All
+		List<AccountVO> list = dao.getAll();
+		for (AccountVO accountVO : list) {
+			System.out.print(accountVO.getUid() + ",");
+			System.out.print(accountVO.getUser() + ",");
+			System.out.println(accountVO.getPassword());
+		}
 
 	}
 

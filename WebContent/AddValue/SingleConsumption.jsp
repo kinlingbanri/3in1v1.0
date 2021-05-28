@@ -166,7 +166,7 @@
 		  <input type="hidden" name="freecount" value="10" id="inputFreecount">
 		  <input type="hidden" name="number" value="<%=MACHID %>" id="inputNumber">
 			<button type="submit" class="btn btn-success" style="font-weight:bold; margin-right:12px;" id="confirmBtn">確認交易</button>
-			<button class="btn btn-warning" style="font-weight:bold; margin-left:12px;" id="logoutBtn">取消交易</button>
+			<button class="btn btn-warning" style="font-weight:bold; margin: 36px 0 0 12px;" id="logoutBtn">取消交易</button>
 		</div>
 		<div style="text-align: center; margin-top:24px;" id="successDiv">
 			<button class="btn btn-success" style="font-weight:bold; margin-left:12px;" id="successBtn">完成交易</button>

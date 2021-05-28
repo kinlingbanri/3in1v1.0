@@ -9,19 +9,22 @@ public class MemService {
 		dao = new MemDAO();
 	}
 	
-	public MemVO addMem(String username, String email,
-			String password, Integer point){
+	public void addMem(String username, String email,
+			String phone, String password, Integer point){
 		
 		MemVO memVO = new MemVO();
 
 		memVO.setUsername(username);
 		memVO.setEmail(email);
+		memVO.setPhone(phone);
 		memVO.setPassword(password);
 		memVO.setPoint(point);
 		dao.insert(memVO);
-
-		return memVO;
 	};
+	
+	public void insertMem(MemVO memVO) {
+		dao.insert(memVO);
+	}
 	
 	public void updateMem(MemVO memVO){
 		dao.update(memVO);

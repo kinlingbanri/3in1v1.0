@@ -5,18 +5,18 @@
 
     
 <%
-// 	/*****	Online *****/
-// 	MemVO memVO = (MemVO) session.getAttribute("memVO");
-// 	System.out.println("Session username : " + memVO.getUsername());
-// 	Object objectDID = session.getAttribute("DID");
-// 	String DID = objectDID.toString();
-// 	System.out.println("Modify.jsp session DID : " +DID );
+	/*****	Online *****/
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
+	System.out.println("Session username : " + memVO.getUsername());
+	Object objectDID = session.getAttribute("DID");
+	String DID = objectDID.toString();
+	System.out.println("Modify.jsp session DID : " +DID );
 	
-	/*****	Test *****/
-	String DID = "12323";
-	System.out.println("Session DID : " + DID);
-	MemService memService = new MemService();
-	MemVO memVO = memService.getOneMem("Van007");
+// 	/*****	Test *****/
+// 	String DID = "12323";
+// 	System.out.println("Session DID : " + DID);
+// 	MemService memService = new MemService();
+// 	MemVO memVO = memService.getOneMem("Van007");
 	
 	String username = memVO.getUsername();
 	String email = memVO.getEmail();

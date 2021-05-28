@@ -1,8 +1,5 @@
 package com.account.model;
 
-import java.security.KeyStore.PrivateKeyEntry;
-
-import javax.lang.model.type.PrimitiveType;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

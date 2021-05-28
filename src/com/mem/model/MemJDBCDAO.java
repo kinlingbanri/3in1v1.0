@@ -53,7 +53,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 			pstmt.setInt(5, memVO.getBlack());
 			pstmt.setInt(6, memVO.getAuthority());
 			pstmt.setInt(7, memVO.getVerification());
-			pstmt.setInt(8, memVO.getVerificationcode());
+			pstmt.setString(8, memVO.getVerificationcode());
 			pstmt.setTimestamp(9, memVO.getVerificationdate());
 			pstmt.setString(10, memVO.getPhone());
 
@@ -103,7 +103,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 			pstmt.setInt(4, memVO.getBlack());
 			pstmt.setInt(5, memVO.getAuthority());
 			pstmt.setInt(6, memVO.getVerification());
-			pstmt.setInt(7, memVO.getVerificationcode());
+			pstmt.setString(7, memVO.getVerificationcode());
 			pstmt.setTimestamp(8, memVO.getVerificationdate());
 			pstmt.setString(9, memVO.getPhone());
 			pstmt.setString(10, memVO.getUsername());			
@@ -206,7 +206,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 				memVO.setBlack(rs.getInt("black"));
 				memVO.setAuthority(rs.getInt("authority"));
 				memVO.setVerification(rs.getInt("verification"));
-				memVO.setVerificationcode(rs.getInt("verificationcode"));
+				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
 			}
@@ -276,7 +276,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 				memVO.setBlack(rs.getInt("black"));
 				memVO.setAuthority(rs.getInt("authority"));
 				memVO.setVerification(rs.getInt("verification"));
-				memVO.setVerificationcode(rs.getInt("verificationcode"));
+				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
 				list.add(memVO); // Store the row in the list
@@ -342,7 +342,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 				memVO.setBlack(rs.getInt("black"));
 				memVO.setAuthority(rs.getInt("authority"));
 				memVO.setVerification(rs.getInt("verification"));
-				memVO.setVerificationcode(rs.getInt("verificationcode"));
+				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
 				list.add(memVO); // Store the row in the list
@@ -386,44 +386,44 @@ public class MemJDBCDAO implements MemDAO_interface {
 	public static void main(String[] args) {
 		MemJDBCDAO dao = new MemJDBCDAO();
 		
-//		//Add
-//		MemVO memVO = new MemVO();
-//		memVO.setUsername("金城六");
-//		memVO.setEmail("Kim@hotmail.com");
-//		memVO.setPassword("123");
-//		memVO.setPoint(600);
-//		memVO.setBlack(0);
-//		memVO.setAuthority(0);
-//		memVO.setVerification(0);
-//		memVO.setVerificationcode(5491);
-//		
-//		Date date = new Date();       
-//		Timestamp nousedate = new Timestamp(date.getTime());
-//		
-//		memVO.setVerificationdate(nousedate);
-//		memVO.setPhone("0935276906");
-//		memVO.setBlack(1);
-//		dao.insert(memVO);
-		
-
-		//Update
+		//Add
 		MemVO memVO = new MemVO();
-		memVO.setUsername("金城六");
-		memVO.setEmail("Kim2@hotmail.com");
+		memVO.setUsername("林阿金");
+		memVO.setEmail("Kim@hotmail.com");
 		memVO.setPassword("123");
-		memVO.setPoint(650);
+		memVO.setPoint(600);
 		memVO.setBlack(0);
 		memVO.setAuthority(0);
 		memVO.setVerification(0);
-		memVO.setVerificationcode(3418);
+		memVO.setVerificationcode("5491");
 		
 		Date date = new Date();       
 		Timestamp nousedate = new Timestamp(date.getTime());
 		
 		memVO.setVerificationdate(nousedate);
 		memVO.setPhone("0935276906");
-		memVO.setBlack(0);
-		dao.update(memVO);
+		memVO.setBlack(1);
+		dao.insert(memVO);
+		
+
+//		//Update
+//		MemVO memVO = new MemVO();
+//		memVO.setUsername("金城六");
+//		memVO.setEmail("Kim2@hotmail.com");
+//		memVO.setPassword("123");
+//		memVO.setPoint(650);
+//		memVO.setBlack(0);
+//		memVO.setAuthority(0);
+//		memVO.setVerification(0);
+//		memVO.setVerificationcode(3418);
+//		
+//		Date date = new Date();       
+//		Timestamp nousedate = new Timestamp(date.getTime());
+//		
+//		memVO.setVerificationdate(nousedate);
+//		memVO.setPhone("0935276906");
+//		memVO.setBlack(0);
+//		dao.update(memVO);
 		
 //		// Delete
 //		dao.delete("金城六");

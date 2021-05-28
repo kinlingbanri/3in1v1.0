@@ -33,11 +33,15 @@ public class MemVO implements java.io.Serializable {
 	@Column(name = "authority")
 	private Integer authority;
 	
+	//預設為1,一天驗證最多3次,每次失敗加1
+	//同天累積至4時,就不再提供驗證
+	//不同天時,先設定為1,並更新為新日期
+	//驗證過設定為10
 	@Column(name = "verification")
 	private Integer verification;
 	
 	@Column(name = "verificationcode")
-	private Integer verificationcode;
+	private String verificationcode;
 	
 	@Column(name = "verificationdate")
 	private Timestamp verificationdate;
@@ -107,11 +111,11 @@ public class MemVO implements java.io.Serializable {
 		this.verification = verification;
 	}
 
-	public Integer getVerificationcode() {
+	public String getVerificationcode() {
 		return verificationcode;
 	}
 
-	public void setVerificationcode(Integer verificationcode) {
+	public void setVerificationcode(String verificationcode) {
 		this.verificationcode = verificationcode;
 	}
 
