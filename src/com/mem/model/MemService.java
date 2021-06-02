@@ -42,6 +42,10 @@ public class MemService {
 		return dao.findByEmail(email);
 	}
 	
+	public List<MemVO> getMemPhone(String phone){
+		return dao.findByPhone(phone);
+	}
+	
 	public List<MemVO>getAll(){
 		return dao.getAll();
 	}

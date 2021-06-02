@@ -324,4 +324,10 @@ public class MemJNDIDAO implements MemDAO_interface {
 		return list;
 	}
 
+	@Override
+	public List<MemVO> findByPhone(String phone) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

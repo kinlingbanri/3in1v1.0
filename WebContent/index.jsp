@@ -674,9 +674,9 @@ a {
 												MAID : MAID
 											},
 											success : function(jsonObject) { //當請求成功後此事件會被呼叫
-												console
-														.log("jsonObject.state : "
-																+ jsonObject.state);
+												console.log("jsonObject.username : " + jsonObject.username);
+												$("#inputHiddenUsername").val(jsonObject.username);
+												console.log("jsonObject.state : " + jsonObject.state);
 												var validateState = jsonObject.state;
 												if (validateState == "1") {
 													console
@@ -699,6 +699,8 @@ a {
 													$("#password").hide();
 													$("#texLogintPwd").val("密碼錯誤!").css('color', 'red').show();
 													document.getElementById('checkboxPwd').checked = true;
+												}else if (validateState == "4") {
+													openValidateDiv();
 												}
 											},
 											error : function(e) {
@@ -875,7 +877,6 @@ a {
 													} else if (state == "register") {
 														console.log("註冊成功!");
 														$("#inputHiddenUsername").val(jsonObject.username);
-
 														$("#signupForm").hide();
 														$("#signupSuccess").show();
 														count = 3;
@@ -966,7 +967,7 @@ a {
 					success : function(jsonObject) { //當請求成功後此事件會被呼叫
 						console.log("jsonObject.state : " + jsonObject.state);
 						var validateState = jsonObject.state;
-						var validateState = jsonObject.state;
+						//var validateState = jsonObject.state;
 						if (validateState == "3") {
 
 							$("#verificationWindow1").hide();

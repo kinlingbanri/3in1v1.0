@@ -2,7 +2,11 @@ package com.mem.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +17,8 @@ import org.json.JSONObject;
 
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
+
+import utils.Random4;
 
 @WebServlet(name = "MemServlet", urlPatterns = {"/MemServlet"})
 public class MemServlet extends HttpServlet {
@@ -27,6 +33,7 @@ public class MemServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
 		//resp.setContentType("text/html;charset=UTF-8");
 		//resp.setContentType("text/plain");
 		resp.setContentType("application/json");
@@ -55,16 +62,59 @@ public class MemServlet extends HttpServlet {
 		
 		if(memVO == null) {
 			jsonObject.put("state", "2");
-		}else {
-			if(password.equals(memVO.getPassword())) {
-				jsonObject.put("state", "1");
-				jsonObject.put("type", machineStr);
-				req.getSession().setAttribute("memVO", memVO);
-			}else {
-				jsonObject.put("state", "3");
+		}else  if( !password.equals(memVO.getPassword())){
+			jsonObject.put("state", "3");
+		}else if((password.equals(memVO.getPassword()) && (memVO.getVerification() == 10))) {
+			jsonObject.put("state", "1");
+			jsonObject.put("type", machineStr);
+			req.getSession().setAttribute("memVO", memVO);
+		}else if((password.equals(memVO.getPassword()) && (memVO.getVerification() != 10))) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+			Date current = new Date();
+			String currentStr = sdf.format(current);
+			int verification = memVO.getVerification();
+			Date verificationDate = memVO.getVerificationdate();
+			String verificationDateStr = sdf.format(verificationDate);
+			
+			boolean isSameDay = false;
+			if(currentStr.equals(verificationDateStr)) {
+				isSameDay = true;
+				System.out.println("Equals!!");	
 			}
+			
+			if((isSameDay == true ) && (verification > 3) ) {
+				
+			}else {
+				if(isSameDay == false) {
+					memVO.setVerification(1);
+				}
+				String newCode = Random4.getRandomCharArray();
+				memVO.setVerificationcode(newCode);
+				Timestamp nowDate = new Timestamp(current.getTime());
+				memVO.setVerificationdate(nowDate);
+				
+				memService.updateMem(memVO);
+				
+				// 這裡要放傳送簡訊的程式碼
+				ServletContext application=getServletConfig().getServletContext();
+				String jarpath = application.getRealPath("/WEB-INF/lib/RXTX_Demo.jar");
+				System.out.println("jarpath : " + jarpath);
+				
+				//以下會出現錯誤:CreateProcess錯誤= 193，％1不是有效的Win32應用程式
+				//ProcessBuilder pb = new ProcessBuilder(jarpath, "-jar", "COM8 test");		
+				//ProcessBuilder pb = new ProcessBuilder("C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar", "-jar", "COM8 test");
+				//pb.start();				
+				
+				//成功
+				String comPortNum = "COM8";
+				String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " " + newCode;
+				//Runtime.getRuntime().exec( "cmd /c java -jar C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar COM8 OOOOKKKK" );
+				Runtime.getRuntime().exec(commandStr);
+			}
+			jsonObject.put("state", "4");
 		}
 
+		jsonObject.put("username", username);
 		out.write(jsonObject.toString());
 		out.flush();
 		out.close();

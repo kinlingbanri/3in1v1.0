@@ -25,6 +25,9 @@ public class MemJDBCDAO implements MemDAO_interface {
 	private static final String GET_ONEEMAIL_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," + 
 			"verificationdate, phone FROM mem where email = ?";
+	private static final String GET_ONEPHONE_STMT = 
+			"SELECT username, email, password, point, black, authority, verification, verificationcode," + 
+			"verificationdate, phone FROM mem where phone = ?";
 	private static final String INSERT_STMT = 
 			"INSERT INTO mem (username, email, password, point, black, authority, verification, verificationcode," + 
 			"verificationdate, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -386,24 +389,24 @@ public class MemJDBCDAO implements MemDAO_interface {
 	public static void main(String[] args) {
 		MemJDBCDAO dao = new MemJDBCDAO();
 		
-		//Add
-		MemVO memVO = new MemVO();
-		memVO.setUsername("林阿金");
-		memVO.setEmail("Kim@hotmail.com");
-		memVO.setPassword("123");
-		memVO.setPoint(600);
-		memVO.setBlack(0);
-		memVO.setAuthority(0);
-		memVO.setVerification(0);
-		memVO.setVerificationcode("5491");
-		
-		Date date = new Date();       
-		Timestamp nousedate = new Timestamp(date.getTime());
-		
-		memVO.setVerificationdate(nousedate);
-		memVO.setPhone("0935276906");
-		memVO.setBlack(1);
-		dao.insert(memVO);
+//		//Add
+//		MemVO memVO = new MemVO();
+//		memVO.setUsername("林阿金");
+//		memVO.setEmail("Kim@hotmail.com");
+//		memVO.setPassword("123");
+//		memVO.setPoint(600);
+//		memVO.setBlack(0);
+//		memVO.setAuthority(0);
+//		memVO.setVerification(0);
+//		memVO.setVerificationcode("5491");
+//		
+//		Date date = new Date();       
+//		Timestamp nousedate = new Timestamp(date.getTime());
+//		
+//		memVO.setVerificationdate(nousedate);
+//		memVO.setPhone("0935276906");
+//		memVO.setBlack(1);
+//		dao.insert(memVO);
 		
 
 //		//Update
@@ -460,6 +463,22 @@ public class MemJDBCDAO implements MemDAO_interface {
 //			System.out.println();
 //		}
 		
+		// Query Phone All
+		List<MemVO> list = dao.findByPhone("0935276906");
+		for (MemVO mem : list) {
+			System.out.print(mem.getUsername() + ",");
+			System.out.print(mem.getEmail() + ",");
+			System.out.print(mem.getPassword() + ",");
+			System.out.print(mem.getPoint());
+			System.out.print(mem.getBlack() + ",");
+			System.out.print(mem.getAuthority() + ",");
+			System.out.print(mem.getVerification() + ",");
+			System.out.print(mem.getVerificationcode() + ",");
+			System.out.print(mem.getVerificationdate() + ",");
+			System.out.print(mem.getPhone());
+			System.out.println();
+		}
+		
 //		// Query All
 //		List<MemVO> list = dao.getAll();
 //		for (MemVO mem : list) {
@@ -476,5 +495,75 @@ public class MemJDBCDAO implements MemDAO_interface {
 //			System.out.println();
 //		}
 		
+	}
+
+	@Override
+	public List<MemVO> findByPhone(String phone) {
+		List<MemVO> list = new ArrayList<MemVO>();
+		MemVO memVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_ONEPHONE_STMT);
+			
+			pstmt.setString(1, phone);
+			
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// memVO 也稱為 Domain objects
+				memVO = new MemVO();
+				memVO.setUsername(rs.getString("username"));
+				memVO.setEmail(rs.getString("email"));
+				memVO.setPassword(rs.getString("password"));
+				memVO.setPoint(rs.getInt("point"));
+				memVO.setBlack(rs.getInt("black"));
+				memVO.setAuthority(rs.getInt("authority"));
+				memVO.setVerification(rs.getInt("verification"));
+				memVO.setVerificationcode(rs.getString("verificationcode"));
+				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
+				memVO.setPhone(rs.getString("phone"));
+				list.add(memVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
 	}
 }

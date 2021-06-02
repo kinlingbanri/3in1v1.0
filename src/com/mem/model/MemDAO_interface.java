@@ -8,5 +8,6 @@ public interface MemDAO_interface {
 	public void delete(String username);
 	public MemVO findByPrimaryKey(String username);
 	public List<MemVO> findByEmail(String email);
+	public List<MemVO> findByPhone(String phone);
 	public List<MemVO> getAll();
 }

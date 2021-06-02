@@ -67,6 +67,8 @@ public class RegisterServlet extends HttpServlet {
 				Timestamp nowTime = new Timestamp(date.getTime());
 				newMemVO.setVerificationdate(nowTime);
 				memService.insertMem(newMemVO);
+				// 這裡要放傳送簡訊的程式碼
+				//
 				
 				//memService.addMem(registerUsername, registerEmail, registerPhone, registerPassword, 0);
 				System.out.println("Register Success!!!");

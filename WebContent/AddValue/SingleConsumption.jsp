@@ -12,6 +12,8 @@
 	//online
  	MemVO memVO = (MemVO) session.getAttribute("memVO");
 	String username = memVO.getUsername();
+	MemService memService = new MemService();
+	memVO = memService.getOneMem(username);
 	int memPoint = memVO.getPoint();
 	//memPoint = 90;
 	String DID = (String)session.getAttribute("DID");
@@ -24,7 +26,7 @@
 	System.out.println("Session machineNumber : " + machineNumber);
 	System.out.println("SingleConsumption.jsp");	
 	
-	int consumptionPoint = 100;						//消費一次費用
+	int consumptionPoint = 100;						//消費一次費用,從資料庫查詢
 	request.setAttribute("consumptionPoint", consumptionPoint);
 	
 // 	HistoryService historyService = new HistoryService();
@@ -136,18 +138,19 @@
   
   <section style="height: 1080px;">
 		<div style="text-align: center;">
-			<h2 id="storeInfo">
+			<h2 id="storeInfo" style="font-weight: 900;">
 				<%=machineName %>
 			</h2>
+			<p style="margin: 0 0 0 0; font-size:20px; font-weight: 600;">本次消費需<%=consumptionPoint %>點</p>
 		</div>
 		<div style="margin: 7% 0 0 0; text-align:center;">
 			<div id="divInfo">
-				<p style="margin: 0 0 0 0; font-size:16px;">現有點數</p>
+				<p style="margin: 0 0 0 0; font-size:20px;">現有點數</p>
 				<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px; margin-bottom: 36px;" id="memPoint"><%=memPoint %>點</p>
-				<p style="margin: 0 0 0 0; font-size:16px;">本次消費需</p>
-				<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px; margin-bottom: 36px;" id="consumptionPoint"><%=consumptionPoint %>點</p>
+				
+				<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px; margin-bottom: 36px;" id="consumptionPoint"></p>
 			</div>
-			<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold; color:red;" id="lack">您的餘額不足，請先加值</p>
+			<p style="margin: 0 0 32px 0; font-size:24px; font-weight: bold; color:red;" id="lack">您的餘額不足，請先加值</p>
 			<div id="divSuccess">
 				<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold;">本次消費<%=consumptionPoint %>點</p>
 				<p style="margin: 0 0 0 0; font-size:24px; font-weight: bold; color:red;" id="balance"></p>
@@ -165,8 +168,8 @@
 		  <input type="hidden" name="consumptionPoint" value="<%=consumptionPoint %>" id="inputConsumptionPoint">
 		  <input type="hidden" name="freecount" value="10" id="inputFreecount">
 		  <input type="hidden" name="number" value="<%=MACHID %>" id="inputNumber">
-			<button type="submit" class="btn btn-success" style="font-weight:bold; margin-right:12px;" id="confirmBtn">確認交易</button>
-			<button class="btn btn-warning" style="font-weight:bold; margin: 36px 0 0 12px;" id="logoutBtn">取消交易</button>
+			<button type="submit" id="confirmBtn" class="btn btn-success" style="font-weight:bold; margin-right:12px;">確認交易</button>
+			<button type="submit" id="logoutBtn" class="btn btn-warning" style="font-weight:bold; margin-left:12px;">取消交易</button>
 		</div>
 		<div style="text-align: center; margin-top:24px;" id="successDiv">
 			<button class="btn btn-success" style="font-weight:bold; margin-left:12px;" id="successBtn">完成交易</button>
@@ -175,6 +178,55 @@
   
   
   <script>
+//   $(function() {
+<%-- 		if (	<%=memPoint%> < 10) { --%>
+// 			$("#lack").show();
+// 			$("#divSelect").hide();
+// 			$("#needPoint").hide();
+// 			$("#CounterDiv").hide();
+// 			$("#divSuccess").hide();
+// 			$("#timerDiv").hide();
+// 			$("#confirmBtn").hide();
+// 		} else {
+// 			$("#lack").hide();
+// 		}
+
+		//初始化各元素
+		$(function(){
+			var memPointStr = $("#memPoint").text();
+			memPointStr = memPointStr.substring(0, memPointStr.length-1);
+			var memPointValue = parseInt(memPointStr, 10);
+			var consumptionPoint = $("#inputConsumptionPoint").val();
+			consumptionPoint =parseInt(consumptionPoint, 10);
+
+			$("#divSuccess").hide();
+			$("#successInfo").hide();
+			$("#logoutBtn").show();
+			$("#successDiv").hide();
+
+			if(memPointValue < consumptionPoint){
+				$("#lack").show();
+				$("#timerDiv").hide();
+				$("#confirmBtn").hide();
+			}else{
+				$("#lack").hide();
+				$("#timerDiv").show();
+				$("#confirmBtn").show();
+				
+				//var myTimerVar= setInterval(function(){ myTimer()}, 1000);
+			}			
+		});
+  
+		//隠藏右側scrollbar
+		$("#body").niceScroll({
+		  cursorcolor: "#0026BF",
+		  cursorborder: "1px solid #30BAFF", 
+		  autohidemode: "hidden",
+		  cursorwidth: "10px"
+		});
+
+		
+		
 		var DID = $("#DID").val();
 		var count = 30;
 		
@@ -281,7 +333,7 @@
 		function historyRecord(username, did, machid, freecount, consumptionPoint, number){
 			$.ajax({
 				  type: 'POST',                     		//POST
-				  url: "../HistoryRecordServlet",  //請求的頁面
+				  url: "../HistoryRecordServlet",  			//請求的頁面
 				  cache: false,                    		//防止抓到快取的回應
 				  async:false,													//停止非同步
 				  data: {
@@ -307,40 +359,7 @@
 			});
 		}
 		
-		//初始化各元素
-		$(function(){
-			var memPointStr = $("#memPoint").text();
-			var consumptionPoint = $("#consumptionPoint").text();
-			memPointStr = memPointStr.substring(0, memPointStr.length-1);
-			consumptionPoint = consumptionPoint.substring(0, consumptionPoint.length-1);
-			var memPointValue = parseInt(memPointStr, 10);
-			var consumptionValue = parseInt(consumptionPoint, 10);
 
-			$("#divSuccess").hide();
-			$("#successInfo").hide();
-			$("#logoutBtn").show();
-			$("#successDiv").hide();
-
-			if(consumptionValue > memPointValue){
-				$("#lack").show();
-				$("#timerDiv").hide();
-				$("#confirmBtn").hide();
-			}else{
-				$("#lack").hide();
-				$("#timerDiv").show();
-				$("#confirmBtn").show();
-				
-				//var myTimerVar= setInterval(function(){ myTimer()}, 1000);
-			}			
-		});
-  
-		//隠藏右側scrollbar
-		$("#body").niceScroll({
-		  cursorcolor: "#0026BF",
-		  cursorborder: "1px solid #30BAFF", 
-		  autohidemode: "hidden",
-		  cursorwidth: "10px"
-		});
 
 		document.getElementById('logoutBtn').onclick = function(){
 			window.location.href = "../logout.jsp";
