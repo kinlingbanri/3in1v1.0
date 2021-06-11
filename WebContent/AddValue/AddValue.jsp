@@ -12,59 +12,74 @@
     pageEncoding="UTF-8"%>
     
 <%
-	MemVO memVO = (MemVO) session.getAttribute("memVO");
-	System.out.println("Session username : " + memVO.getUsername());
+
 	Object DIDObject = session.getAttribute("DID");
 	String did = (String)DIDObject;
 	System.out.println("AddValue.jspSession did : " + did.toString());
-	
-	SalepriceService salepriceService = new SalepriceService();
-	
-	// Query All
-	List<SalePriceVO> salePriceVOs = salepriceService.getAll();
 
-	Collections.sort(salePriceVOs, new Comparator<SalePriceVO>() {
-		public int compare(SalePriceVO o1, SalePriceVO o2) {
-			return o1.getDallas() - o2.getDallas();
-		}
-	});
+	MemVO memVO = (MemVO) session.getAttribute("memVO");
 	
-	// Get Device Object
-	DeviceService deviceService = new DeviceService();
-	DeviceVO deviceVO = deviceService.getOneDevice(did);
-	String localName = deviceVO.getLocation();
-	
-	request.setAttribute("salePriceVOs", salePriceVOs);
-	request.setAttribute("localName", localName);
-	request.setAttribute("did", did);
-	
-	
-// 	for (SalePriceVO salePriceVO1 : salePriceVOs) {
-// 		System.out.print(salePriceVO1.getId() + ",");
-// 		System.out.print(salePriceVO1.getDallas() + ",");
-// 		System.out.println(salePriceVO1.getPoint());
-// 	}
+	if(memVO == null){
+		System.out.println("Session memVO Null ");
+		RequestDispatcher rd = request.getRequestDispatcher("../logout.jsp");
+		rd.forward(request,response);
+	}else{
+		
+		System.out.println("Session username : " + memVO.getUsername());
+		String username = memVO.getUsername();
 
-// 		Query check money
-// 		DeviceVO deviceVO1 = deviceService.getCheckMoney("TY00001");
-// 		System.out.print(deviceVO1.getDid() + ",");
-// 		System.out.print(deviceVO1.getNumber() + ",");
-// 		System.out.print(deviceVO1.getCoin() + ",");
-// 		System.out.print(deviceVO1.getPaper() + ",");
-// 		System.out.print(deviceVO1.getLocation() + ",");
-// 		System.out.print(deviceVO1.getRefund() + ",");
-// 		System.out.print(deviceVO1.getUid() + ",");
-// 		System.out.print(deviceVO1.getStatus() + ",");
-// 		System.out.print(deviceVO1.getError() + ",");
-// 		System.out.print(deviceVO1.getMachid() + ",");
-// 		System.out.print(deviceVO1.getFreecount() + ",");
-// 		System.out.print(deviceVO1.getFreecountset() + ",");
-// 		System.out.print(deviceVO1.getMaid() + ",");
-// 		System.out.print(deviceVO1.getMid() + ",");
-// 		System.out.print(deviceVO1.getAdd_status() + ",");
-// 		System.out.print(deviceVO1.getCount_100() + ",");
-// 		System.out.print(deviceVO1.getCount_500() + ",");
-// 		System.out.println(deviceVO1.getCount_1000());
+		
+		SalepriceService salepriceService = new SalepriceService();
+		
+		// Query All
+		List<SalePriceVO> salePriceVOs = salepriceService.getAll();
+
+		Collections.sort(salePriceVOs, new Comparator<SalePriceVO>() {
+			public int compare(SalePriceVO o1, SalePriceVO o2) {
+				return o1.getDallas() - o2.getDallas();
+			}
+		});
+		
+		// Get Device Object
+		DeviceService deviceService = new DeviceService();
+		DeviceVO deviceVO = deviceService.getOneDevice(did);
+		String localName = deviceVO.getLocation();
+		
+		request.setAttribute("memVO", memVO);
+		request.setAttribute("salePriceVOs", salePriceVOs);
+		request.setAttribute("localName", localName);
+		request.setAttribute("did", did);
+		request.setAttribute("username", username);
+		
+//	 	for (SalePriceVO salePriceVO1 : salePriceVOs) {
+//	 		System.out.print(salePriceVO1.getId() + ",");
+//	 		System.out.print(salePriceVO1.getDallas() + ",");
+//	 		System.out.println(salePriceVO1.getPoint());
+//	 	}
+
+//	 		Query check money
+//	 		DeviceVO deviceVO1 = deviceService.getCheckMoney("TY00001");
+//	 		System.out.print(deviceVO1.getDid() + ",");
+//	 		System.out.print(deviceVO1.getNumber() + ",");
+//	 		System.out.print(deviceVO1.getCoin() + ",");
+//	 		System.out.print(deviceVO1.getPaper() + ",");
+//	 		System.out.print(deviceVO1.getLocation() + ",");
+//	 		System.out.print(deviceVO1.getRefund() + ",");
+//	 		System.out.print(deviceVO1.getUid() + ",");
+//	 		System.out.print(deviceVO1.getStatus() + ",");
+//	 		System.out.print(deviceVO1.getError() + ",");
+//	 		System.out.print(deviceVO1.getMachid() + ",");
+//	 		System.out.print(deviceVO1.getFreecount() + ",");
+//	 		System.out.print(deviceVO1.getFreecountset() + ",");
+//	 		System.out.print(deviceVO1.getMaid() + ",");
+//	 		System.out.print(deviceVO1.getMid() + ",");
+//	 		System.out.print(deviceVO1.getAdd_status() + ",");
+//	 		System.out.print(deviceVO1.getCount_100() + ",");
+//	 		System.out.print(deviceVO1.getCount_500() + ",");
+//	 		System.out.println(deviceVO1.getCount_1000());
+		
+	}
+
 	
 %>
 
@@ -143,7 +158,7 @@
 		</div>
 		
 		<!-- Price mapping -->
-		<div style="text-align:center; width:100%;">
+		<div style="text-align:center; width:100%;" id="divPrice">
 			<div style="position: relative; z-index: 20; width: 320px; margin: 0px auto;">
 				<img style="z-index: 5; position:relative; height:35px; width:210px;" src="../images/price-11.png.png">
 				<h5 style="z-index: 10; position:absolute; color:#888; top:4px; left:82px; float:left;">${salePriceVOs.get(0).getDallas()}元</h5>
@@ -187,13 +202,12 @@
 		<!-- End  舊優惠對照表 -->
 		
 		<!--  -->
-		<div style="margin: 7% 0 0 0; text-align:center; width:320px; height:124px; margin:0px auto;">
+		<div style="margin: 7% 0 0 0; text-align:center; width:320px; height:124px; margin:0px auto;" id="divNowPrice">
 			<div style="float:left; position:relative; margin:24px;">
 				<img style="z-index: 5; position:relative; height:124px; width:105px;" src="../images/price-444.png">
 				<div style="z-index: 10; position:absolute; top:24px; width: 100%;">
 						<h4 style="color:#F6C936;font-weight: 900;" id="totalMoney">0</h4>
 				</div>
-
 				<h5 style="z-index: 10; position:absolute; color:#EEE; top:89px; right:13px; float:right;">投入金額</h5>
 			</div>
 			<div style="float:right; position:relative;">
@@ -209,6 +223,11 @@
 		
 		
 		<input type="hidden" name="did" value="<%=did %>" id="inputDid">
+		<input type="hidden" name="username" value="${username }" id="inputUsername">		
+		<input type="hidden" name="count_100" value="" id="inputCount_100">
+		<input type="hidden" name="count_500" value="" id="inputCount_500">
+		<input type="hidden" name="count_1000" value="" id="inputCount_1000">
+		<input type="hidden" name="totalPoint" value="" id="inputTotalPoint">
 		
 		<div style="margin: 7% 0 0 0; text-align:center; width:100%;">
 		
@@ -216,12 +235,26 @@
 <!-- 			<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px;" id="addMoney">200元</p> -->
 <!-- 			<p style="margin: 6px 0 0 0;">加值點數為</p> -->
 <!-- 			<p style="font-weight: bold; color: #FF993C; font-size: 20px;" id="addPoint">220點</p> -->
-			<p style="margin: 0 0 0 0; font-size:16px;">系統將於以下時間結束後自動完成加值</p>
-			<p style="margin: 0 0 0 0; font-size:16px;">或請按完成，手動完成加值</p>
-			<p id="timer" style="color:red; font-weight:bold; font-size:18px;">30秒</p>
-			<button class="btn btn-outline-success" style="font-weight:bold;" id="btnAdd">確認</button>
+			<div id="divInfo">
+				<p style="margin: 0 0 0 0; font-size:16px;">系統將於以下時間結束後自動完成加值</p>
+				<p style="margin: 0 0 0 0; font-size:16px;">或請按完成，手動完成加值</p>
+				<p id="timer" style="color:red; font-weight:bold; font-size:18px;">30秒</p>
+				<button class="btn btn-outline-success" style="font-weight:bold;" id="btnAdd" disabled>確認</button>
+			</div>
+
+			<div id="divSuccess" style="display:none;">
+				<p style="font-size:28px; font-weight: 900; color: blue; margin: 24px 0 12px 0;">加值成功</p>
+				<p style="font-size:20px; font-weight: 700; color: orange; margin: 0 0 0 0;" id="successDallas">本次加值0元</p>
+				<p style="font-size:20px; font-weight: 700; color: orange; margin: 0 0 0 0;" id="successPoint">儲值點數0點</p>
+				<p style="font-size:24px; font-weight: 700; color: red; margin: 48px 0 0 0;" id="successInfo">3秒後自動跳回至登入畫面</p>
+			</div>
+				
+			
+			
+			
 		</div>
-  </section><!-- End Section -->  
+  </section>
+  <!-- End Section -->  
   
   
   <script>
@@ -241,28 +274,13 @@
 		function myTimer(){
 			if(count == 0){
 				clearInterval(myTimerVar);
-				
-				/*
-				var totalPoint = 520;				
-				swal.fire({
-				    title: '加值成功！',
-				    text: '本次加值' + $("#addMoney").val() + '；' + $("#addPoint").val() + '；' + 
-				    					'剩餘點數' + totalPoint +  '；' + '3秒後自動關閉!',
-				    timer: 3000
-				}).then(
-				    function () {
-				    	// handling the promise rejection
-				    	window.location.href = "../logout.jsp";
-				    },		    	
-				    function (dismiss) {
-				        if (dismiss === 'timer') {
-				            console.log('I was closed by the timer')
-				        }
-				    }
-					)
-					*/
-					
-				window.location.href = "../logout.jsp";
+				var totalPoint = $("#inputTotalPoint").val();
+				if(totalPoint > 0){
+					addValue();
+				}else{
+					window.location.replace("../logout.jsp");
+					//window.location.href = "../logout.jsp";
+				}
 				
 			}else{
 				count = count - 1;
@@ -286,14 +304,6 @@
 			var totalPoint = 0;
 			var totalMoney = (count100*100) + (count500*500) + (count1000*1000);
 			console.log("totalMoney : " + totalMoney);
-
-// 			if(totalMoney > ${salePriceVOs.get(2).getDallas()){
-// 				totalPoint = totalMoney + ( ${salePriceVOs.get(2).getPoint() - ${salePriceVOs.get(2).getDallas() );
-// 			}else if(totalMoney > ${salePriceVOs.get(1).getDallas()){
-// 				totalPoint = totalMoney + ( ${salePriceVOs.get(1).getPoint() - ${salePriceVOs.get(1).getDallas() );
-// 			}else if(totalMoney > ${salePriceVOs.get(0).getDallas()){
-// 				totalPoint = totalMoney + ( ${salePriceVOs.get(0).getPoint() - ${salePriceVOs.get(0).getDallas() );
-// 			}
 
 			price3 = parseInt(totalMoney / ${salePriceVOs.get(2).getDallas()});
 			console.log("price3 : " + price3);
@@ -319,13 +329,19 @@
 
 			$("#totalMoney").text(totalMoney);
 			$("#totalPoint").text(totalPoint);
+			$("#inputTotalPoint").val(totalPoint);
+			$("#successDallas").text( "本次加值" + totalMoney + "元");
+			$("#successPoint").text( "本次儲值" + totalPoint + "點");
+
+			if(totalPoint > 0){
+				$("#btnAdd").attr("disabled", false);
+			}
 
 			if( totalMoneyTemp != totalPoint ){
 				totalMoneyTemp = totalPoint;
 				resetTimer();
 			}
 		}
-
 		
 		function checkMoney(){
 			var did = $("#inputDid").val();
@@ -342,10 +358,57 @@
 					count100 = jsonObject.count_100;
 					count500 = jsonObject.count_500;
 					count1000 = jsonObject.count_1000;
+					$("#inputCount_100").val(count100);
+					$("#inputCount_500").val(count500);
+					$("#inputCount_1000").val(count1000);
 					console.log("jsonObject.add_status : " + jsonObject.add_status);
 					moneyToPoint(count100, count500, count1000 );
-					
-					//$("#verificationcode").val( jsonObject.testCode);
+				},
+				error : function(e) {
+					console.log("e: " + e);
+				}
+			});
+		}
+
+		function addValue(){
+			console.log("Add Value Function!");
+			var did = $("#inputDid").val();
+			var username = $("#inputUsername").val();
+			var count_100 = $("#inputCount_100").val();
+			var count_500 = $("#inputCount_500").val();
+			var count_1000 = $("#inputCount_1000").val();
+			var totalPoint = $("#inputTotalPoint").val();
+			console.log("did : " + did);
+			console.log("username : " + username);
+			console.log("count_100 : " + count_100);
+			console.log("count_500 : " + count_500);
+			console.log("count_1000 : " + count_1000);
+			console.log("totalPoint : " + totalPoint);
+			
+			$.ajax({
+				type : 'POST', //GET or POST
+				url : "../AddRecordServlet", //請求的頁面
+				cache : false, //防止抓到快取的回應
+				data : { //要傳送到頁面的參數
+					did : did,
+					username : username,
+					count_100 : count_100,
+					count_500 : count_500,
+					count_1000 : count_1000,
+					totalPoint : totalPoint
+				},
+				success : function(jsonObject) { //當請求成功後此事件會被呼叫
+					console.log("jsonObject.state : " + jsonObject.state);
+					if(jsonObject.state == 19){
+						clearInterval(myTimerVar);
+						//show add success, and jump to login page
+						$("#divPrice").hide();
+						$("#divNowPrice").hide();
+						$("#divInfo").hide();
+						$("#divSuccess").show();
+						setTimeout(function(){ window.location.replace("../logout.jsp"); }, 3000);
+						//setTimeout(function(){ window.location.href = "../logout.jsp"; }, 3000);
+					}
 				},
 				error : function(e) {
 					console.log("e: " + e);
@@ -355,15 +418,13 @@
 		
 		$("#btnAdd").click(function(){
 			checkMoney();
+			var totalPoint = $("#inputTotalPoint").val();
+			console.log("btnAdd totalPoint :" + tatoalPoint);
+			if(totalPoint > 0){
+				addValue();
+			}			
 		});
-		
 
-		
-		
-// 		document.getElementById('menuLogoutBtn').onclick = function(){
-// 			window.location.href = "../logout.jsp";
-// 		}
- 
   </script>
 </body>
 </html>

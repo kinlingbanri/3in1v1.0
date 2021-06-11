@@ -8,20 +8,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%
-	String deviceNumber = "TY00001";
-	String location = "RD-1";
+// 	String deviceNumber = "TY00001";
+// 	String location = "RD-1";
 	int did = 1;
 
 	HistoryService historyService = new HistoryService();
 	int totalCount = historyService.getCount(did);
 	System.out.println("totalCount : " + totalCount);
-	// int lastCount = 0;
-	// int pageTotal = totalCount / 100;
-	// if(totalCount > 50){
-	// 	lastCount = totalCount - 50;
-	// }else{
-	// 	lastCount = totalCount;
-	// }
 	int pageTotal = totalCount / 100;
 	int lastPage = pageTotal * 100;
 	System.out.println("pageTatal : " + pageTotal);
@@ -66,39 +59,14 @@
 <script src="js/jquery.validate.js"></script>
 <script src="js/additional-methods.js"></script>
 
-
+<!-- Date range picker -->
+<script src="js/moment.min.js"></script>
+<script src="js/daterangepicker.js"></script>
+<link rel="stylesheet" href="./css/daterangepicker.css">
 
 <style>
 {
-box-sizing
-
-
-
-
-
-
-
-
-:
-
-
-
-
- 
-
-
-
-
-border-box
-
-
-
-
-
-
-
-
-;
+	box-sizing:border-box;
 }
 
 /* Button used to open the contact form - fixed at the bottom of the page */
@@ -193,43 +161,7 @@ border-box
 
 100%
 {
--webkit-transform
-
-
-
-
-
-
-
-
-:
-
-
-
-
- 
-
-
-
-
-rotate
-
-
-
-
-
-
-
-
-(360
-deg
-
-
-
-
-
-
-);
+-webkit-transform:rotate(360deg);
 }
 }
 @
@@ -237,45 +169,8 @@ keyframes spin { 0% {
 	transform: rotate(0deg);
 }
 
-100%
-{
-transform
-
-
-
-
-
-
-
-
-:
-
-
-
-
- 
-
-
-
-
-rotate
-
-
-
-
-
-
-
-
-(360
-deg
-
-
-
-
-
-
-);
+100%{
+transform:rotate(360deg);
 }
 }
 
@@ -316,9 +211,29 @@ to {
 }
 </style>
 
+<!-- date range picker -->
+<style>
+/* 外框 */
+.daterangepicker{
+	background: #BBE6E4  none;
+}
+
+.drp-calendar{
+ background: #90EE90 none;
+}
+
+.cancelBtn{
+	background: #F0F6F6 none;
+}
+
+
+</style>
+
 <script>
 
     $( function() {
+			$("#divDataTable").show();
+        
         $( "#slider-vertical" ).slider({
           range: "min",
           min: 1,
@@ -380,12 +295,9 @@ to {
 		  			    }
 		  			  }
 		  			});
-
           }
-        });
-        
-      } );
-
+        });        
+      });
 
     </script>
 </head>
@@ -401,9 +313,7 @@ to {
 			id="accordionSidebar">
 
 			<!-- Sidebar - Brand -->
-			<a
-				class="sidebar-brand d-flex align-items-center justify-content-center"
-				href="./index.jsp">
+			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="./index.jsp">
 				<div class="sidebar-brand-text mx-3">三合一後台管理系統</div>
 			</a>
 
@@ -450,12 +360,10 @@ to {
 			<div id="content">
 
 				<!-- Topbar -->
-				<nav
-					class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+				<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
 					<!-- Sidebar Toggle (Topbar) -->
-					<button id="sidebarToggleTop"
-						class="btn btn-link d-md-none rounded-circle mr-3">
+					<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
 						<i class="fa fa-bars"></i>
 					</button>
 
@@ -463,30 +371,27 @@ to {
 					<ul class="navbar-nav ml-auto">
 
 						<!-- Nav Item - User Information -->
-						<li class="nav-item dropdown no-arrow"><a
-							class="nav-link dropdown-toggle" href="#" id="userDropdown"
-							role="button" data-toggle="dropdown" aria-haspopup="true"
-							aria-expanded="false"> <span
-								class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+						<li class="nav-item dropdown no-arrow">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
 								<!--                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg"> -->
-						</a> <!-- Dropdown - User Information -->
-							<div
-								class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-								aria-labelledby="userDropdown">
-								<a class="dropdown-item" href="#"> <i
-									class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
-								</a> <a class="dropdown-item" href="#"> <i
-									class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-									Settings
-								</a> <a class="dropdown-item" href="#"> <i
-									class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-									Activity Log
+							</a>
+							<!-- Dropdown - User Information -->
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+										aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="#">
+									<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
+								</a>
+								<a class="dropdown-item" href="#">
+									<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>Settings
+								</a>
+								<a class="dropdown-item" href="#">
+									<i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>Activity Log
 								</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#" data-toggle="modal"
-									data-target="#logoutModal"> <i
-									class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-									Logout
+								<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+									<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>Logout
 								</a>
 							</div></li>
 					</ul>
@@ -497,24 +402,34 @@ to {
 					<div id="loader" style="display: none;"></div>
 				</div>
 
-
-
-
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
 
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4">
 						<div class="card-header py-3">
-							<h6 class="m-0 font-weight-bold text-primary"
-								style="float: left;">設備記錄</h6>
-							<button class="btn btn-success" type="button" id="btnOutExcel"
-								style="float: right;">輸出excel</button>
+							<h6 class="m-0 font-weight-bold text-primary" style="float: left;">設備記錄</h6>
+							<button class="btn btn-success" type="button" id="btnOutExcel" style="float: right;">輸出excel</button>
 						</div>
+						
+						<div id="divSearch">
+							<h5>請選擇日期:</h5>
+							<input class="default" type="text" id="inputDateRangePicker" style="width: 220px;"/>
+							<h5>請選擇加值或消費:</h5>
+							<div class="btn-group">
+							  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							    加值
+							  </button>
+							  <div class="dropdown-menu">
+							    <a class="dropdown-item" href="#">加值</a>
+							    <a class="dropdown-item" href="#">消費</a>
+							  </div>
+							</div>
+						</div>
+						
 
-
-
-						<div style="width: 96%; margin-left: 2%;">
+						<!-- Div Data Table -->
+						<div style="width: 96%; margin-left: 2%; display:none;" id="divDataTable">
 							<div style="float: left;">
 								<p style="float: left;">
 									<label for="amount">總筆數:</label>
@@ -534,19 +449,15 @@ to {
 
 							<div id="slider-vertical" style="margin-top: 40px;"></div>
 
-
-
 							<div class="card-body">
 								<div class="table-responsive">
-									<table class='table table-striped table-bordered display'
-										id='dataTable' width='100%' cellspacing='0'>
+									<table class='table table-striped table-bordered display' id='dataTable' width='100%' cellspacing='0'>
 										<thead>
 											<tr>
 												<th>時間</th>
 												<th>訊息</th>
 											</tr>
 										</thead>
-
 										<tbody>
 											<c:url var="url" value="/AdminModifyMemberServlet" />
 											<c:forEach items="${deviceJsonObjects}" var="devicejson"
@@ -561,6 +472,7 @@ to {
 								</div>
 							</div>
 						</div>
+						<!--End Div Data Table -->
 
 					</div>
 					<!-- /.container-fluid -->
@@ -570,32 +482,23 @@ to {
 					<div class="form-container" style="background-color: #BFFFDF;">
 						<h1 id="username"></h1>
 						<div>
-							<label for="email"
-								style="width: 24%; float: left; margin-top: 7px;"><b>Email</b></label>
-							<input style="width: 76%; float: left; height: 24px;" type="text"
-								name="email" id="inputemail">
+							<label for="email" style="width: 24%; float: left; margin-top: 7px;"><b>Email</b></label>
+							<input style="width: 76%; float: left; height: 24px;" type="text" name="email" id="inputemail">
 						</div>
 						<div>
-							<label for="point"
-								style="width: 24%; float: left; margin-top: 7px;"><b>點數</b></label>
-							<input style="width: 76%; float: left; height: 24px;" type="text"
-								name="point" id="inputpoint">
+							<label for="point" style="width: 24%; float: left; margin-top: 7px;"><b>點數</b></label>
+							<input style="width: 76%; float: left; height: 24px;" type="text" name="point" id="inputpoint">
 						</div>
 						<div>
-							<label for="phone"
-								style="width: 24%; float: left; margin-top: 7px;"><b>電話</b></label>
-							<input style="width: 76%; float: left; height: 24px;" type="text"
-								name="phone" id="inputphone">
+							<label for="phone" style="width: 24%; float: left; margin-top: 7px;"><b>電話</b></label>
+							<input style="width: 76%; float: left; height: 24px;" type="text" name="phone" id="inputphone">
 						</div>
 						<div>
-							<label for="password"
-								style="width: 24%; float: left; margin-top: 7px;"><b>密碼</b></label>
-							<input style="width: 76%; float: left; height: 24px;" type="text"
-								name="password" id="inputpassword">
+							<label for="password" style="width: 24%; float: left; margin-top: 7px;"><b>密碼</b></label>
+							<input style="width: 76%; float: left; height: 24px;" type="text" name="password" id="inputpassword">
 						</div>
 						<div>
-							<label for="password"
-								style="width: 24%; float: left; margin-top: 7px;"><b>權限</b></label>
+							<label for="password" style="width: 24%; float: left; margin-top: 7px;"><b>權限</b></label>
 							<select class="browser-default custom-select" style="width: 76%;">
 								<option selected>Open this select menu</option>
 								<option value="1">One</option>
@@ -605,15 +508,12 @@ to {
 						</div>
 						<div>
 							<div class="form-check" style="margin: 12px 0 20px;">
-								<input class="form-check-input" type="checkbox" value=""
-									id="cbblack"> <label class="form-check-label"
-									for="flexCheckDefault">黑名單</label>
+								<input class="form-check-input" type="checkbox" value="" id="cbblack">
+								<label class="form-check-label" for="flexCheckDefault">黑名單</label>
 							</div>
 						</div>
-						<button type="submit" class="btn"
-							style="height: 48px; padding: 8px;" id="updateBtn">更新</button>
-						<button type="submit" class="btn cancel"
-							style="height: 48px; padding: 8px;" onclick="closeForm()">取消</button>
+						<button type="submit" class="btn" style="height: 48px; padding: 8px;" id="updateBtn">更新</button>
+						<button type="submit" class="btn cancel" style="height: 48px; padding: 8px;" onclick="closeForm()">取消</button>
 						<input type="hidden" value="" id="hiddenNumber">
 					</div>
 				</div>
@@ -636,8 +536,8 @@ to {
 		<!-- End of Page Wrapper -->
 
 		<!-- Scroll to Top Button-->
-		<a class="scroll-to-top rounded" href="#page-top"> <i
-			class="fas fa-angle-up"></i>
+		<a class="scroll-to-top rounded" href="#page-top">
+			<i class="fas fa-angle-up"></i>
 		</a>
 
 		<!-- Logout Modal-->
@@ -646,34 +546,46 @@ to {
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Ready to
-							Leave?</h5>
-						<button class="close" type="button" data-dismiss="modal"
-							aria-label="Close">
+						<h5 class="modal-title" id="exampleModalLabel">Ready toLeave?</h5>
+						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">Ã</span>
 						</button>
 					</div>
-					<div class="modal-body">Select "Logout" below if you are
-						ready to end your current session.</div>
+					<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
 					<div class="modal-footer">
-						<button class="btn btn-secondary" type="button"
-							data-dismiss="modal">Cancel</button>
+						<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
 						<a class="btn btn-primary" href="login.html">Logout</a>
 					</div>
 				</div>
 			</div>
 		</div>
 
-
-
-
-
-
-
-
-
-
 		<script>
+
+		$("#inputDateRangePicker").daterangepicker({
+			"alwaysShowCalendars": true,
+			opens: "right",
+			startDate: "2017-08-01",
+			endDate: "2017-09-01",
+			ranges: {
+			"今天": [moment(), moment()],
+			"過去 7 天": [moment().subtract(6, "days"), moment()],
+			"本月": [moment().startOf("month"), moment().endOf("month")],
+			"上個月": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
+			},
+			locale: {
+			format: "YYYY-MM-DD",
+			separator: " ~ ",
+			applyLabel: "確定",
+			cancelLabel: "清除",
+			fromLabel: "開始日期",
+			toLabel: "結束日期",
+			customRangeLabel: "自訂日期區間",
+			daysOfWeek: ["日", "一", "二", "三", "四", "五", "六"],
+			monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+			firstDay: 1
+			}
+		});
 
 		function updateTable(value){
 				document.getElementById("loader").style.display = "block";
@@ -738,8 +650,7 @@ to {
 	    var value = $( "#amount" ).val();
 	    console.log("value : " + value);
 			if((value > <%=pageTotal%>) ||(value < 1)){
-				alert("請輸入大於0或小於等於<%=pageTotal%>
-			的數值");
+				alert("請輸入大於0或小於等於<%=pageTotal%>的數值");
 				} else {
 					updateTable(value);
 				}

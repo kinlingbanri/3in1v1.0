@@ -29,30 +29,29 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 	
 	private static final String GET_ALL_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
-			+ "point, errorcode, username, deviceid, storeid, cardid FROM addrecord order by id";
+			+ "point, errorcode, username, deviceid, devicenumber, storeid, cardid FROM addrecord order by id";
 	
 	private static final String GET_TodayTotal_STMT = 
 			"SELECT sum( (coin10*10) + (coin50*50) + (paper100*100) + (paper500*500) + (paper1000*1000)) totalMoney, (point) totalpoint "
 			+ "from addrecord where DATE(storedatetime) = curdate();";
 	
-	private static final String GET_BYUSERNAME_STMT = 
-			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
-					+ "point, errorcode, username, deviceid, storeid, cardid FROM addrecord where username = ?"
-					+ "order by storedatetime DESC LIMIT 30";
-	
-	private static final String GET_AFTER30_STMT = 
-			"SELECT ADDRECORD.STOREDATETIME, ADDRECORD.POINT, STORE.STORENAME, STORE.CITY FROM ADDRECORD " + 
-			"					INNER JOIN STORE ON ADDRECORD.STOREID = STORE.ID AND ADDRECORD.USERNAME = ? " + 
-			"					order by STOREDATETIME DESC LIMIT 30";
 	private static final String GET_ONE_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
-					+ "point, errorcode, username, deviceid, storeid, cardid FROM addrecord where id = ?";
+					+ "point, errorcode, username, deviceid, devicenumber, storeid, cardid FROM addrecord where id = ?";
+	private static final String GET_BYUSERNAME_STMT = 
+			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
+					+ "point, errorcode, username, deviceid, devicenumber, storeid, cardid FROM addrecord where username = ?"
+					+ "order by storedatetime DESC LIMIT 30";
+	private static final String GET_AFTER30_STMT = 
+			"SELECT ADDRECORD.STOREDATETIME, ADDRECORD.POINT, ADDRECORD.DEVICENUMBER, STORE.NAME, STORE.CITY FROM ADDRECORD " + 
+			"					INNER JOIN STORE ON ADDRECORD.STOREID = STORE.SID AND ADDRECORD.USERNAME = ? " + 
+			"					order by STOREDATETIME DESC LIMIT 30";
 	private static final String INSERT_STMT = 
 			"INSERT INTO addrecord (storedatetime, coin10, coin50, paper100, paper500, paper1000, "
-			+ "point, errorcode, username, deviceid, storeid, cardid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			+ "point, errorcode, username, deviceid, devicenumber, storeid, cardid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
 			"UPDATE addrecord set storedatetime=?, coin10=?, coin50=?, paper100=?, paper500=?,"
-			+ " paper1000=?, point=?, errorcode=?, username=?, deviceid=?, storeid=?, cardid=? where id = ?";
+			+ " paper1000=?, point=?, errorcode=?, username=?, deviceid=?,  devicenumber = ?, storeid=?, cardid=? where id = ?";
 	private static final String DELETE_STMT = 
 			"DELETE FROM addrecord where id = ?";
 
@@ -75,8 +74,9 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 			pstmt.setInt(8, addRecordVO.getErrorcode());
 			pstmt.setString(9, addRecordVO.getUsername());
 			pstmt.setInt(10, addRecordVO.getDeviceid());
-			pstmt.setInt(11, addRecordVO.getStoreid());
-			pstmt.setString(12, addRecordVO.getCardid());
+			pstmt.setString(11, addRecordVO.getDeviceNumber());
+			pstmt.setInt(12, addRecordVO.getStoreid());
+			pstmt.setString(13, addRecordVO.getCardid());
 
 			pstmt.executeUpdate();
 
@@ -122,9 +122,10 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 			pstmt.setInt(8, addRecordVO.getErrorcode());
 			pstmt.setString(9, addRecordVO.getUsername());
 			pstmt.setInt(10, addRecordVO.getDeviceid());
-			pstmt.setInt(11, addRecordVO.getStoreid());
-			pstmt.setString(12, addRecordVO.getCardid());
-			pstmt.setInt(13, addRecordVO.getId());
+			pstmt.setString(11, addRecordVO.getDeviceNumber());
+			pstmt.setInt(12, addRecordVO.getStoreid());
+			pstmt.setString(13, addRecordVO.getCardid());
+			pstmt.setInt(14, addRecordVO.getId());
 
 			pstmt.executeUpdate();
 
@@ -215,6 +216,7 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 				addRecordVO.setErrorcode(rs.getInt("errorcode"));
 				addRecordVO.setUsername(rs.getString("username"));
 				addRecordVO.setDeviceid(rs.getInt("deviceid"));
+				addRecordVO.setDeviceNumber(rs.getString("deviceNumber"));
 				addRecordVO.setStoreid(rs.getInt("storeid"));
 				addRecordVO.setCardid(rs.getString("cardid"));
 			}
@@ -277,6 +279,7 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 				addRecordVO.setErrorcode(rs.getInt("errorcode"));
 				addRecordVO.setUsername(rs.getString("username"));
 				addRecordVO.setDeviceid(rs.getInt("deviceid"));
+				addRecordVO.setDeviceNumber(rs.getString("deviceNumber"));
 				addRecordVO.setStoreid(rs.getInt("storeid"));
 				addRecordVO.setCardid(rs.getString("cardid"));
 
@@ -342,6 +345,7 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 				addRecordVO.setErrorcode(rs.getInt("errorcode"));
 				addRecordVO.setUsername(rs.getString("username"));
 				addRecordVO.setDeviceid(rs.getInt("deviceid"));
+				addRecordVO.setDeviceNumber(rs.getString("deviceNumber"));
 				addRecordVO.setStoreid(rs.getInt("storeid"));
 				addRecordVO.setCardid(rs.getString("cardid"));
 
@@ -399,7 +403,8 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 				addRecordVO = new AddRecordVO();
 				addRecordVO.setStoredatetime(rs.getTimestamp("storedatetime"));
 				addRecordVO.setPoint(rs.getInt("point"));
-				addRecordVO.setStorename(rs.getString("storename"));
+				addRecordVO.setDeviceNumber(rs.getString("deviceNumber"));
+				addRecordVO.setStorename(rs.getString("name"));
 				addRecordVO.setCity(rs.getString("city"));
 
 				list.add(addRecordVO); // Store the row in the list

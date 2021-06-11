@@ -54,6 +54,9 @@ public class AddRecordVO implements java.io.Serializable  {
 	@Column(name = "deviceid")
 	private int deviceid;
 	
+	@Column(name = "devicenumber")
+	private String deviceNumber;
+
 	@Column(name = "storeid")
 	private int storeid;
 	
@@ -155,6 +158,14 @@ public class AddRecordVO implements java.io.Serializable  {
 
 	public void setDeviceid(int deviceid) {
 		this.deviceid = deviceid;
+	}
+
+	public String getDeviceNumber() {
+		return deviceNumber;
+	}
+
+	public void setDeviceNumber(String deviceNumber) {
+		this.deviceNumber = deviceNumber;
 	}
 
 	public int getStoreid() {

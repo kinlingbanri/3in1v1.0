@@ -826,9 +826,7 @@ a {
 			$("#signin").hide('slow');
 		});
 
-		$("#registerBtn")
-				.click(
-						function() {
+		$("#registerBtn").click(function() {
 							var state = registerValidate();
 							console.log("register state : " + state);
 							if (state == 0) {
@@ -848,9 +846,7 @@ a {
 								} else if (registerUsername == "此帳號已註冊!") {
 
 								} else {
-
 									var RegisterState = 2;
-
 									$.ajax({
 												type : 'POST', //GET or POST
 												url : "./RegisterServlet", //請求的頁面
