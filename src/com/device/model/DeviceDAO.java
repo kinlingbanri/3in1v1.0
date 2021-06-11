@@ -33,6 +33,8 @@ public class DeviceDAO implements DeviceDAO_interface{
 					+ "freecount, freecountset FROM device where number = ?";
 	private static final String GET_DEVICE_STATUS_STMT = 
 			"SELECT status FROM device where number = ?";
+	private static final String GET_CHECK_MONEY_STMT = 
+			"SELECT did, number, ADD_STATUS, 100_COUNT, 500_COUNT, 1000_COUNT FROM device where number = ?";
 	private static final String INSERT_STMT = 
 			"INSERT INTO device (number, coin, paper, location, refund, uid, maid, mid, status, error,"
 					+ "machid, freecount, freecountset) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -284,4 +286,58 @@ public class DeviceDAO implements DeviceDAO_interface{
 		return status;
 	}
 
+	@Override
+	public DeviceVO getCheckMoney(String number) {
+		DeviceVO deviceVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_CHECK_MONEY_STMT);
+			pstmt.setString(1, number);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// deviceVO 也稱為 Domain objects
+				deviceVO = new DeviceVO();
+				deviceVO.setDid(rs.getInt("DID"));
+				deviceVO.setNumber(rs.getString("number"));
+				deviceVO.setAdd_status(rs.getInt("ADD_STATUS"));
+				deviceVO.setCount_100(rs.getInt("100_COUNT"));
+				deviceVO.setCount_500(rs.getInt("500_COUNT"));
+				deviceVO.setCount_1000(rs.getInt("1000_COUNT"));
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return deviceVO;
+	}
 }

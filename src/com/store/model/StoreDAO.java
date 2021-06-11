@@ -26,15 +26,15 @@ public class StoreDAO implements StoreDAO_interface{
 	}
 	
 	private static final String GET_ALL_STMT = 
-			"SELECT id, name, city, district FROM store order by city";
+			"SELECT sid, name, city, district, pause FROM store";
 	private static final String GET_ONE_STMT = 
-			"SELECT id, name, city, district FROM store where id = ?";
+			"SELECT sid, name, city, district, pause FROM store where sid = ?";
 	private static final String INSERT_STMT = 
-			"INSERT INTO store (name, city, district) VALUES (?, ?, ?)";
+			"INSERT INTO store (name, city, district, pause) VALUES (?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
-			"UPDATE store set name=?, city=?, district=? where id = ?";
+			"UPDATE store set name=?, city=?, district=?, pause=? where sid = ?";
 	private static final String DELETE_STMT = 
-			"DELETE FROM store where id = ?";
+			"DELETE FROM store where sid = ?";
 
 	@Override
 	public void insert(StoreVO storeVO) {
@@ -47,7 +47,7 @@ public class StoreDAO implements StoreDAO_interface{
 			pstmt.setString(1, storeVO.getName());
 			pstmt.setString(2, storeVO.getCity());
 			pstmt.setString(3, storeVO.getDistrict());
-
+			pstmt.setInt(4, storeVO.getPause());
 			pstmt.executeUpdate();
 
 			// Handle any SQL errors
@@ -85,8 +85,8 @@ public class StoreDAO implements StoreDAO_interface{
 			pstmt.setString(1, storeVO.getName());
 			pstmt.setString(2, storeVO.getCity());
 			pstmt.setString(3, storeVO.getDistrict());
-			pstmt.setInt(4, storeVO.getID());
-
+			pstmt.setInt(4, storeVO.getPause());
+			pstmt.setInt(5, storeVO.getSid());
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
@@ -120,7 +120,7 @@ public class StoreDAO implements StoreDAO_interface{
 		try {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(DELETE_STMT);
-			pstmt.setInt(1, storeVO.getID());
+			pstmt.setInt(1, storeVO.getSid());
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
@@ -147,7 +147,7 @@ public class StoreDAO implements StoreDAO_interface{
 	}
 
 	@Override
-	public StoreVO findByPrimaryId(int id) {
+	public StoreVO findByPrimaryId(int sid) {
 		StoreVO storeVO = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -156,16 +156,17 @@ public class StoreDAO implements StoreDAO_interface{
 		try {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_STMT);
-			pstmt.setInt(1, id);
+			pstmt.setInt(1, sid);
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 				// empVo 也稱為 Domain objects
 				storeVO = new StoreVO();
-				storeVO.setID(rs.getInt("id"));
+				storeVO.setSid(rs.getInt("sid"));
 				storeVO.setName(rs.getString("name"));
 				storeVO.setCity(rs.getString("city"));
 				storeVO.setDistrict(rs.getString("district"));
+				storeVO.setPause(rs.getInt("pause"));
 			}
 
 			// Handle any driver errors
@@ -215,10 +216,11 @@ public class StoreDAO implements StoreDAO_interface{
 			while (rs.next()) {
 				// memVO 也稱為 Domain objects
 				storeVO = new StoreVO();
-				storeVO.setID(rs.getInt("id"));
+				storeVO.setSid(rs.getInt("sid"));
 				storeVO.setName(rs.getString("name"));
 				storeVO.setCity(rs.getString("city"));
 				storeVO.setDistrict(rs.getString("district"));
+				storeVO.setPause(rs.getInt("pause"));
 				list.add(storeVO); // Store the row in the list
 			}
 

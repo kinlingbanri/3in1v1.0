@@ -43,6 +43,8 @@ public class MemServlet extends HttpServlet {
 		String DID = req.getParameter("DID");
 		String MAID = req.getParameter("MAID");
 
+		System.out.println("memservlet req username : " + username);
+		System.out.println("memservlet req password : " + password);
 		System.out.println("memservlet req DID : " + DID);
 		System.out.println("memservlet req MAID : " + MAID);
 		
@@ -56,18 +58,22 @@ public class MemServlet extends HttpServlet {
 		
 		MemService memService = new MemService();
 		MemVO memVO = memService.getOneMem(username);
-		
+		System.out.println("memVO");
 		PrintWriter out = resp.getWriter();
 		JSONObject jsonObject = new JSONObject();
+		String testCode = "";
 		
 		if(memVO == null) {
 			jsonObject.put("state", "2");
+			System.out.println("null : ");
 		}else  if( !password.equals(memVO.getPassword())){
 			jsonObject.put("state", "3");
+			System.out.println("state : " + 3);
 		}else if((password.equals(memVO.getPassword()) && (memVO.getVerification() == 10))) {
 			jsonObject.put("state", "1");
 			jsonObject.put("type", machineStr);
 			req.getSession().setAttribute("memVO", memVO);
+			System.out.println("verification OK");
 		}else if((password.equals(memVO.getPassword()) && (memVO.getVerification() != 10))) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 			Date current = new Date();
@@ -89,12 +95,15 @@ public class MemServlet extends HttpServlet {
 					memVO.setVerification(1);
 				}
 				String newCode = Random4.getRandomCharArray();
+				//測試用
+				testCode = newCode;
+				
 				memVO.setVerificationcode(newCode);
 				Timestamp nowDate = new Timestamp(current.getTime());
 				memVO.setVerificationdate(nowDate);
-				
+				System.out.println("testCode : " + testCode);
 				memService.updateMem(memVO);
-				
+				System.out.println(" updateMem");
 				// 這裡要放傳送簡訊的程式碼
 				ServletContext application=getServletConfig().getServletContext();
 				String jarpath = application.getRealPath("/WEB-INF/lib/RXTX_Demo.jar");
@@ -107,16 +116,18 @@ public class MemServlet extends HttpServlet {
 				
 				//成功
 				String comPortNum = "COM8";
-				String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " " + newCode;
+				String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " 您的驗證碼為:" + newCode;
 				//Runtime.getRuntime().exec( "cmd /c java -jar C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar COM8 OOOOKKKK" );
 				Runtime.getRuntime().exec(commandStr);
 			}
 			jsonObject.put("state", "4");
 		}
-
+		System.out.println("code2 : " + testCode);
 		jsonObject.put("username", username);
+		jsonObject.put("testCode", testCode);
 		out.write(jsonObject.toString());
 		out.flush();
 		out.close();
+		System.out.println("MemServlet End ");
 	}
 }

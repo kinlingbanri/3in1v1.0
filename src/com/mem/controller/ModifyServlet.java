@@ -45,8 +45,7 @@ public class ModifyServlet extends HttpServlet {
 		jsonObject.put("state", "no");
 		
 		MemService memService = new MemService();
-		MemVO memVO = memService.getOneMem(username);
-		
+		MemVO memVO = memService.getOneMem(username);		
 		
 		System.out.println("memVO.getUsername() : " + memVO.getUsername());	
 		if(memVO != null) {
@@ -55,13 +54,18 @@ public class ModifyServlet extends HttpServlet {
 			if(type.equals("password")) {
 				memVO.setPassword(value);				
 				System.out.println("Modify Password Success!!!");
+			}else if(type.equals("phone")) {
+				memVO.setPhone(value);
+				System.out.println("Modify Phone Success!!!");
 			}else if(type.equals("email")) {
 				memVO.setEmail(value);
-				System.out.println("Modify Password Success!!!");
+				System.out.println("Modify Email Success!!!");
 			}
 			new MemService().updateMem(memVO);
 			jsonObject.put("state", "ok");
 		}
+		
+		
 		
 		out.write(jsonObject.toString());
 		out.flush();

@@ -10,20 +10,23 @@
 
 <%
 	//online
-	
+	System.out.println("Multi page");
 	MemVO memVO = (MemVO) session.getAttribute("memVO");
+	System.out.println("memVO : " + memVO);
 	String username = memVO.getUsername();
+	System.out.println("Session username : " + username);
 	MemService memService = new MemService();
 	memVO = memService.getOneMem(username);
+	System.out.println("memVO : " + memVO);
 	int memPoint = memVO.getPoint();
+	System.out.println("Session memPoint : " + memPoint);
 	//memPoint = 90;
 	String DID = (String) session.getAttribute("DID");
-	String MACHID = (String) session.getAttribute("MAID");
-	int machineNumber = Integer.parseInt(MACHID.substring(3, 8));
-	System.out.println("Session username : " + username);
-	System.out.println("Session memPoint : " + memPoint);
 	System.out.println("Session DID : " + DID);
+	String MACHID = (String) session.getAttribute("MAID");
 	System.out.println("Session MAID : " + MACHID);
+	int machineNumber = Integer.parseInt(MACHID.substring(3, 8));
+
 	System.out.println("Session machineNumber : " + machineNumber);
 	System.out.println("MultiConsumption.jsp");
 
@@ -56,7 +59,7 @@
 	System.out.print(device.getFreecount() + ",");
 	System.out.println(device.getFreecountset());
 
-	String machineName = device.getLocation() + " 洗衣機" + Integer.toString(machineNumber) + "號";
+	String machineName = device.getLocation() + " 烘衣機" + Integer.toString(machineNumber) + "號";
 	System.out.print("machineName : " + machineName);
 %>
 
@@ -69,6 +72,10 @@
 
 <link rel="shortcut icon" href="#" />
 <link rel="stylesheet" href="../css/bootstrap.css">
+<!-- <link rel="stylesheet" href="../css/bootstrap3.3.7.min.css"> -->
+<link rel="stylesheet" href="../css/font-awesome.min.css">
+
+
 <style>
 .element::-webkit-scrollbar {
 	width: 0 !important
@@ -103,13 +110,75 @@
 }
 
 #matrix button:hover {
-	background-color: rgb(15, 138, 15);
+/* 	background-color: rgb(15, 138, 15); */
 }
+
+.main {
+  margin-left: 5px;
+}
+.counter {
+  width: 45px;  
+  border-radius: 0px !important;
+  text-align: center;
+}
+.up_count {
+  margin-bottom: 10px;  
+  margin-left: -4px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+} 
+.down_count {
+  margin-bottom: 10px;  
+  margin-right: -4px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
 </style>
 
 <script src="../js/jquery-3.3.1.js"></script>
 <script src="../js/bootstrap-4.0.0/bootstrap.js"></script>
 <script src="../js/nicescroll.js"></script>
+
+<script>
+
+
+
+// $('.btn-number').click(function(e){
+	
+//     e.preventDefault();
+    
+//     fieldName = $(this).attr('data-field');
+//     type      = $(this).attr('data-type');
+//     var input = $("input[name='"+fieldName+"']");
+//     var currentVal = parseInt(input.val());
+//     if (!isNaN(currentVal)) {
+//         if(type == 'minus') {
+            
+//             if(currentVal > input.attr('min')) {
+//                 input.val(currentVal - 1).change();
+//             } 
+//             if(parseInt(input.val()) == input.attr('min')) {
+//                 $(this).attr('disabled', true);
+//             }
+
+//         } else if(type == 'plus') {
+
+//             if(currentVal < input.attr('max')) {
+//                 input.val(currentVal + 1).change();
+//             }
+//             if(parseInt(input.val()) == input.attr('max')) {
+//                 $(this).attr('disabled', true);
+//             }
+
+//         }
+//     } else {
+//         input.val(0);
+//     }
+// });
+
+</script>
+
 </head>
 
 <body
@@ -158,61 +227,110 @@
 			<h2 id="storeInfo" style="font-weight: 900;">
 				<%=machineName%>
 			</h2>
-			<p style="margin: 0 0 0 0; font-size: 20px; font-weight: 600;"
-				id="pointMinute">
+			<p style="margin: 0 0 0 0; font-size: 20px; font-weight: 600;" id="pointMinute">
 				每<%=usePoint%>點可使用<%=useMinute%>分鐘
 			</p>
 		</div>
-		<p
-			style="text-align: center; margin: 20px 0 16px 0; font-size: 24px; font-weight: 900; color: red;"
-			id="lack">您的點數不足，請先加值</p>
+		<p id="lack" style="text-align: center; margin: 20px 0 16px 0; font-size: 24px;
+					font-weight: 900; color: red; display:none;">
+			您的點數不足，請先加值
+		</p>
 		<div id="divInfo">
 			<div style="margin: 36px 0 0 0; text-align: center;" id="divNowPoint">
 				<div>
 					<p style="margin: 0 0 0 0; font-size: 20px;">現有點數</p>
-					<p
-						style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px;"
-						id="memPoint"><%=memPoint%>點
+					<p id="memPoint" style="font-weight: bold; color: #FF993C; margin: 0 0 0 0;
+							font-size: 20px;">
+						<%=memPoint%>點
 					</p>
 				</div>
 			</div>
 		</div>
-		<div style="margin: 28px 0 0 0; text-align: center;" id="divSelect">
-			<button type="button" class="btn btn-info" id="selectBtn">選擇次數</button>
-		</div>
-		<div
-			style="margin: 24px 0 0 0; text-align: center; width: 100%; display: none;"
-			id="CounterDiv">
-			<table id="matrix">
-				<tr>
-					<td><button id="btn1" class="btn btn-warning">1</button></td>
-					<td><button id="btn2" class="btn btn-warning">2</button></td>
-					<td><button id="btn3" class="btn btn-warning">3</button></td>
-				</tr>
-				<tr>
-					<td><button id="btn4" class="btn btn-warning">4</button></td>
-					<td><button id="btn5" class="btn btn-warning">5</button></td>
-					<td><button id="btn6" class="btn btn-warning">6</button></td>
-				</tr>
-				<tr>
-					<td><button id="btn7" class="btn btn-warning">7</button></td>
-					<td><button id="btn8" class="btn btn-warning">8</button></td>
-					<td><button id="btn9" class="btn btn-warning">9</button></td>
-				</tr>
-				<tr>
-					<td><button id="btn10" class="btn btn-warning">10</button></td>
-					<td><button id="btn11" class="btn btn-warning">11</button></td>
-					<td><button id="btn12" class="btn btn-warning">12</button></td>
-				</tr>
-			</table>
-		</div>
+		
+		<!-- bootstrap 3.7 only -->
+<!-- 		<div class="center" style="width:150px; margin:40px auto;"> -->
+<!-- 			<div class="input-group"> -->
+<!-- 	          <span class="input-group-btn"> -->
+<!-- 	              <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[2]"> -->
+<!-- 	                <span class="glyphicon glyphicon-minus"></span> -->
+<!-- 	              </button> -->
+<!-- 	          </span> -->
+<!-- 	          <input type="text" name="quant[2]" class="form-control input-number" value="10" min="1" max="100"> -->
+<!-- 	          <span class="input-group-btn"> -->
+<!-- 	              <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"> -->
+<!-- 	                  <span class="glyphicon glyphicon-plus"></span> -->
+<!-- 	              </button> -->
+<!-- 	          </span> -->
+<!-- 	      </div> -->
+<!-- 	</div> -->
 
-		<div style="margin: 32px 0 0 0; text-align: center;" id="divService">
+
+
+					<div class="container py-4" id="divUsePoint" style="padding: 0.5rem 0 0.5rem 0 !important;">
+							<p style="margin: 0 0 0 0; font-size: 20px; text-align:center;">本次消費點數</p>
+					    <div class="row" style="width:240px; margin:0 auto;">
+					        <div class="col-sm-3 mx-auto" style="min-width:172px;">
+					            <div class="input-group">
+					                <span class="input-group-prepend">
+					                    <button type="button" id="btnMinus" class="btn btn-danger btn-number" data-type="minus" data-field="quant[1]">
+					                        <span class="fa fa-minus" id="spanMinus"></span>
+					                    </button>
+					                </span>
+					                <input type="text" id="inputUsePoint" name="quant[1]" class="form-control input-number" value="10" min="10" max="1000" style="text-align: center; font-weight: bold; color: #FF993C; font-size: 20px;"disabled="disabled">
+					                <span class="input-group-append">
+					                    <button type="button" id="btnPlus"  class="btn btn-success  btn-number" data-type="plus" data-field="quant[1]">
+					                        <span class="fa fa-plus" id="spanPlus"></span>
+					                    </button>
+					                </span>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+
+
+		
+
+		
+		
+		
+		
+		
+		
+		
+<!-- 		<div style="margin: 28px 0 0 0; text-align: center;" id="divSelect"> -->
+<!-- 			<button type="button" class="btn btn-info" id="selectBtn">選擇次數</button> -->
+<!-- 		</div> -->
+<!-- 		<div style="margin: 24px 0 0 0; text-align: center; width: 100%; display: none;" -->
+<!-- 			id="CounterDiv"> -->
+<!-- 			<table id="matrix"> -->
+<!-- 				<tr> -->
+<!-- 					<td><button id="btn1" class="btn btn-warning">1</button></td> -->
+<!-- 					<td><button id="btn2" class="btn btn-warning">2</button></td> -->
+<!-- 					<td><button id="btn3" class="btn btn-warning">3</button></td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td><button id="btn4" class="btn btn-warning">4</button></td> -->
+<!-- 					<td><button id="btn5" class="btn btn-warning">5</button></td> -->
+<!-- 					<td><button id="btn6" class="btn btn-warning">6</button></td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td><button id="btn7" class="btn btn-warning">7</button></td> -->
+<!-- 					<td><button id="btn8" class="btn btn-warning">8</button></td> -->
+<!-- 					<td><button id="btn9" class="btn btn-warning">9</button></td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td><button id="btn10" class="btn btn-warning">10</button></td> -->
+<!-- 					<td><button id="btn11" class="btn btn-warning">11</button></td> -->
+<!-- 					<td><button id="btn12" class="btn btn-warning">12</button></td> -->
+<!-- 				</tr> -->
+<!-- 			</table> -->
+<!-- 		</div> -->
+
+		<div style="margin: 0 0 0 0; text-align: center;" id="divService">
 			<div id="needPoint">
-				<p style="margin: 0 0 0 0; font-size: 20px;">本次服務需要</p>
-				<p
-					style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px; margin-bottom: 10px;"
-					id="consumptionPoint">0點</p>
+<!-- 				<p style="margin: 0 0 0 0; font-size: 20px;">本次服務需要</p> -->
+<!-- 				<p style="font-weight: bold; color: #FF993C; margin: 0 0 0 0; font-size: 20px; margin-bottom: 10px;" -->
+<!-- 					id="consumptionPoint">0點</p> -->
 				<p style="margin: 6px 0 0 0; font-size: 20px;">可使用</p>
 				<p style="font-weight: bold; color: #FF993C; font-size: 20px;"
 					id="minute">0分鐘</p>
@@ -271,6 +389,26 @@
 		});
 		
 		$(function() {
+
+// 			$('button').click(function(e){
+// 		        var button_classes, value = +$('.counter').val();
+// 		        button_classes = $(e.currentTarget).prop('class');        
+// 		        if(button_classes.indexOf('up_count') !== -1){
+// 		            value = (value) + 1;            
+// 		        } else {
+// 		            value = (value) - 1;            
+// 		        }
+// 		        value = value < 0 ? 0 : value;
+// 		        $('.counter').val(value);
+// 		    });  
+// 		    $('.counter').click(function(){
+// 		        $(this).focus().select();
+// 		    });
+
+			//$("#inputUsePoint").val(0);
+			$("#confirmBtn").attr('disabled', true);
+
+			
 			if (	<%=memPoint%> < 10) {
 				$("#lack").show();
 				$("#divSelect").hide();
@@ -283,6 +421,164 @@
 				$("#lack").hide();
 			}
 		});
+
+
+
+		$('.btn-number').click(function(event){
+			var point =  parseInt( $("#inputUsePoint").val(), 10);
+			
+			var usePointState = 1;
+			var ID = event.target.id;
+			console.log("ID:" + ID);
+			if((ID == "btnMinus") || (ID == "spanMinus")){
+				if(point >= 20){
+					point = point - 10;
+					$("#confirmBtn").attr('disabled', false);
+				}else if(point <= 10){
+					usePointState = 0;
+					$("#confirmBtn").attr('disabled', true);
+				}
+				console.log("point:" + point);
+				if(point == 10){
+					console.log("pointpoint:" + point);
+					$("#confirmBtn").attr('disabled', true);
+				}
+			}else if((ID == "btnPlus") || (ID == "spanPlus")){
+				
+				if( point < <%=memPoint%>){
+					point = point + 10;
+				}
+
+				if( point >= <%=memPoint%>){
+					$("#confirmBtn").attr('disabled', true);
+				}else{
+					$("#confirmBtn").attr('disabled', false);
+				}
+				
+			}
+
+			if(usePointState == 1){
+	 			$("#inputUsePoint").val( point );
+	 			var pointStr = point + "點";
+	 			var count = point / 10;
+	 			console.log("count:" + count);
+	 			$("#inputFreecount").val(count);
+	 			$("#inputConsumptionPoint").val(point);
+	 			$("#consumptionPoint").text(pointStr);
+				var minuteStr = (count * <%=useMinute%>) + "分鐘";
+	 			$("#minute").text(minuteStr);
+				console.log("useMinute:" + <%=useMinute%>);
+	 			console.log("minuteStr:" + minuteStr);
+
+	 			var memPointStr = $("#memPoint").text();
+	 			var memPoint = memPointStr.substring(0, memPointStr.length - 1);
+
+	 			var balance = memPoint - point;
+	 			console.log("balance:" +balance);
+
+// 	 			if (balance < 0) {
+// 	 				$("#lack").show();
+// 	 				$("#confirmBtn").attr("disabled", true);
+// 	 			} else {
+// 	 				$("#lack").hide();
+// 	 				$("#confirmBtn").attr("disabled", false);
+// 	 			}
+
+	 			resetTimer();
+
+			}
+
+		});
+
+
+
+
+		
+
+// 		$("#btnMinus").click(function(){
+// 			var point =  parseInt( $("#inputUsePoint").val(), 10);
+// 			console.log(point);
+// 			if(point >= 10){				
+// 				point = point - 10;
+				
+// 				$("#inputUsePoint").val( point );				
+// 				var pointStr = point + "點";
+// 				var count = point / 10;
+// 				console.log("count:" +count);
+// 				$("#inputFreecount").val(count);
+// 				$("#inputConsumptionPoint").val(point);
+// 				$("#consumptionPoint").text(pointStr);
+<%-- 				var minuteStr = (count * <%=useMinute%>) + "分鐘"; --%>
+// 				$("#minute").text(minuteStr);
+<%-- 				console.log("useMinute:" + <%=useMinute%>); --%>
+// 				console.log("minuteStr:" + minuteStr);
+
+// 				var memPointStr = $("#memPoint").text();
+// 				var memPoint = memPointStr.substring(0, memPointStr.length - 1);
+
+// 				var balance = memPoint - point;
+// 				console.log("balance:" +balance);
+
+// 				if (balance < 0) {
+// 					$("#lack").show();
+// 					$("#confirmBtn").attr("disabled", true);
+// 				} else {
+// 					$("#lack").hide();
+// 					$("#confirmBtn").attr("disabled", false);
+// 				}
+
+// 				resetTimer();
+// 			}else{
+
+// 			}
+			
+			
+// 		});
+
+// 		$("#btnPlus").click(function(){
+// 			var point =  parseInt( $("#inputUsePoint").val(), 10);
+// 			console.log(point);
+// 			point = point + 10;
+// 			console.log("ADD:" + point);
+			
+// 			$("#inputUsePoint").val( point );
+// 			var pointStr = point + "點";
+// 			var count = point / 10;
+// 			console.log("count:" + count);
+// 			$("#inputFreecount").val(count);
+// 			$("#inputConsumptionPoint").val(point);
+// 			$("#consumptionPoint").text(pointStr);
+<%-- 			var minuteStr = (count * <%=useMinute%>) + "分鐘"; --%>
+// 			$("#minute").text(minuteStr);
+<%-- 			console.log("useMinute:" + <%=useMinute%>); --%>
+// 			console.log("minuteStr:" + minuteStr);
+
+// 			var memPointStr = $("#memPoint").text();
+// 			var memPoint = memPointStr.substring(0, memPointStr.length - 1);
+
+// 			var balance = memPoint - point;
+// 			console.log("balance:" +balance);
+
+// 			if (balance < 0) {
+// 				$("#lack").show();
+// 				$("#confirmBtn").attr("disabled", true);
+// 			} else {
+// 				$("#lack").hide();
+// 				$("#confirmBtn").attr("disabled", false);
+// 			}
+
+// 			resetTimer();
+// 		});
+
+
+		
+
+
+
+
+
+		
+		
 
 		function myTimer() {
 			if (count == 0) {
@@ -335,6 +631,7 @@
 						$("#selectBtn").hide();
 						$("#needPoint").hide();
 						$("#lack").hide();
+						$("#divUsePoint").hide();
 						$("#divInfo").hide();
 						$("#timerDiv").hide();
 						$("#confirmBtn").hide();
@@ -466,8 +763,7 @@
 			window.location.href = "../logout.jsp";
 		}
 
-		$("#confirmBtn").click(
-				function() {
+		$("#confirmBtn").click(function() {
 					var did = $("#inputDIid").val();
 					var machid = $("#inputMachid").val();
 					var username = $("#inputUsername").val();

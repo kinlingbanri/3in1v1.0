@@ -36,6 +36,18 @@ public class DeviceVO  implements java.io.Serializable  {
 	@Column(name = "uid")
 	private int uid;
 	
+	@Column(name = "add_status")
+	private int add_status;	
+	
+	@Column(name = "100_count")
+	private int count_100;	
+	
+	@Column(name = "500_count")
+	private int count_500;
+	
+	@Column(name = "1000_count")
+	private int count_1000;	
+	
 	@Column(name = "maid")
 	private int maid;
 	
@@ -98,6 +110,30 @@ public class DeviceVO  implements java.io.Serializable  {
 	}
 	public void setUid(int uid) {
 		this.uid = uid;
+	}	
+	public int getAdd_status() {
+		return add_status;
+	}
+	public void setAdd_status(int add_status) {
+		this.add_status = add_status;
+	}
+	public int getCount_100() {
+		return count_100;
+	}
+	public void setCount_100(int count_100) {
+		this.count_100 = count_100;
+	}
+	public int getCount_500() {
+		return count_500;
+	}
+	public void setCount_500(int count_500) {
+		this.count_500 = count_500;
+	}
+	public int getCount_1000() {
+		return count_1000;
+	}
+	public void setCount_1000(int count_1000) {
+		this.count_1000 = count_1000;
 	}
 	public int getMaid() {
 		return maid;

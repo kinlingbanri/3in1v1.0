@@ -311,12 +311,12 @@ a {
 						</div>
 						<div class="group">
 							<label for="email" class="label" style="font-size: 20px;">Email</label>
-							<input id="registerEmail" type="text" class="input"
+							<input id="registerEmail" type="email" class="input"
 								style="margin-top: 6px; font-size: 16px;">
 						</div>
 						<div class="group">
 							<label for="email" class="label" style="font-size: 20px;">再輸入一次Email</label>
-							<input id="checkRegisterEmail" type="text" class="input"
+							<input id="checkRegisterEmail" type="email" class="input"
 								style="margin-top: 6px; font-size: 16px;">
 						</div>
 						<div class="group">
@@ -365,7 +365,7 @@ a {
 							<label for="over" class="label" style="font-size: 20px;text-align:center; color:#AAAAAA;">請稍後，將進入登入頁面</label>
 						</div>
 						<div class="group" id="verificationWindow4">
-							<label for="user" class="label" style="font-size: 20px;">請輸入驗證碼</label>
+							<label for="user" class="label" style="font-size: 20px;">請輸入4位數字的驗證碼</label>
 							<input id="verificationcode" type="text" class="input" style="margin-top: 16px; font-size: 16px;  color:#AAAAAA">
 						</div>
 						<div class="group" id="verificationWindow5">
@@ -598,7 +598,7 @@ a {
 
 
 
-		/*************************** 驗證 ***************************/
+		/*************************** END 驗證 ***************************/
 
 
 
@@ -679,12 +679,9 @@ a {
 												console.log("jsonObject.state : " + jsonObject.state);
 												var validateState = jsonObject.state;
 												if (validateState == "1") {
-													console
-															.log("Login success!");
+													console.log("Login success!");
 													var type = jsonObject.type;
-													console
-															.log("type length : "
-																	+ type.length);
+													console.log("type length : "	+ type.length);
 													if (type == "NOT") {
 														window.location.href = "./AddValue/AddValue.jsp";
 													} else if (type == "DRY") {
@@ -693,14 +690,15 @@ a {
 														window.location.href = "./AddValue/SingleConsumption.jsp";
 													}
 												} else if (validateState == "2") {
-													$("#username")
-															.val("無此帳號!").css('color', 'red');
+													$("#username") .val("無此帳號!").css('color', 'red');
 												} else if (validateState == "3") {
 													$("#password").hide();
 													$("#texLogintPwd").val("密碼錯誤!").css('color', 'red').show();
 													document.getElementById('checkboxPwd').checked = true;
 												}else if (validateState == "4") {
 													openValidateDiv();
+													//測試用
+													$("#verificationcode").val( jsonObject.code);
 												}
 											},
 											error : function(e) {
@@ -834,17 +832,14 @@ a {
 							var state = registerValidate();
 							console.log("register state : " + state);
 							if (state == 0) {
-								var registerUsername = $("#registerUsername")
-										.val();
+								var registerUsername = $("#registerUsername").val();
 								var registerEmail = $("#registerEmail").val();
 								var registerPhone = $("#registerPhone").val();
-								var registerPassword = $("#registerPassword")
-										.val();
+								var registerPassword = $("#registerPassword").val();
 								var DID = $("#DID").val();
 								var MAID = $("#MAID").val();
 
-								var registerUsername = $("#registerUsername")
-										.val();
+								var registerUsername = $("#registerUsername").val();
 
 								if (registerUsername == null
 										|| registerUsername == "") {
@@ -876,10 +871,11 @@ a {
 														$("#registerUsername").val("此帳號已註冊!").css('color', 'red');
 													} else if (state == "register") {
 														console.log("註冊成功!");
+														$(window).scrollTop(0);
 														$("#inputHiddenUsername").val(jsonObject.username);
 														$("#signupForm").hide();
 														$("#signupSuccess").show();
-														count = 3;
+														count = 3;														
 														myTimerVar = setInterval(
 																function() {
 																	myTimerToVarification()
@@ -965,7 +961,9 @@ a {
 						MAID : MAID
 					},
 					success : function(jsonObject) { //當請求成功後此事件會被呼叫
-						console.log("jsonObject.state : " + jsonObject.state);
+						$("#verificationcode").val( jsonObject.testCode);
+						console.log("jsonObject.testCode : " + jsonObject.testCode);
+						console.log("jsonObject.name : " + jsonObject.name);
 						var validateState = jsonObject.state;
 						//var validateState = jsonObject.state;
 						if (validateState == "3") {
@@ -984,10 +982,12 @@ a {
 								window.location.href = "./AddValue/SingleConsumption.jsp";
 							}
 						}else if (validateState == "1") {
+							$("#verificationcode").val( jsonObject.testCode);
 							$("#verificationWindow2").hide();
 							$("#verificationWindow3").hide();
 							$("#verificationWindow1").show();
 						}else if (validateState == "2") {
+							$("#verificationcode").val( jsonObject.testCode);
 							$("#verificationWindow1").hide();
 							$("#verificationWindow3").hide();
 							$("#verificationWindow2").show();

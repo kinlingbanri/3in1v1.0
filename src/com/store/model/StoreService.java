@@ -21,8 +21,8 @@ public class StoreService{
 		dao.delete(storeVO);
 	}
 	
-	public void getOneStore(int id) {
-		dao.findByPrimaryId(id);
+	public StoreVO getOneStore(int id) {
+		return dao.findByPrimaryId(id);
 	}
 	
 	public List<StoreVO>getAll(){

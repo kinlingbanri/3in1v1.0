@@ -32,6 +32,10 @@ public class DeviceService {
 		return dao.findByPrimaryId(number);
 	}
 	
+	public DeviceVO getCheckMoney(String number) {
+		return dao.getCheckMoney(number);
+	}
+	
 	public List<DeviceVO> getAll(){
 		return dao.getAll();
 	}

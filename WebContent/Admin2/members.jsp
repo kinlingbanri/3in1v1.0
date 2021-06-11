@@ -353,9 +353,8 @@ border-box
 					</div>
 					<div>
 						<div class="form-check" style="margin: 12px 0 20px;">
-							<input class="form-check-input" type="checkbox" value=""
-								id="cbblack"> <label class="form-check-label"
-								for="flexCheckDefault">黑名單</label>
+							<input class="form-check-input" type="checkbox" value="" id="cbblack">
+							<label class="form-check-label" for="flexCheckDefault">黑名單</label>
 						</div>
 					</div>
 					<button type="submit" class="btn"

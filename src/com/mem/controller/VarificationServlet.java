@@ -84,6 +84,8 @@ public class VarificationServlet extends HttpServlet {
 			System.out.println("Equals!!");	
 		}
 
+		//測試用
+		String testCode = "";
 		if(verification == 10) {										//已驗證
 			jsonObject.put("state", "3");
 			req.getSession().setAttribute("memVO", memVO);
@@ -117,6 +119,7 @@ public class VarificationServlet extends HttpServlet {
 				}
 				
 				String newCode = Random4.getRandomCharArray();
+				testCode = newCode;
 				memVO.setVerificationcode(newCode);
 				Date date = new Date();
 				Timestamp nowDate = new Timestamp(date.getTime());
@@ -134,7 +137,7 @@ public class VarificationServlet extends HttpServlet {
 				
 				//成功
 				String comPortNum = "COM8";
-				String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " " + newCode;
+				String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " 您的驗證碼為:" + newCode;
 				//Runtime.getRuntime().exec( "cmd /c java -jar C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar COM8 OOOOKKKK" );
 				Runtime.getRuntime().exec(commandStr);
 				
@@ -143,6 +146,7 @@ public class VarificationServlet extends HttpServlet {
 		}
 
 		jsonObject.put("type", machineStr);
+		jsonObject.put("testCode", testCode);
 		
 		out.write(jsonObject.toString());
 		out.flush();

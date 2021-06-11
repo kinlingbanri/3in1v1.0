@@ -16,15 +16,15 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 	String passwd = "34182958";
 	
 	private static final String GET_ALL_STMT = 
-			"SELECT id, name, city, district FROM store order by city";
+			"SELECT sid, name, city, district, pause FROM store";
 	private static final String GET_ONE_STMT = 
-			"SELECT id, name, city, district FROM store where id = ?";
+			"SELECT sid, name, city, district, pause FROM store where sid = ?";
 	private static final String INSERT_STMT = 
-			"INSERT INTO store (name, city, district) VALUES (?, ?, ?)";
+			"INSERT INTO store (name, city, district, pause) VALUES (?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
-			"UPDATE store set name=?, city=?, district=? where id = ?";
+			"UPDATE store set name=?, city=?, district=?, pause=? where sid = ?";
 	private static final String DELETE_STMT = 
-			"DELETE FROM store where id = ?";
+			"DELETE FROM store where sid = ?";
 
 	public static void main(String[] args) {
 		StoreJDBCDAO dao = new StoreJDBCDAO();
@@ -32,40 +32,44 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 		
 //		//Add
 //		StoreVO storeVO = new StoreVO();
-//		storeVO.setName("龍華店");
-//		storeVO.setCity("桃園市");
-//		storeVO.setDistrict("龜山區");
+//		storeVO.setName("三峽恩主公店");
+//		storeVO.setCity("新北市");
+//		storeVO.setDistrict("三峽區");
+//		storeVO.setPause(1);					//1預設為啟用
 //		dao.insert(storeVO);
 		
 //		//Update
 //		StoreVO storeVO = new StoreVO();
-//		storeVO.setID(2);
-//		storeVO.setName("龍華店");
-//		storeVO.setCity("桃園市");
-//		storeVO.setDistrict("龜山區");
+//		storeVO.setSid(6);
+//		storeVO.setName("三峽大埔店");
+//		storeVO.setCity("新北市");
+//		storeVO.setDistrict("三峽區");
+//		storeVO.setPause(1);
 //		dao.update(storeVO);
 
 		
 //		// Delete
 //		StoreVO storeVO = new StoreVO();
-//		storeVO.setID(3);
+//		storeVO.setSid(2);
 //		dao.delete(storeVO);
 
 
 //		// Query One
-//		StoreVO storeVO = dao.findByPrimaryId(1);
-//		System.out.print(storeVO.getID() + ",");
+//		StoreVO storeVO = dao.findByPrimaryId(6);
+//		System.out.print(storeVO.getSid() + ",");
 //		System.out.print(storeVO.getName() + ",");
 //		System.out.print(storeVO.getCity() + ",");
-//		System.out.println(storeVO.getDistrict());
+//		System.out.print(storeVO.getDistrict());
+//		System.out.println(storeVO.getPause());
 		
 		// Query All
 		List<StoreVO> list = dao.getAll();
 		for (StoreVO store : list) {
-			System.out.print(store.getID() + ",");
+			System.out.print(store.getSid() + ",");
 			System.out.print(store.getName() + ",");
 			System.out.print(store.getCity() + ",");
-			System.out.println(store.getDistrict());
+			System.out.print(store.getDistrict()+ ",");
+			System.out.println(store.getPause());
 		}
 	}
 
@@ -83,7 +87,7 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 			pstmt.setString(1, storeVO.getName());
 			pstmt.setString(2, storeVO.getCity());
 			pstmt.setString(3, storeVO.getDistrict());
-
+			pstmt.setInt(4, storeVO.getPause());
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
@@ -126,8 +130,8 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 			pstmt.setString(1, storeVO.getName());
 			pstmt.setString(2, storeVO.getCity());
 			pstmt.setString(3, storeVO.getDistrict());
-			pstmt.setInt(4, storeVO.getID());
-
+			pstmt.setInt(4, storeVO.getPause());
+			pstmt.setInt(5, storeVO.getSid());
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
@@ -166,7 +170,7 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(DELETE_STMT);
-			pstmt.setInt(1, storeVO.getID());
+			pstmt.setInt(1, storeVO.getSid());
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
@@ -197,7 +201,7 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 	}
 
 	@Override
-	public StoreVO findByPrimaryId(int id) {
+	public StoreVO findByPrimaryId(int sid) {
 		StoreVO storeVO= null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -207,16 +211,17 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_ONE_STMT);
-			pstmt.setInt(1, id);
+			pstmt.setInt(1, sid);
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 				// empVo 也稱為 Domain objects
 				storeVO = new StoreVO();
-				storeVO.setID(rs.getInt("id"));
+				storeVO.setSid(rs.getInt("sid"));
 				storeVO.setName(rs.getString("name"));
 				storeVO.setCity(rs.getString("city"));
 				storeVO.setDistrict(rs.getString("district"));
+				storeVO.setPause(rs.getInt("pause"));
 			}
 
 			// Handle any driver errors
@@ -272,10 +277,11 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 			while (rs.next()) {
 				// memVO 也稱為 Domain objects
 				storeVO = new StoreVO();
-				storeVO.setID(rs.getInt("id"));
+				storeVO.setSid(rs.getInt("sid"));
 				storeVO.setName(rs.getString("name"));
 				storeVO.setCity(rs.getString("city"));
 				storeVO.setDistrict(rs.getString("district"));
+				storeVO.setPause(rs.getInt("pause"));
 				list.add(storeVO); // Store the row in the list
 			}
 			// Handle any driver errors

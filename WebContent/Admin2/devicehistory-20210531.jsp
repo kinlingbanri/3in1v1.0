@@ -1,25 +1,147 @@
+<%@page import="com.history.model.HistoryService"%>
+<%@page import="com.history.model.HistoryVO"%>
+<%@page import="java.util.List"%>
+<%@page import="com.mem.model.MemService"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%
+String deviceNumber = "TY00001";
+String location = "RD-1";
+int did = 1;
+
+HistoryService historyService = new HistoryService();
+int totalCount = historyService.getCount(did);
+int lastCount = 0;
+if(totalCount > 50){
+	lastCount = totalCount - 50;
+}else{
+	lastCount = totalCount;
+}
+
+// List<HistoryVO> historyVOs = historyService.getAllByDid(did, lastCount, 50);
+// request.setAttribute("historyVOs", historyVOs);
+%>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - 404</title>
+    <title>三合一對幣機後台管理系統</title>
 
-    <!-- Custom fonts for this template-->
+    <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="css/googlefont.css" rel="stylesheet">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template -->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+    <!-- Custom styles for this page -->
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="vendor/datatables/scroller.dataTables.css" rel="stylesheet">
+    
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.scroller.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/datatables-demo.js"></script>
+    
+    <script src="js/jquery.validate.js"></script>
+    <script src="js/additional-methods.js"></script>
+    
+    <style>
+			{box-sizing: border-box;}
+			
+			/* Button used to open the contact form - fixed at the bottom of the page */
+			.open-button {
+			  background-color: #555;
+			  color: white;
+			  padding: 16px 20px;
+			  border: none;
+			  cursor: pointer;
+			  opacity: 0.8;
+			  position: fixed;
+			  bottom: 23px;
+			  right: 28px;
+			  width: 280px;
+			}
+			
+			/* The popup form - hidden by default */
+			.form-popup {
+			  display: none;
+			  position: fixed;
+			  bottom: 0;
+			  right: 15px;
+			  border: 3px solid #f1f1f1;
+			  z-index: 9;
+			}
+			
+			/* Add styles to the form container */
+			.form-container {
+			  max-width: 300px;
+			  padding: 10px;
+			  background-color: white;
+			}
+			
+			/* Full-width input fields */
+			.form-container input[type=text], .form-container input[type=password] {
+			  width: 100%;
+			  padding: 15px;
+			  margin: 5px 0 22px 0;
+			  border: none;
+			  background: #f1f1f1;
+			}
+			
+			/* When the inputs get focus, do something */
+			.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+			  background-color: #ddd;
+			  outline: none;
+			}
+			
+			/* Set a style for the submit/login button */
+			.form-container .btn {
+			  background-color: #04AA6D;
+			  color: white;
+			  padding: 16px 20px;
+			  border: none;
+			  cursor: pointer;
+			  width: 100%;
+			  margin-bottom:10px;
+			  opacity: 0.8;
+			}
+			
+			/* Add a red background color to the cancel button */
+			.form-container .cancel {
+			  background-color: red;
+			}
+			
+			/* Add some hover effects to buttons */
+			.form-container .btn:hover, .open-button:hover {
+			  opacity: 1;
+			}
+    </style>
+    
+    <script>
+
+    </script>
 </head>
 
 <body id="page-top">
@@ -45,8 +167,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
+                    <span>Dashboard</span></a>
             </li>
 
             <!-- Divider -->
@@ -101,14 +222,13 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
-                    aria-controls="collapsePages">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Pages</span>
                 </a>
-                <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
-                    data-parent="#accordionSidebar">
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Login Screens:</h6>
                         <a class="collapse-item" href="login.html">Login</a>
@@ -116,7 +236,7 @@
                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item active" href="404.html">404 Page</a>
+                        <a class="collapse-item" href="404.html">404 Page</a>
                         <a class="collapse-item" href="blank.html">Blank Page</a>
                     </div>
                 </div>
@@ -130,10 +250,10 @@
             </li>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+            <li class="nav-item active">
+                <a class="nav-link" href="./members.jsp">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                    <span>會員</span></a>
             </li>
 
             <!-- Divider -->
@@ -157,9 +277,11 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
+                    <form class="form-inline">
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </form>
 
                     <!-- Topbar Search -->
                     <form
@@ -276,7 +398,7 @@
                                     <div class="font-weight-bold">
                                         <div class="text-truncate">Hi there! I am wondering if you can help me with a
                                             problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
+                                        <div class="small text-gray-500">Emily Fowler Â· 58m</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -288,7 +410,7 @@
                                     <div>
                                         <div class="text-truncate">I have the photos that you ordered last month, how
                                             would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
+                                        <div class="small text-gray-500">Jae Chun Â· 1d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -300,7 +422,7 @@
                                     <div>
                                         <div class="text-truncate">Last month's report looks great, I am very happy with
                                             the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                                        <div class="small text-gray-500">Morgan Alvarez Â· 2d</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -312,7 +434,7 @@
                                     <div>
                                         <div class="text-truncate">Am I a good boy? The reason I ask is because someone
                                             told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                                        <div class="small text-gray-500">Chicken the Dog Â· 2w</div>
                                     </div>
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
@@ -351,27 +473,98 @@
                                 </a>
                             </div>
                         </li>
-
                     </ul>
-
                 </nav>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- 404 Error Text -->
-                    <div class="text-center">
-                        <div class="error mx-auto" data-text="404">404</div>
-                        <p class="lead text-gray-800 mb-5">Page Not Found</p>
-                        <p class="text-gray-500 mb-0">It looks like you found a glitch in the matrix...</p>
-                        <a href="index.html">&larr; Back to Dashboard</a>
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">會員清單</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered display" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>時間</th>
+                                            <th>訊息</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>時間</th>
+                                            <th>訊息</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    
+                                    
+                                    
+<%--                                     		<c:url var="url" value="/AdminModifyMemberServlet" />  --%>
+<%-- 																				<c:forEach items="${memberVOs}" var="member" varStatus="id"> --%>
+<%-- 																					<tr id="tr${id.count}"> --%>
+<%-- 																						<td id="thun${id.count}">${member.username }</td> --%>
+<%-- 																						<td id="them${id.count}">${member.email }</td> --%>
+<%-- 																						<td id="thpo${id.count}">${member.point }</td> --%>
+<%-- 																						<td id="thph${id.count}">${member.phone }</td> --%>
+<%-- 																						<td id="thpw${id.count}">${member.password }</td> --%>
+<%-- 																						<td id="thbl${id.count}">${member.black }</td> --%>
+<%-- 																						<td id="thau${id.count}">${member.authority }</td> --%>
+<!-- 																					</tr> -->
+<%-- 																				</c:forEach> --%>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
                 <!-- /.container-fluid -->
-
             </div>
+            
+            <div class="form-popup" id="myForm" >
+            	<div  class="form-container" style="background-color: #BFFFDF;">
+            		<h1 id="username"></h1>            		
+            		<div>
+            				<label for="email" style="width:24%; float:left; margin-top: 7px;"><b>Email</b></label>
+						    		<input  style="width:76%; float:left; height: 24px;" type="text"name="email" id="inputemail">
+            		</div>
+								<div>
+            				<label for="point" style="width:24%; float:left; margin-top: 7px;"><b>點數</b></label>
+						    		<input  style="width:76%; float:left; height: 24px;" type="text" name="point" id="inputpoint">
+            		</div>
+								<div>
+            				<label for="phone" style="width:24%; float:left; margin-top: 7px;"><b>電話</b></label>
+						    		<input  style="width:76%; float:left; height: 24px;" type="text" name="phone" id="inputphone">
+            		</div>
+            		<div>
+            				<label for="password" style="width:24%; float:left; margin-top: 7px;"><b>密碼</b></label>
+						    		<input style="width:76%; float:left; height: 24px;" type="text" name="password" id="inputpassword">
+            		</div>
+            		<div>
+            				<label for="password" style="width:24%; float:left; margin-top: 7px;"><b>權限</b></label>
+										<select class="browser-default custom-select" style="width:76%;">
+										  <option selected>Open this select menu</option>
+										  <option value="1">One</option>
+										  <option value="2">Two</option>
+										  <option value="3">Three</option>
+										</select>
+            		</div>
+            		<div>
+	            			<div class="form-check" style="margin: 12px 0 20px;">
+											  <input class="form-check-input" type="checkbox" value="" id="cbblack">
+											  <label class="form-check-label" for="flexCheckDefault">黑名單</label>
+										</div>
+            		</div>
+						    <button type="submit" class="btn" style="height: 48px; padding: 8px;" id="updateBtn">更新</button>
+						    <button type="submit" class="btn cancel"  style="height: 48px; padding: 8px;" onclick="closeForm()">取消</button>
+						    <input type="hidden" value="" id="hiddenNumber">
+            	</div>
+						</div>            
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -403,7 +596,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
+                        <span aria-hidden="true">Ã</span>
                     </button>
                 </div>
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
@@ -414,17 +607,126 @@
             </div>
         </div>
     </div>
+    
+    
+    
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
 
+
+		<script>
+
+	    $(document).ready(function() {
+
+	        $('#dataTable').DataTable( {
+	            'processing': true,											//載入時在畫面會出現processing的訊息
+	            'serverSide': true,												//啟動server side模式,避免一次載入大量資料(50000)
+	            'cache':false,
+	            'serverMethod': 'post',
+	            //'retrieve': true,
+	            'ajax': {
+	                "url": '../DeviceHistorySevlet',
+	                type: 'POST',
+	                dataSrc:'historyVOs',
+	                success:(data) => {
+										console.log("data : " + data);
+			            }
+	            },
+	             "columns":[
+										{"data":"ttime"},
+										{"data":"event"}
+								]
+
+	            
+//	             //"deferLoading": 0,										//預先用ajax載入
+//	             order: [[0, "desc"]],											//預設排序資料行(由0算起)
+//	             orderMulti : false,
+//	             "columns":[
+//	 							{"data":"ttime"},
+//	 							{"data":"event"}
+//	             ],
+//	             ajax: {
+//	                 method:"post",
+//	                 url: "../DeviceHistorySevlet", 
+//	                 data: function (d)
+//	                 {
+//	                 	console.log("d : " + d);
+//	                     //d.MyTitle = $("input[name=MyTitle]").val();
+//	                     //d.MyMoney = $("input[name=MyMoney]").val();
+//	                 }
+//	             }
+	            
+	        } );
+
+
+
+
+
+
+	        
+	    } );
+
+		function openForm() {
+				document.getElementById("myForm").style.display = "block";
+		}
+
+		function closeForm() {
+				document.getElementById("myForm").style.display = "none";
+		}
+
+
+
+		$("#updateBtn").click(function(){
+
+			var checked = $('#cbblack').is(":checked");
+			var blackstate = 0;
+			if(checked == true){
+				blackstate = 1;
+			}
+			
+			$.ajax({
+				  type: 'POST',                    					//GET or POST
+				  url: "../AdminModifyMemberServlet",		//請求的頁面
+				  cache: false,                     				//防止抓到快取的回應
+				  data: {
+						username:$("#username").text(),
+						email:$("#inputemail").val(),
+						point:$("#inputpoint").val(),
+						phone:$("#inputphone").val(),
+						password:$("#inputpassword").val(),
+						black:blackstate
+				  },
+				  success: function (jsonObject) {         //當請求成功後此事件會被呼叫
+				  	var state = jsonObject.state;
+						console.log("state : " + state);
+						if(state == "ok"){
+
+							var num = $("#hiddenNumber").val();
+							$("#them" + num).text( $("#inputemail").val() );
+							$("#thpo" + num).text( $("#inputpoint").val() );
+							$("#thph" + num).text( $("#inputphone").val() );
+							$("#thpw" + num).text( $("#inputpassword").val() ) ;
+							$("#thbl" + num).text( blackstate ) ;
+							closeForm();
+						}    	
+				  },
+				  error: function(e){
+				  	console.log("e: " + e);
+				  },            //當請求失敗後此事件會被呼叫
+				  statusCode: {                     //狀態碼處理
+				    404: function() {
+				      alert("page not found");
+				    }
+				  }
+				});
+				
+		});
+
+		
+		</script>
 </body>
 
 </html>

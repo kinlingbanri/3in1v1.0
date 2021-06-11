@@ -24,6 +24,9 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 					+ "freecount, freecountset FROM device where number = ?";
 	private static final String GET_DEVICE_STATUS_STMT = 
 			"SELECT status FROM device where number = ?";
+	private static final String GET_CHECK_MONEY_STMT = 
+			"SELECT did, number, ADD_STATUS, 100_COUNT, 500_COUNT, 1000_COUNT"
+			+ " FROM device where number = ?";
 	private static final String INSERT_STMT = 
 			"INSERT INTO device (number, coin, paper, location, refund, uid, status, error,"
 					+ "machid, freecount, freecountset) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -76,6 +79,14 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 //		boolean status = dao.getStatus("TY00001");
 //		System.out.print("Device Status : " + status);
 		
+		// Query check money
+		DeviceVO deviceVO = dao.getCheckMoney("TY00001");
+		System.out.print(deviceVO.getDid() + ",");
+		System.out.print(deviceVO.getNumber() + ",");
+		System.out.print(deviceVO.getAdd_status() + ",");
+		System.out.print(deviceVO.getCount_100() + ",");
+		System.out.print(deviceVO.getCount_500() + ",");
+		System.out.println(deviceVO.getCount_1000());
 		
 //		// Query One
 //		DeviceVO deviceVO = dao.findByPrimaryId("TY00001");
@@ -440,4 +451,63 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 		return status;
 	}
 
+	@Override
+	public DeviceVO getCheckMoney(String number) {
+		DeviceVO deviceVO = null;		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_CHECK_MONEY_STMT);			
+			pstmt.setString(1, number);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// deviceVO 也稱為 Domain objects
+				deviceVO = new DeviceVO();
+				deviceVO.setDid(rs.getInt("DID"));
+				deviceVO.setNumber(rs.getString("number"));
+				deviceVO.setAdd_status(rs.getInt("ADD_STATUS"));
+				deviceVO.setCount_100(rs.getInt("100_COUNT"));
+				deviceVO.setCount_500(rs.getInt("500_COUNT"));
+				deviceVO.setCount_1000(rs.getInt("1000_COUNT"));
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return deviceVO;
+	}
 }

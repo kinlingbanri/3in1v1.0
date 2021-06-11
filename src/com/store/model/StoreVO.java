@@ -12,9 +12,9 @@ import javax.persistence.Table;
 public class StoreVO {
 	
 	@Id
-	@Column(name = "id")
+	@Column(name = "sid")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private int sid;
 	
 	@Column(name = "name")
 	private String name;
@@ -24,13 +24,16 @@ public class StoreVO {
 	
 	@Column(name = "district")
 	private String district;
+	
+	@Column(name = "pause")
+	private int pause;
 
-	public int getID() {
-		return id;
+	public int getSid() {
+		return sid;
 	}
 
-	public void setID(int id) {
-		this.id = id;
+	public void setSid(int sid) {
+		this.sid = sid;
 	}
 
 	public String getName() {
@@ -55,5 +58,13 @@ public class StoreVO {
 
 	public void setDistrict(String district) {
 		this.district = district;
+	}
+
+	public int getPause() {
+		return pause;
+	}
+
+	public void setPause(int pause) {
+		this.pause = pause;
 	}
 }
