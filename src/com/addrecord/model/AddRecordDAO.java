@@ -30,7 +30,11 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 	private static final String GET_ALL_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
 			+ "point, errorcode, username, deviceid, devicenumber, storeid, cardid FROM addrecord order by id";
-	
+	private static final String QUERY_RANGEDATE_STORENAME_STMT = 
+			"SELECT id, storedatetime, paper100, paper500, paper1000, point FROM addrecord " + 
+			"WHERE STR_TO_DATE(storedatetime, '%Y-%m-%d') >= ? AND " + 
+			"		STR_TO_DATE(storedatetime, '%Y-%m-%d') <= ? AND " + 
+			"		storename = ?";
 	private static final String GET_TodayTotal_STMT = 
 			"SELECT sum( (coin10*10) + (coin50*50) + (paper100*100) + (paper500*500) + (paper1000*1000)) totalMoney, (point) totalpoint "
 			+ "from addrecord where DATE(storedatetime) = curdate();";
@@ -490,6 +494,65 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 			}
 		}
 		return todayTotalVO;
+	}
+
+	@Override
+	public List<AddRecordVO> queryRangeDateAndStoreName(String startDate, String endDate, String storeName) {
+		List<AddRecordVO> list = new ArrayList<AddRecordVO>();
+		AddRecordVO addRecordVO = null;	
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(QUERY_RANGEDATE_STORENAME_STMT);
+			pstmt.setString(1, startDate);
+			pstmt.setString(2, endDate);
+			pstmt.setString(3, storeName);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// addRecordVO 也稱為 Domain objects
+				addRecordVO = new AddRecordVO();
+				addRecordVO.setId(rs.getInt("id"));
+				addRecordVO.setStoredatetime(rs.getTimestamp("storedatetime"));
+				addRecordVO.setPaper100(rs.getInt("paper100"));
+				addRecordVO.setPaper500(rs.getInt("paper500"));
+				addRecordVO.setPaper1000(rs.getInt("paper1000"));
+				addRecordVO.setPoint(rs.getInt("point"));
+
+				list.add(addRecordVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
 	}
 
 }

@@ -39,17 +39,14 @@
 <title>三合一對幣機後台管理系統</title>
 
 <!-- Custom fonts for this template -->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
-	type="text/css">
+<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link href="css/googlefont.css" rel="stylesheet">
 
 <!-- Custom styles for this template -->
 <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
 <!-- Custom styles for this page -->
-<link href="vendor/datatables/dataTables.bootstrap4.min.css"
-	rel="stylesheet">
-
+<!-- <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"> -->
 
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>
@@ -150,6 +147,19 @@ border-box
 }
 </style>
 
+<script>
+
+$(function() {
+	$("#report").click(function(){
+		$("#reportPages").slideToggle(150);
+	});
+	$("#setting").click(function(){
+		$("#settingPages").slideToggle(150);
+	});
+});
+
+</script>
+
 </head>
 
 <body id="page-top">
@@ -158,41 +168,84 @@ border-box
 	<div id="wrapper">
 
 		<!-- Sidebar -->
-		<ul
-			class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-			id="accordionSidebar">
+		<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 			<!-- Sidebar - Brand -->
-			<a
-				class="sidebar-brand d-flex align-items-center justify-content-center"
-				href="./index.jsp">
+			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="./index.jsp">
 				<div class="sidebar-brand-text mx-3">三合一後台管理系統</div>
 			</a>
 
 			<!-- Nav Item - Pages Collapse Menu -->
-			<li class="nav-item"><a class="nav-link collapsed" href="#"
-				data-toggle="collapse" data-target="#collapsePages"
-				aria-expanded="true" aria-controls="collapsePages"> <i
-					class="fas fa-fw fa-folder"></i> <span>設備</span>
-			</a>
-				<div id="collapsePages" class="collapse"
-					aria-labelledby="headingPages" data-parent="#accordionSidebar">
+<!-- 			<li class="nav-item"> -->
+<!-- 				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" -->
+<!-- 									aria-expanded="true" aria-controls="collapsePages"> -->
+<!-- 					<i class="fas fa-fw fa-folder"></i> -->
+<!-- 					<span>營運管理</span> -->
+<!-- 				</a> -->
+<!-- 				<div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar"> -->
+<!-- 					<div class="bg-white py-2 collapse-inner rounded"> -->
+<!-- 						<a class="collapse-item" href="./devices.jsp">店家管理</a> -->
+<!-- 						<a class="collapse-item" href="./devices.jsp">設備管理</a> -->
+<!-- 						                        <h6 class="collapse-header">Login Screens:</h6> -->
+<!-- 						                        <a class="collapse-item" href="register.html">Register</a> -->
+<!-- 						                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
+<!-- 						                        <div class="collapse-divider"></div> -->
+<!-- 						                        <h6 class="collapse-header">Other Pages:</h6> -->
+<!-- 						                        <a class="collapse-item" href="404.html">404 Page</a> -->
+<!-- 						                        <a class="collapse-item" href="blank.html">Blank Page</a> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</li> -->
+			<!-- End Nav Item - Pages Collapse Menu -->
+			
+			
+			
+			
+			<!-- Nav Report - Pages Collapse Menu -->
+			<li class="nav-item">
+				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="reportPages"
+									aria-expanded="true" aria-controls="reportPages" id="report">
+					<i class="fas fa-fw fa-folder"></i>
+					<span>營運報表</span>
+				</a>
+				<div id="reportPages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
 					<div class="bg-white py-2 collapse-inner rounded">
-						<!--                         <h6 class="collapse-header">Login Screens:</h6> -->
-						<a class="collapse-item" href="./devices.jsp">設備管理</a>
-						<!--                         <a class="collapse-item" href="register.html">Register</a> -->
-						<!--                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
-						<!--                         <div class="collapse-divider"></div> -->
-						<!--                         <h6 class="collapse-header">Other Pages:</h6> -->
-						<!--                         <a class="collapse-item" href="404.html">404 Page</a> -->
-						<!--                         <a class="collapse-item" href="blank.html">Blank Page</a> -->
+						<a class="collapse-item" href="#">店家資訊</a>
+						<a class="collapse-item" href="./devicehistory.jsp">設備資訊</a>
 					</div>
-				</div></li>
+				</div>
+			</li>
+			<!-- End Nav Report - Pages Collapse Menu -->
 
 			<!-- Nav Item - Members -->
 			<li class="nav-item"><a class="nav-link" href="./members.jsp">
-					<i class="fas fa-fw fa-table"></i> <span>會員</span>
+					<i class="fas fa-fw fa-table"></i>
+					<span>會員</span>
 			</a></li>
+
+			
+			<!-- Nav Setting - Pages Collapse Menu -->
+			<li class="nav-item">
+				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="reportPages"
+									aria-expanded="true" aria-controls="reportPages" id="setting">
+					<i class="fas fa-fw fa-folder"></i>
+					<span>參數設定</span>
+				</a>
+				<div id="settingPages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+					<div class="bg-white py-2 collapse-inner rounded">
+						<a class="collapse-item" href="#">優惠設定</a>
+						<a class="collapse-item" href="#">簡訊機設定</a>
+					</div>
+				</div>
+			</li>
+			<!-- End Nav Setting - Pages Collapse Menu -->
+			
+			
+			
+			
+			
+
+
 
 			<!-- Divider -->
 			<!--             <hr class="sidebar-divider d-none d-md-block"> -->

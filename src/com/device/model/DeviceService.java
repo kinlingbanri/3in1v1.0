@@ -2,7 +2,7 @@ package com.device.model;
 
 import java.util.List;
 
-import com.history.model.HistoryVO;
+import org.apache.xmlbeans.impl.xb.xsdschema.impl.PublicImpl;
 
 public class DeviceService {
 	
@@ -38,5 +38,21 @@ public class DeviceService {
 	
 	public List<DeviceVO> getAll(){
 		return dao.getAll();
+	}
+	
+	public DeviceVO getAddStatus(String number) {
+		return dao.getAddStatus(number);
+	}
+	
+	public void updateStatus(String number, int status) {
+		dao.updateStatus(number, status);
+	}
+	
+	public void updateAddStatus11(String number, int add_status, int point) {
+		dao.updateAddStatus11(number, add_status, point);
+	}
+	
+	public void updateAddStatus13(String number, int add_status, int add_point) {
+		dao.updateAddStatus13(number, add_status, add_point);
 	}
 }

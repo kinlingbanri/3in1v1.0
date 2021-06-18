@@ -20,6 +20,10 @@ import com.device.model.DeviceService;
 import com.device.model.DeviceVO;
 import com.history.model.HistoryService;
 import com.history.model.HistoryVO;
+import com.mem.model.MemService;
+import com.mem.model.MemVO;
+import com.store.model.StoreService;
+import com.store.model.StoreVO;
 
 @WebServlet("/AddRecordServlet")
 public class AddRecordServlet extends HttpServlet {
@@ -45,19 +49,32 @@ public class AddRecordServlet extends HttpServlet {
 		
 		String username = req.getParameter("username");
 		String did = req.getParameter("did");
-		int count_100 = Integer.parseInt(req.getParameter("count_100"));
-		int count_500 =Integer.parseInt(req.getParameter("count_500"));
-		int count_1000 = Integer.parseInt(req.getParameter("count_1000"));
-		int totalPoint = Integer.parseInt(req.getParameter("totalPoint"));
-		
+		String sidStr = req.getParameter("sid");
+		int sid = Integer.parseInt(sidStr);
 		System.out.println("username : " + username);
-		System.out.println("did : " + did);
-		System.out.println("count_100 : " + count_100);
-		System.out.println("count_500 : " + count_500);
-		System.out.println("count_1000 : " + count_1000);
-		System.out.println("totalPoint : " + totalPoint);
+		System.out.println("CheckMoneyServlet number : " + did);
+		System.out.println("CheckMoneyServlet store id : " + sid);
 		
-		DeviceVO deviceVO = new DeviceService().getOneDevice(did);
+		
+		DeviceVO deviceVO = new DeviceService().getCheckMoney(did);
+		int count_100 = deviceVO.getCount_100();
+		int count_500 = deviceVO.getCount_500();
+		int count_1000 = deviceVO.getCount_1000();
+		int totalMoney = (count_100 * 100) + (count_500 * 500) + (count_1000 * 1000);
+		
+		StoreService storeService = new StoreService();
+		StoreVO storeVO = storeService.getOneStore(sid);
+		
+		int totalPoint = 0;
+		if(totalMoney >= storeVO.getDiscount_3_money()) {
+			totalPoint = totalMoney + ( storeVO.getDiscount_3_point() - storeVO.getDiscount_3_money());
+		}else if(totalMoney >= storeVO.getDiscount_2_money()) {
+			totalPoint = totalMoney + ( storeVO.getDiscount_2_point() - storeVO.getDiscount_2_money());
+		}else if(totalMoney >= storeVO.getDiscount_1_money()) {
+			totalPoint = totalMoney + ( storeVO.getDiscount_1_point() - storeVO.getDiscount_1_money());
+		}
+		System.out.println("totalPoint : " + totalPoint);		
+
 		
 		Date date = new Date();	//Get now
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -73,13 +90,22 @@ public class AddRecordServlet extends HttpServlet {
 		addRecordVO.setUsername(username);
 		addRecordVO.setDeviceid(deviceVO.getDid());
 		addRecordVO.setDeviceNumber(deviceVO.getNumber());
+		addRecordVO.setStoreid(sid);
+		new AddRecordService().insertRecord(addRecordVO);
 		
-		new AddRecordService().insertRecord(addRecordVO);	
+		//完成交易,更新Device狀態
+		//19 : 完成交易
+		//totalPoint : 更新device add_point的數值 
+		new DeviceService().updateAddStatus13(did, 19, totalPoint);
 		
-		deviceVO.setAdd_status(19);
-		new DeviceService().updateDevice(deviceVO);
+		MemService memService = new MemService();
+		MemVO memVO = memService.getOneMem(username);
+		int nowPoint = memVO.getPoint() + totalPoint;
+		memVO.setPoint(nowPoint);
+		memService.updateMem(memVO);
 		
 		jsonObject.put("state", "19");
+		jsonObject.put("nowPoint", nowPoint);
 		out.write(jsonObject.toString());
 		out.flush();
 		out.close();

@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +20,11 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 	private static final String GET_ALL_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
 			+ "point, errorcode, username, deviceid, devicenumber, storeid, cardid FROM addrecord order by id";
+	private static final String QUERY_RANGEDATE_STORENAME_STMT = 
+			"SELECT id, storedatetime, paper100, paper500, paper1000, point FROM addrecord " + 
+			"WHERE STR_TO_DATE(storedatetime, '%Y-%m-%d') >= ? AND " + 
+			"		STR_TO_DATE(storedatetime, '%Y-%m-%d') <= ? AND " + 
+			"		storename = ?";
 	
 	private static final String GET_TodayTotal_STMT = 
 			"SELECT sum( (coin10*10) + (coin50*50) + (paper100*100) + (paper500*500) + (paper1000*1000)) totalMoney, (point) totalpoint "
@@ -164,24 +168,42 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 //		}	
 
 		
-		// Query All
-		List<AddRecordVO> list = dao.getAll();
+//		 Query queryRangeDateAndStoreName
+		List<AddRecordVO> list = dao.queryRangeDateAndStoreName("2021-03-15", "2021-06-15", "三峽復興店");
+		
 		for (AddRecordVO addRecord : list) {
+			int totalMoney = 0;
 			System.out.print(addRecord.getId() + ",");
 			System.out.print(addRecord.getStoredatetime() + ",");
-			System.out.print(addRecord.getCoin10() + ",");
-			System.out.print(addRecord.getCoin50() + ",");
 			System.out.print(addRecord.getPaper100() + ",");
+			totalMoney += addRecord.getPaper100() * 100;
 			System.out.print(addRecord.getPaper500() + ",");
+			totalMoney += addRecord.getPaper500() * 500;
 			System.out.print(addRecord.getPaper1000() + ",");
-			System.out.print(addRecord.getPoint() + ",");
-			System.out.print(addRecord.getErrorcode() + ",");
-			System.out.print(addRecord.getUsername() + ",");
-			System.out.print(addRecord.getDeviceid() + ",");
-			System.out.print(addRecord.getDeviceNumber() + ",");
-			System.out.print(addRecord.getStoreid() + ",");
-			System.out.println(addRecord.getCardid());
-		}		
+			totalMoney += addRecord.getPaper1000() * 1000;
+			System.out.println(addRecord.getPoint());
+			System.out.println("加值金額: " + totalMoney + ", 儲值點數: " + addRecord.getPoint());
+		}
+		
+		
+//		 Query All
+//		List<AddRecordVO> list = dao.getAll();
+//		for (AddRecordVO addRecord : list) {
+//			System.out.print(addRecord.getId() + ",");
+//			System.out.print(addRecord.getStoredatetime() + ",");
+//			System.out.print(addRecord.getCoin10() + ",");
+//			System.out.print(addRecord.getCoin50() + ",");
+//			System.out.print(addRecord.getPaper100() + ",");
+//			System.out.print(addRecord.getPaper500() + ",");
+//			System.out.print(addRecord.getPaper1000() + ",");
+//			System.out.print(addRecord.getPoint() + ",");
+//			System.out.print(addRecord.getErrorcode() + ",");
+//			System.out.print(addRecord.getUsername() + ",");
+//			System.out.print(addRecord.getDeviceid() + ",");
+//			System.out.print(addRecord.getDeviceNumber() + ",");
+//			System.out.print(addRecord.getStoreid() + ",");
+//			System.out.println(addRecord.getCardid());
+//		}	
 
 	}
 
@@ -660,6 +682,72 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 			}
 		}
 		return todayTotalVO;
+	}
+
+	@Override
+	public List<AddRecordVO> queryRangeDateAndStoreName(String startDate, String endDate, String storeName) {
+		List<AddRecordVO> list = new ArrayList<AddRecordVO>();
+		AddRecordVO addRecordVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(QUERY_RANGEDATE_STORENAME_STMT);
+			pstmt.setString(1, startDate);
+			pstmt.setString(2, endDate);
+			pstmt.setString(3, storeName);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// addRecordVO 也稱為 Domain objects
+				addRecordVO = new AddRecordVO();
+				addRecordVO.setId(rs.getInt("id"));
+				addRecordVO.setStoredatetime(rs.getTimestamp("storedatetime"));
+				addRecordVO.setPaper100(rs.getInt("paper100"));
+				addRecordVO.setPaper500(rs.getInt("paper500"));
+				addRecordVO.setPaper1000(rs.getInt("paper1000"));
+				addRecordVO.setPoint(rs.getInt("point"));
+
+				list.add(addRecordVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
 	}	
 	
 }

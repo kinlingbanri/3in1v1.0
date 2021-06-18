@@ -40,6 +40,10 @@ public class AddRecordService {
 		return dao.getTodayAddValue();
 	}
 	
+	public List<AddRecordVO> queryRangeDateStoreName(String startDate, String endDate, String storeName){
+		return dao.queryRangeDateAndStoreName(startDate, endDate, storeName);
+	}
+	
 	public List<AddRecordVO>getAll(){
 		return dao.getAll();
 	}

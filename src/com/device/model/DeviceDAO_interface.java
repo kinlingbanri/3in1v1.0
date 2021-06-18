@@ -10,4 +10,10 @@ public interface DeviceDAO_interface {
 	public DeviceVO getCheckMoney(String number);
 	public DeviceVO findByPrimaryId(String number);
 	public List<DeviceVO> getAll();
+	
+	public DeviceVO getAddStatus(String number);
+	public void updateStatus(String number, int status);
+	public void updateAddStatus11(String number, int add_status, int point);
+	public void updateAddStatus13(String number, int add_status, int add_point);
+	public int checkAutoIncrement();
 }

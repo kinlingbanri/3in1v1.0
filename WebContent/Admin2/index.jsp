@@ -82,8 +82,7 @@
 <title>三合一兌幣機後台管理</title>
 
 <!-- Custom fonts for this template-->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
-	type="text/css">
+<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link href="css/googlefont.css" rel="stylesheet">
 
 <!-- Custom styles for this template-->
@@ -255,26 +254,26 @@ $(function() {
 			</a>
 
 			<!-- Nav Item - Pages Collapse Menu -->
-			<li class="nav-item">
-				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-									aria-expanded="true" aria-controls="collapsePages">
-					<i class="fas fa-fw fa-folder"></i>
-					<span>營運管理</span>
-				</a>
-				<div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" href="./devices.jsp">店家管理</a>
-						<a class="collapse-item" href="./devices.jsp">設備管理</a>
-						<!--                         <h6 class="collapse-header">Login Screens:</h6> -->
-						<!--                         <a class="collapse-item" href="register.html">Register</a> -->
-						<!--                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
-						<!--                         <div class="collapse-divider"></div> -->
-						<!--                         <h6 class="collapse-header">Other Pages:</h6> -->
-						<!--                         <a class="collapse-item" href="404.html">404 Page</a> -->
-						<!--                         <a class="collapse-item" href="blank.html">Blank Page</a> -->
-					</div>
-				</div>
-			</li>
+<!-- 			<li class="nav-item"> -->
+<!-- 				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" -->
+<!-- 									aria-expanded="true" aria-controls="collapsePages"> -->
+<!-- 					<i class="fas fa-fw fa-folder"></i> -->
+<!-- 					<span>營運管理</span> -->
+<!-- 				</a> -->
+<!-- 				<div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar"> -->
+<!-- 					<div class="bg-white py-2 collapse-inner rounded"> -->
+<!-- 						<a class="collapse-item" href="./devices.jsp">店家管理</a> -->
+<!-- 						<a class="collapse-item" href="./devices.jsp">設備管理</a> -->
+<!-- 						                        <h6 class="collapse-header">Login Screens:</h6> -->
+<!-- 						                        <a class="collapse-item" href="register.html">Register</a> -->
+<!-- 						                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
+<!-- 						                        <div class="collapse-divider"></div> -->
+<!-- 						                        <h6 class="collapse-header">Other Pages:</h6> -->
+<!-- 						                        <a class="collapse-item" href="404.html">404 Page</a> -->
+<!-- 						                        <a class="collapse-item" href="blank.html">Blank Page</a> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</li> -->
 			<!-- End Nav Item - Pages Collapse Menu -->
 			
 			
@@ -289,12 +288,19 @@ $(function() {
 				</a>
 				<div id="reportPages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
 					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" href="./devices.jsp">店家資訊</a>
-						<a class="collapse-item" href="./devices.jsp">設備資訊</a>
+						<a class="collapse-item" href="#">店家資訊</a>
+						<a class="collapse-item" href="./devicehistory.jsp">設備資訊</a>
 					</div>
 				</div>
 			</li>
 			<!-- End Nav Report - Pages Collapse Menu -->
+
+			<!-- Nav Item - Members -->
+			<li class="nav-item"><a class="nav-link" href="./members.jsp">
+					<i class="fas fa-fw fa-table"></i>
+					<span>會員</span>
+			</a></li>
+
 			
 			<!-- Nav Setting - Pages Collapse Menu -->
 			<li class="nav-item">
@@ -305,8 +311,8 @@ $(function() {
 				</a>
 				<div id="settingPages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
 					<div class="bg-white py-2 collapse-inner rounded">
-						<a class="collapse-item" href="./devices.jsp">優惠設定</a>
-						<a class="collapse-item" href="./devices.jsp">簡訊機設定</a>
+						<a class="collapse-item" href="#">優惠設定</a>
+						<a class="collapse-item" href="#">簡訊機設定</a>
 					</div>
 				</div>
 			</li>
@@ -317,11 +323,7 @@ $(function() {
 			
 			
 
-			<!-- Nav Item - Members -->
-			<li class="nav-item"><a class="nav-link" href="./members.jsp">
-					<i class="fas fa-fw fa-table"></i>
-					<span>會員</span>
-			</a></li>
+
 
 			<!-- Divider -->
 			<!--             <hr class="sidebar-divider d-none d-md-block"> -->

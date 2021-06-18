@@ -12,5 +12,6 @@ public interface AddRecordDAO_interface {
 	public List<AddRecordVO> getListByUsername(MemVO memVO);
 	public List<AddRecordVO> getAfter30(MemVO memVO);
 	public TodayTotalVO getTodayAddValue();
+	public List<AddRecordVO> queryRangeDateAndStoreName(String startDate, String endDate, String storename); 
 	public List<AddRecordVO> getAll();
 }

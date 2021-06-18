@@ -5,20 +5,20 @@
     
 <%
 	Object objectDID = session.getAttribute("DID");
-	Object objectMAID = session.getAttribute("MAID");
+	Object objectSID = session.getAttribute("SID");
 	if(objectDID != null){
 		String DID = objectDID.toString();
-		String MAID = objectMAID.toString();
+		String SID = objectSID.toString();
 		System.out.println("Logout.jsp session DID : " +DID );
-		System.out.println("Logout.jsp session MAID : " +MAID );
+		System.out.println("Logout.jsp session SID : " +SID );
 
 		//清除session資料
 		session.invalidate();
 		
 		request.getSession().setAttribute("DID", DID);
-		request.getSession().setAttribute("MAID", MAID);
+		request.getSession().setAttribute("SID", SID);
 		//跳躍到登入畫面
-		String returnURL = "0;url=index.jsp?DID=" + DID + "&MAID=" + MAID;
+		String returnURL = "0;url=index.jsp?DID=" + DID + "&SID=" + SID;
 		response.setHeader("refresh", returnURL);
 	}
 

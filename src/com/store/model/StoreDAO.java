@@ -26,13 +26,19 @@ public class StoreDAO implements StoreDAO_interface{
 	}
 	
 	private static final String GET_ALL_STMT = 
-			"SELECT sid, name, city, district, pause FROM store";
+			"SELECT sid, name, city, district, pause, single_count, multi_count, discount_1_money, discount_1_point,"
+					+ "discount_2_money, discount_2_point, discount_3_money, discount_3_point FROM store";
 	private static final String GET_ONE_STMT = 
-			"SELECT sid, name, city, district, pause FROM store where sid = ?";
+			"SELECT sid, name, city, district, pause, single_count, multi_count, discount_1_money, discount_1_point," + 
+			"					+ discount_2_money, discount_2_point, discount_3_money, discount_3_point FROM store where sid = ?";
 	private static final String INSERT_STMT = 
-			"INSERT INTO store (name, city, district, pause) VALUES (?, ?, ?, ?)";
+			"INSERT INTO store (name, city, district, pause, single_count, multi_count, discount_1_money, discount_1_point," + 
+								"discount_2_money, discount_2_point, discount_3_money, discount_3_point) "
+								+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
-			"UPDATE store set name=?, city=?, district=?, pause=? where sid = ?";
+			"UPDATE store set name=?, city=?, district=?, pause=?, single_count=?, multi_count=?, discount_1_money=?, "
+								+ "discount_1_point=?, discount_2_money=?, discount_2_point=?, discount_3_money=?, "
+								+ "discount_3_point=? where sid = ?";
 	private static final String DELETE_STMT = 
 			"DELETE FROM store where sid = ?";
 
@@ -48,6 +54,14 @@ public class StoreDAO implements StoreDAO_interface{
 			pstmt.setString(2, storeVO.getCity());
 			pstmt.setString(3, storeVO.getDistrict());
 			pstmt.setInt(4, storeVO.getPause());
+			pstmt.setInt(5, storeVO.getSingle_count());
+			pstmt.setInt(6, storeVO.getMulti_count());
+			pstmt.setInt(7, storeVO.getDiscount_1_money());
+			pstmt.setInt(8, storeVO.getDiscount_1_point());
+			pstmt.setInt(9, storeVO.getDiscount_2_money());
+			pstmt.setInt(10, storeVO.getDiscount_2_point());
+			pstmt.setInt(11, storeVO.getDiscount_3_money());
+			pstmt.setInt(12, storeVO.getDiscount_3_point());
 			pstmt.executeUpdate();
 
 			// Handle any SQL errors
@@ -86,7 +100,15 @@ public class StoreDAO implements StoreDAO_interface{
 			pstmt.setString(2, storeVO.getCity());
 			pstmt.setString(3, storeVO.getDistrict());
 			pstmt.setInt(4, storeVO.getPause());
-			pstmt.setInt(5, storeVO.getSid());
+			pstmt.setInt(5, storeVO.getSingle_count());
+			pstmt.setInt(6, storeVO.getMulti_count());
+			pstmt.setInt(7, storeVO.getDiscount_1_money());
+			pstmt.setInt(8, storeVO.getDiscount_1_point());
+			pstmt.setInt(9, storeVO.getDiscount_2_money());
+			pstmt.setInt(10, storeVO.getDiscount_2_point());
+			pstmt.setInt(11, storeVO.getDiscount_3_money());
+			pstmt.setInt(12, storeVO.getDiscount_3_point());
+			pstmt.setInt(13, storeVO.getSid());
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
@@ -167,6 +189,14 @@ public class StoreDAO implements StoreDAO_interface{
 				storeVO.setCity(rs.getString("city"));
 				storeVO.setDistrict(rs.getString("district"));
 				storeVO.setPause(rs.getInt("pause"));
+				storeVO.setSingle_count(rs.getInt("single_count"));
+				storeVO.setMulti_count(rs.getInt("multi_count"));
+				storeVO.setDiscount_1_money(rs.getInt("discount_1_money"));
+				storeVO.setDiscount_1_point(rs.getInt("discount_1_point"));
+				storeVO.setDiscount_2_money(rs.getInt("discount_2_money"));
+				storeVO.setDiscount_2_point(rs.getInt("discount_2_point"));
+				storeVO.setDiscount_3_money(rs.getInt("discount_3_money"));
+				storeVO.setDiscount_3_point(rs.getInt("discount_3_point"));
 			}
 
 			// Handle any driver errors
@@ -221,6 +251,14 @@ public class StoreDAO implements StoreDAO_interface{
 				storeVO.setCity(rs.getString("city"));
 				storeVO.setDistrict(rs.getString("district"));
 				storeVO.setPause(rs.getInt("pause"));
+				storeVO.setSingle_count(rs.getInt("single_count"));
+				storeVO.setMulti_count(rs.getInt("multi_count"));
+				storeVO.setDiscount_1_money(rs.getInt("discount_1_money"));
+				storeVO.setDiscount_1_point(rs.getInt("discount_1_point"));
+				storeVO.setDiscount_2_money(rs.getInt("discount_2_money"));
+				storeVO.setDiscount_2_point(rs.getInt("discount_2_point"));
+				storeVO.setDiscount_3_money(rs.getInt("discount_3_money"));
+				storeVO.setDiscount_3_point(rs.getInt("discount_3_point"));
 				list.add(storeVO); // Store the row in the list
 			}
 

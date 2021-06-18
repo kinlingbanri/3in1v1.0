@@ -36,8 +36,17 @@ public class DeviceVO  implements java.io.Serializable  {
 	@Column(name = "uid")
 	private int uid;
 	
+	@Column(name = "status")
+	private int status;
+	
 	@Column(name = "add_status")
-	private int add_status;	
+	private int add_status;
+	
+	@Column(name = "point")
+	private int point;
+	
+	@Column(name = "add_point")
+	private int add_point;
 	
 	@Column(name = "100_count")
 	private int count_100;	
@@ -48,14 +57,11 @@ public class DeviceVO  implements java.io.Serializable  {
 	@Column(name = "1000_count")
 	private int count_1000;	
 	
-	@Column(name = "maid")
-	private int maid;
+	@Column(name = "sid")
+	private int sid;
 	
 	@Column(name = "mid")
 	private String mid;
-	
-	@Column(name = "status")
-	private int status;
 	
 	@Column(name = "error")
 	private int error;
@@ -135,11 +141,11 @@ public class DeviceVO  implements java.io.Serializable  {
 	public void setCount_1000(int count_1000) {
 		this.count_1000 = count_1000;
 	}
-	public int getMaid() {
-		return maid;
+	public int getSid() {
+		return sid;
 	}
-	public void setMaid(int maid) {
-		this.maid = maid;
+	public void setSid(int sid) {
+		this.sid = sid;
 	}
 	public String getMid() {
 		return mid;
@@ -177,4 +183,17 @@ public class DeviceVO  implements java.io.Serializable  {
 	public void setFreecountset(int freecountset) {
 		this.freecountset = freecountset;
 	}
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
+	}
+	public int getAdd_point() {
+		return add_point;
+	}
+	public void setAdd_point(int add_point) {
+		this.add_point = add_point;
+	}
+	
 }

@@ -1,3 +1,5 @@
+<%@page import="com.store.model.StoreService"%>
+<%@page import="com.store.model.StoreVO"%>
 <%@page import="com.history.model.DeviceJsonObject"%>
 <%@page import="com.history.model.HistoryService"%>
 <%@page import="com.history.model.HistoryVO"%>
@@ -19,8 +21,13 @@
 	int lastPage = pageTotal * 100;
 	System.out.println("pageTatal : " + pageTotal);
 
-	List<DeviceJsonObject> deviceJsonObjects = historyService.getAllByDid(did, 1, 100);
-	request.setAttribute("deviceJsonObjects", deviceJsonObjects);
+// 	List<DeviceJsonObject> deviceJsonObjects = historyService.getAllByDid(did, 1, 100);
+// 	request.setAttribute("deviceJsonObjects", deviceJsonObjects);
+	
+	StoreService storeService = new StoreService();
+	List<StoreVO> storeVOs = storeService.getAll();
+	request.setAttribute("storeVOs", storeVOs);
+
 %>
 
 <!DOCTYPE html>
@@ -41,7 +48,7 @@
 <link href="css/googlefont.css" rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link href="css/sb-admin-2.min.css" rel="stylesheet">
+<link href="css/sb-admin-2.css" rel="stylesheet">
 
 <link rel="stylesheet" href="./css/jquery-ui.css">
 
@@ -154,8 +161,7 @@
 	animation: spin 2s linear infinite;
 }
 
-@
--webkit-keyframes spin { 0% {
+@-webkit-keyframes spin { 0% {
 	-webkit-transform: rotate(0deg);
 }
 
@@ -183,8 +189,7 @@ transform:rotate(360deg);
 	animation-duration: 1s
 }
 
-@
--webkit-keyframes animatebottom {from { bottom:-100px;
+@-webkit-keyframes animatebottom {from { bottom:-100px;
 	opacity: 0
 }
 
@@ -194,8 +199,7 @@ to {
 }
 
 }
-@
-keyframes animatebottom {from { bottom:-100px;
+@keyframes animatebottom {from { bottom:-100px;
 	opacity: 0
 }
 
@@ -209,6 +213,11 @@ to {
 	display: none;
 	text-align: center;
 }
+
+  .col-sm-4 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
 </style>
 
 <!-- date range picker -->
@@ -232,7 +241,7 @@ to {
 <script>
 
     $( function() {
-			$("#divDataTable").show();
+			//$("#divDataTable").show();
         
         $( "#slider-vertical" ).slider({
           range: "min",
@@ -300,6 +309,35 @@ to {
       });
 
     </script>
+    
+    <script>
+    Date.prototype.yyyymmdd = function() {
+    	  var mm = this.getMonth() + 1; // getMonth() is zero-based
+    	  var dd = this.getDate();
+
+    	  return [this.getFullYear(),
+    	          (mm>9 ? '' : '0') + mm,
+    	          (dd>9 ? '' : '0') + dd
+    	         ].join('-');
+    	};
+
+    	var date = new Date();
+    	date.yyyymmdd();
+    	console.log("Today : " + date.yyyymmdd());
+    </script>
+    
+<script>
+
+$(function() {
+	$("#report").click(function(){
+		$("#reportPages").slideToggle(150);
+	});
+	$("#setting").click(function(){
+		$("#settingPages").slideToggle(150);
+	});
+});
+
+</script>
 </head>
 
 <body id="page-top">
@@ -308,9 +346,7 @@ to {
 	<div id="wrapper">
 
 		<!-- Sidebar -->
-		<ul
-			class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-			id="accordionSidebar">
+		<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 			<!-- Sidebar - Brand -->
 			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="./index.jsp">
@@ -318,29 +354,76 @@ to {
 			</a>
 
 			<!-- Nav Item - Pages Collapse Menu -->
-			<li class="nav-item"><a class="nav-link collapsed" href="#"
-				data-toggle="collapse" data-target="#collapsePages"
-				aria-expanded="true" aria-controls="collapsePages"> <i
-					class="fas fa-fw fa-folder"></i> <span>設備</span>
-			</a>
-				<div id="collapsePages" class="collapse"
-					aria-labelledby="headingPages" data-parent="#accordionSidebar">
+<!-- 			<li class="nav-item"> -->
+<!-- 				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" -->
+<!-- 									aria-expanded="true" aria-controls="collapsePages"> -->
+<!-- 					<i class="fas fa-fw fa-folder"></i> -->
+<!-- 					<span>營運管理</span> -->
+<!-- 				</a> -->
+<!-- 				<div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar"> -->
+<!-- 					<div class="bg-white py-2 collapse-inner rounded"> -->
+<!-- 						<a class="collapse-item" href="./devices.jsp">店家管理</a> -->
+<!-- 						<a class="collapse-item" href="./devices.jsp">設備管理</a> -->
+<!-- 						                        <h6 class="collapse-header">Login Screens:</h6> -->
+<!-- 						                        <a class="collapse-item" href="register.html">Register</a> -->
+<!-- 						                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
+<!-- 						                        <div class="collapse-divider"></div> -->
+<!-- 						                        <h6 class="collapse-header">Other Pages:</h6> -->
+<!-- 						                        <a class="collapse-item" href="404.html">404 Page</a> -->
+<!-- 						                        <a class="collapse-item" href="blank.html">Blank Page</a> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</li> -->
+			<!-- End Nav Item - Pages Collapse Menu -->
+			
+			
+			
+			
+			<!-- Nav Report - Pages Collapse Menu -->
+			<li class="nav-item">
+				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="reportPages"
+									aria-expanded="true" aria-controls="reportPages" id="report">
+					<i class="fas fa-fw fa-folder"></i>
+					<span>營運報表</span>
+				</a>
+				<div id="reportPages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
 					<div class="bg-white py-2 collapse-inner rounded">
-						<!--                         <h6 class="collapse-header">Login Screens:</h6> -->
-						<a class="collapse-item" href="./devices.jsp">設備管理</a>
-						<!--                         <a class="collapse-item" href="register.html">Register</a> -->
-						<!--                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
-						<!--                         <div class="collapse-divider"></div> -->
-						<!--                         <h6 class="collapse-header">Other Pages:</h6> -->
-						<!--                         <a class="collapse-item" href="404.html">404 Page</a> -->
-						<!--                         <a class="collapse-item" href="blank.html">Blank Page</a> -->
+						<a class="collapse-item" href="#">店家資訊</a>
+						<a class="collapse-item" href="./devicehistory.jsp">設備資訊</a>
 					</div>
-				</div></li>
+				</div>
+			</li>
+			<!-- End Nav Report - Pages Collapse Menu -->
 
 			<!-- Nav Item - Members -->
 			<li class="nav-item"><a class="nav-link" href="./members.jsp">
-					<i class="fas fa-fw fa-table"></i> <span>會員</span>
+					<i class="fas fa-fw fa-table"></i>
+					<span>會員</span>
 			</a></li>
+
+			
+			<!-- Nav Setting - Pages Collapse Menu -->
+			<li class="nav-item">
+				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="reportPages"
+									aria-expanded="true" aria-controls="reportPages" id="setting">
+					<i class="fas fa-fw fa-folder"></i>
+					<span>參數設定</span>
+				</a>
+				<div id="settingPages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+					<div class="bg-white py-2 collapse-inner rounded">
+						<a class="collapse-item" href="#">優惠設定</a>
+						<a class="collapse-item" href="#">簡訊機設定</a>
+					</div>
+				</div>
+			</li>
+			<!-- End Nav Setting - Pages Collapse Menu -->
+			
+			
+			
+			
+			
+
+
 
 			<!-- Divider -->
 			<!--             <hr class="sidebar-divider d-none d-md-block"> -->
@@ -374,7 +457,7 @@ to {
 						<li class="nav-item dropdown no-arrow">
 							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
 										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+								<span class="mr-2 d-none d-lg-inline text-gray-600 small" style="display: inline !important;">Admin</span>
 								<!--                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg"> -->
 							</a>
 							<!-- Dropdown - User Information -->
@@ -411,22 +494,60 @@ to {
 							<h6 class="m-0 font-weight-bold text-primary" style="float: left;">設備記錄</h6>
 							<button class="btn btn-success" type="button" id="btnOutExcel" style="float: right;">輸出excel</button>
 						</div>
-						
-						<div id="divSearch">
-							<h5>請選擇日期:</h5>
-							<input class="default" type="text" id="inputDateRangePicker" style="width: 220px;"/>
-							<h5>請選擇加值或消費:</h5>
-							<div class="btn-group">
-							  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							    加值
-							  </button>
-							  <div class="dropdown-menu">
-							    <a class="dropdown-item" href="#">加值</a>
-							    <a class="dropdown-item" href="#">消費</a>
-							  </div>
+						<button class="btn btn-success" type="button" style="width:96%; margin:8px 0 0 2%;" id="btnSetQuery">設定查詢條件</button>
+						<div id="divSearch" style="margin: 12px;">
+							<div style="background-color: #DFFFDF; height: 76px;">
+								<div style="width:100%; float:left;">
+									<h5 style="float:left;">請選擇日期:</h5>
+								</div>
+								<input class="default form-control" type="text" id="inputDateRangePicker" style="width: 226px; float:left;" />
+								<span class="fa fa-calendar" style="font-size: 28px; margin: 6px; cursor:pointer;"></span>
+							</div>
+							<div style="margin: 24px 0 24px 0; background-color: #F1E1FF;">
+								<div style="width:100%; float:left;">
+									<h5 style="float:left;">請選擇加值或消費:</h5>
+								</div>
+								<div class="btn-group">
+								  <button id="btnAS" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    加值
+								  </button>
+								  <div class="dropdown-menu" id="dropdownList">
+								    <a class="dropdown-item" href="#">加值</a>
+								    <a class="dropdown-item" href="#">消費</a>
+								  </div>
+								</div>
+							</div>
+							<div style="background-color: #FFE6D9;">
+								<div style="width:100%; float:left;">
+									<h5 style="float:left;">請選擇店家:</h5>
+									<h5 style="float:left;" id="selectST">${storeVOs.get(0).getName()}</h5>
+								</div>
+								<button class="btn btn-info" type="button" id="btnSelectStore">選擇店家</button>
+								<div class="container" id="divStoreList" style="display:none;">
+							    <div class="row">
+							        <c:forEach items="${storeVOs}" var="store" varStatus="id">
+													<div class="col-sm-4 py-2">
+									            <div class="card h-100 border-primary" style="text-align: center; cursor:pointer;">
+									                <div class="card-body">
+									                    <h3 class="card-title" style="font-size: 1.2rem; font-weight: 560;">${store.name}</h3>
+									                </div>
+									            </div>
+									        </div>
+											</c:forEach>
+							        
+							        
+
+							        
+							        
+							    </div>
+							    <!--  End Row -->
+							</div>
+
+								
+								
 							</div>
 						</div>
-						
+						<button class="btn btn-success" type="button" style="width:96%; margin:8px 0 8px 2%;" id="btnQuery">查詢</button>
 
 						<!-- Div Data Table -->
 						<div style="width: 96%; margin-left: 2%; display:none;" id="divDataTable">
@@ -440,9 +561,8 @@ to {
 							</div>
 							<div style="float: right;">
 								<p>
-									<label for="amount">當前頁數(每頁100筆):</label> <input type="text"
-										id="amount"
-										style="border: 0; color: #f6931f; font-weight: bold; width: 120px;"
+									<label for="amount">當前頁數(每頁100筆):</label>
+										<input type="text" id="amount" style="border: 0; color: #f6931f; font-weight: bold; width: 120px;"
 										oninput="value=value.replace(/[^\d]/g,'')">
 								</p>
 							</div>
@@ -451,22 +571,21 @@ to {
 
 							<div class="card-body">
 								<div class="table-responsive">
-									<table class='table table-striped table-bordered display' id='dataTable' width='100%' cellspacing='0'>
+									<table class='table table-striped table-bordered display' width='100%' cellspacing='0' style="width: 99.4%; margin: 2px;" id='dataTable'>
 										<thead>
 											<tr>
-												<th>時間</th>
-												<th>訊息</th>
+<!-- 												<th></th> -->
+<!-- 												<th></th> -->
 											</tr>
 										</thead>
 										<tbody>
-											<c:url var="url" value="/AdminModifyMemberServlet" />
-											<c:forEach items="${deviceJsonObjects}" var="devicejson"
-												varStatus="id">
-												<tr id="tr${id.count}">
-													<td>${devicejson.ttime }</td>
-													<td>${devicejson.event }</td>
-												</tr>
-											</c:forEach>
+<%-- 											<c:url var="url" value="/AdminModifyMemberServlet" /> --%>
+<%-- 											<c:forEach items="${deviceJsonObjects}" var="devicejson" varStatus="id"> --%>
+<%-- 												<tr id="tr${id.count}"> --%>
+<%-- 													<td>${devicejson.ttime }</td> --%>
+<%-- 													<td>${devicejson.event }</td> --%>
+<!-- 												</tr> -->
+<%-- 											</c:forEach> --%>
 										</tbody>
 									</table>
 								</div>
@@ -562,28 +681,37 @@ to {
 
 		<script>
 
+		  // Toggle the side navigation
+		  $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
+		    $("body").toggleClass("sidebar-toggled");
+		    $(".sidebar").toggleClass("toggled");
+		    if ($(".sidebar").hasClass("toggled")) {
+		      $('.sidebar .collapse').collapse('hide');
+		    };
+		  });
+		
 		$("#inputDateRangePicker").daterangepicker({
 			"alwaysShowCalendars": true,
 			opens: "right",
-			startDate: "2017-08-01",
-			endDate: "2017-09-01",
-			ranges: {
-			"今天": [moment(), moment()],
-			"過去 7 天": [moment().subtract(6, "days"), moment()],
-			"本月": [moment().startOf("month"), moment().endOf("month")],
-			"上個月": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
-			},
+			startDate: date.yyyymmdd(),
+			endDate: date.yyyymmdd(),
+// 			ranges: {
+// 				"今天": [moment(), moment()],
+// 				"過去 7 天": [moment().subtract(6, "days"), moment()],
+// 				"本月": [moment().startOf("month"), moment().endOf("month")],
+// 				"上個月": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")]
+// 			},
 			locale: {
-			format: "YYYY-MM-DD",
-			separator: " ~ ",
-			applyLabel: "確定",
-			cancelLabel: "清除",
-			fromLabel: "開始日期",
-			toLabel: "結束日期",
-			customRangeLabel: "自訂日期區間",
-			daysOfWeek: ["日", "一", "二", "三", "四", "五", "六"],
-			monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
-			firstDay: 1
+				format: "YYYY-MM-DD",
+				separator: " ~ ",
+				applyLabel: "確定",
+				cancelLabel: "清除",
+				fromLabel: "開始日期",
+				toLabel: "結束日期",
+				customRangeLabel: "自訂日期區間",
+				daysOfWeek: ["日", "一", "二", "三", "四", "五", "六"],
+				monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+				firstDay: 1
 			}
 		});
 
@@ -641,8 +769,132 @@ to {
 
 		}
 
+		function query(){
+			var dateRange = $("#inputDateRangePicker").val();
+			var selectAS = $("#btnAS").text();
+			var storeName = $("#selectST").text();
+
+			console.log( "dateRange : " + dateRange + "; selectAS :  " + selectAS + "; storeName : " + storeName);
+			
+  			$.ajax({
+	  			  type: 'post',                     //GET or POST
+	  				dataType : "json",
+	  			  url: "../DeviceQueryHistorySevlet",            //請求的頁面
+	  			  cache: false,                     //防止抓到快取的回應
+	  			  data: {
+	  					dateRange : dateRange,
+	  					selectAS : selectAS,
+	  					storeName : storeName
+	  			  },
+	  			  success: function (jsonObject) {         //當請求成功後此事件會被呼叫
+	  					console.log( jsonObject);
+							var addRecordVOs = jsonObject["addRecordVOs"];
+							console.log("addRecordVOs:" + addRecordVOs);
+							
+							var count = addRecordVOs.length;
+
+							$("#dataTable").find('thead')
+									.append($('<tr>')
+											.append($('<td>')
+												.text("時間")
+											)
+											.append($('</td>'))
+											.append($('<td>')
+												.text("加值金額")
+											)
+											.append($('</td>'))
+											.append($('<td>')
+												.text("儲值點數")
+											)
+											.append($('</td>'))
+								).append($('</tr>')
+
+								);
+
+							
+							for(var i = 0; i < count; i++){
+								var addRecord = addRecordVOs[i];
+
+								console.log(addRecord);
+								var totalMoney = (addRecord["paper100"] * 100) +
+																		(addRecord["paper500"] * 500) +
+																		(addRecord["paper1000"] * 1000);
+								var eventStr = "加值金額" +  totalMoney + "元," +
+																"儲值點數" + addRecord.point + "點";
+								console.log("eventStr:" + eventStr);
+								console.log("storedatetime:" + addRecord["storedatetime"].split(' ')[0]);
+			  				    $("#dataTable").find('tbody')
+			  				    .append($('<tr>')
+												.append($('<td>')
+													.text(addRecord["storedatetime"].split(' ')[0])
+												)
+												.append($('</td>'))
+												.append($('<td>')
+													.text(totalMoney)
+												)
+												.append($('</td>'))
+												.append($('<td>')
+													.text(addRecord.point)
+												)
+												.append($('</td>'))
+										).append($('</tr>'));
+							}
+
+							$("#dataTable thead").css('text-align','center');
+							$("#dataTable tbody").css('text-align','center');
+			  				
+								$( "#slider-vertical" ).slider( "enable" );
+								$("#amount").prop('disabled', false);
+								$("#totalCount").text(count);
+								$("#slider-vertical").slider("value", 1);
+								var newPageCount = (count / 100) + 1;
+								$( "#slider-vertical" ).slider("option", "max", newPageCount);
+	  			  },
+	  			  error: function(e){
+	  			  	console.log("e: " + e);
+	  			  },            //當請求失敗後此事件會被呼叫
+	  			  statusCode: {                     //狀態碼處理
+	  			    404: function() {
+	  			      alert("page not found");
+	  			    }
+	  			  }
+	  			});
+		}
+
 		$(document).ready(function() {
 			$( "#amount" ).val(1);
+		});
+
+		$("#btnSetQuery").on('click', function(){
+			$("#divSearch").show();
+			$("#divDataTable").hide();
+			$("#divDataTable thead tr").empty();
+			$("#divDataTable tbody tr").empty();
+			$("#btnQuery").attr("disabled", false);
+		});
+
+		$("#btnQuery").on('click', function(){
+			$("#divSearch").hide();
+			query();
+			$("#divDataTable").show();
+			$("#btnQuery").attr("disabled", true);
+		});
+		
+		$('.fa-calendar').click(function() {
+		    $("#inputDateRangePicker").focus();
+		  });
+
+		$("#dropdownList a").on('click', function(){
+			$("#btnAS").text($(this).text());			
+		});		
+		
+		$("#btnSelectStore").click(function(){
+			$("#divStoreList").toggle();
+		});
+
+		$(".card-title").click(function(e){
+			$("#selectST").text($(this).text());
+			$("#divStoreList").hide();
 		});
 
 		$("#amount").blur(function(){

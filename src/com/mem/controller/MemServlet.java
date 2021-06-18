@@ -41,19 +41,19 @@ public class MemServlet extends HttpServlet {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		String DID = req.getParameter("DID");
-		String MAID = req.getParameter("MAID");
+		String SID = req.getParameter("SID");
 
 		System.out.println("memservlet req username : " + username);
 		System.out.println("memservlet req password : " + password);
 		System.out.println("memservlet req DID : " + DID);
-		System.out.println("memservlet req MAID : " + MAID);
+		System.out.println("memservlet req SID : " + SID);
 		
 		String sessionDID = req.getSession().getAttribute("DID").toString();
-		String sessionMAID = req.getSession().getAttribute("MAID").toString();
+		String sessionSID = req.getSession().getAttribute("SID").toString();
 		System.out.println("memservlet session DID : " + sessionDID);
-		System.out.println("memservlet session MAID : " + sessionMAID);
+		System.out.println("memservlet sessionSID : " + sessionSID);
 		
-		String machineStr = sessionMAID.substring(0, 3);
+		String machineStr = sessionDID.substring(0, 2);
 		System.out.println("machineStr : " + machineStr);
 		
 		MemService memService = new MemService();
