@@ -1,7 +1,5 @@
 package com.mem.controller;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
@@ -20,13 +18,8 @@ import org.json.JSONObject;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
+import utils.EmailUtil;
 import utils.Random4;
-import utils.TXRXSend;
-import java.io.OutputStream;
-import java.util.Enumeration;
-
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
 
 @WebServlet("/VarificationServlet")
 public class VarificationServlet extends HttpServlet {
@@ -50,19 +43,19 @@ public class VarificationServlet extends HttpServlet {
 		String username = req.getParameter("username");
 		String code = req.getParameter("code");
 		String DID = req.getParameter("DID");
-		String MAID = req.getParameter("MAID");
+		String MACHID = req.getParameter("MACHID");
 
 		System.out.println("memservlet req username : " + username);
 		System.out.println("memservlet req code : " + code);
 		System.out.println("memservlet req DID : " + DID);
-		System.out.println("memservlet req MAID : " + MAID);
+		System.out.println("memservlet req MACHID : " + MACHID);
 		
 		String sessionDID = req.getSession().getAttribute("DID").toString();
-		String sessionMAID = req.getSession().getAttribute("MAID").toString();
+		String sessionMACHID = req.getSession().getAttribute("MACHID").toString();
 		System.out.println("memservlet session DID : " + sessionDID);
-		System.out.println("memservlet session MAID : " + sessionMAID);
+		System.out.println("memservlet sessionMACHID : " + sessionMACHID);
 		
-		String machineStr = sessionMAID.substring(0, 3);
+		String machineStr = sessionMACHID.substring(0, 2);
 		System.out.println("machineStr : " + machineStr);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -117,7 +110,7 @@ public class VarificationServlet extends HttpServlet {
 						memVO.setVerification(4);
 					}
 				}
-				
+				System.out.println("Varificationing...");
 				String newCode = Random4.getRandomCharArray();
 				testCode = newCode;
 				memVO.setVerificationcode(newCode);
@@ -140,6 +133,11 @@ public class VarificationServlet extends HttpServlet {
 				String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " 您的驗證碼為:" + newCode;
 				//Runtime.getRuntime().exec( "cmd /c java -jar C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar COM8 OOOOKKKK" );
 				Runtime.getRuntime().exec(commandStr);
+				System.out.println("Sending 簡訊 ...");
+				
+				EmailUtil.sendEmail(memVO.getEmail(), "van@tongya.com.tw",
+						"mail.tongya.com.tw", "驗證碼", "您的驗證碼為 : " + newCode);
+				System.out.println("Sending Email ...");
 				
 				jsonObject.put("state", "2");
 			}
@@ -147,6 +145,7 @@ public class VarificationServlet extends HttpServlet {
 
 		jsonObject.put("type", machineStr);
 		jsonObject.put("testCode", testCode);
+		jsonObject.put("name", username);
 		
 		out.write(jsonObject.toString());
 		out.flush();

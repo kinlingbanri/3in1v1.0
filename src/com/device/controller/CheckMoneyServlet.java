@@ -68,6 +68,8 @@ public class CheckMoneyServlet extends HttpServlet {
 				totalPoint = totalMoney + ( storeVO.getDiscount_2_point() - storeVO.getDiscount_2_money());
 			}else if(totalMoney >= storeVO.getDiscount_1_money()) {
 				totalPoint = totalMoney + ( storeVO.getDiscount_1_point() - storeVO.getDiscount_1_money());
+			}else {
+				totalPoint = totalMoney;
 			}
 			System.out.println("totalPoint : " + totalPoint);
 			

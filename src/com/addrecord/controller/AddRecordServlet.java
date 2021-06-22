@@ -91,6 +91,7 @@ public class AddRecordServlet extends HttpServlet {
 		addRecordVO.setDeviceid(deviceVO.getDid());
 		addRecordVO.setDeviceNumber(deviceVO.getNumber());
 		addRecordVO.setStoreid(sid);
+		addRecordVO.setStorename(storeVO.getName());
 		new AddRecordService().insertRecord(addRecordVO);
 		
 		//完成交易,更新Device狀態

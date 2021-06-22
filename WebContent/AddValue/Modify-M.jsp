@@ -196,8 +196,7 @@
   
   <!-- .navbar-expand-{sm|md|lg|xl}決定在哪個斷點以上就出現漢堡式選單 -->
   <!-- navbar-dark 文字顏色 .bg-dark 背景顏色 -->
-  <!-- .navbar-expand-{sm|md|lg|xl}決定在哪個斷點以上就出現漢堡式選單 -->
-  <!-- navbar-dark 文字顏色 .bg-dark 背景顏色 -->
+
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0093E9; background-image: linear-gradient(340deg, #0093E9 0%, #80D0C7 100%); //background-color:#91989F  !important;">
     <!-- .navbar-brand 左上LOGO位置 -->
     <a class="navbar-brand" href="#">
@@ -244,27 +243,27 @@
 		<div class="login-wrap" style="box-shadow: none;">
 			<div class="login-html" style="background: none;">
 				<input id="tab-1" type="radio" name="tab" class="sign-in" checked>
-				<label for="tab-1" class="tab" style="font-size: 20px; font-weight:bold;">密碼</label>
+				<label for="tab-1" class="tab" style="font-size: 20px; font-weight:bold; margin: 0 10px 10px 0;">密碼</label>
 				<input id="tab-2" type="radio" name="tab" class="phone">
-				<label for="tab-2" class="tab" style="font-size: 20px; font-weight:bold;">號碼</label>
+				<label for="tab-2" class="tab" style="font-size: 20px; font-weight:bold; margin: 0 10px 10px 0;">號碼</label>
 				<input id="tab-3" type="radio" name="tab" class="sign-up">
-				<label for="tab-3" class="tab" style="font-size: 20px; font-weight:bold;">Email</label>
+				<label for="tab-3" class="tab" style="font-size: 20px; font-weight:bold; margin: 0 10px 10px 0;">Email</label>
 				
 				<div class="login-form" style="margin-top: 16px;">
 				
 					<!-- Password form -->
 					<div class="sign-in-htm" id="signin">
 						<div class="group">
-							<label for="user" class="label" style="font-size:18px; color:#ff8033;">原密碼:${memVO.getPassword() }</label>
+							<label for="user" class="label" style="font-size:16px; color:#ff8033;">原密碼:${memVO.getPassword() }</label>
 							
 <!-- 							<input id="password" type="text" class="input" name="password" style="margin-top: 6px; font-size: 16px;"> -->
 						</div>
 						<div class="group">
-							<label for="pass" class="label" style="font-size:18px;">新密碼</label>
+							<label for="pass" class="label" style="font-size:16px;">新密碼</label>
 							<input id="newPassword" type="text" class="input" name="newPassword" style="margin-top: 6px; font-size: 16px;">
 						</div>
 						<div class="group">
-							<label for="pass" class="label" style="font-size:18px;">再輸入一次新密碼</label>
+							<label for="pass" class="label" style="font-size:16px;">再輸入一次新密碼</label>
 							<input id="checkNewPassword" type="text" class="input" name="checkNewPassword" style="margin-top: 6px; font-size: 16px;">
 						</div>
 						<div class="group" style="margin-top: 48px;">
@@ -278,15 +277,15 @@
 					<!-- Phone form -->
 					<div class="phone-htm" id="divPhone">
 						<div class="group">
-							<label for="user" class="label" style="font-size: 18px; color:#ff8033;">原號碼:${memVO.getPhone() }</label>
+							<label for="user" class="label" style="font-size: 16px; color:#ff8033;">原號碼:${memVO.getPhone() }</label>
 <!-- 							<input id="phone" type="text" class="input" style="margin-top: 6px; font-size: 16px;"> -->
 						</div>
 						<div class="group">
-							<label for="pass" class="label" style="font-size: 18px;">新號碼</label>
+							<label for="pass" class="label" style="font-size: 16px;">新號碼</label>
 							<input id="newPhone" type="text" class="input" style="margin-top: 6px; font-size: 16px; color:#AAA;">
 						</div>
 						<div class="group">
-							<label for="pass" class="label" style="font-size: 18px;">再輸入一次新號碼</label>
+							<label for="pass" class="label" style="font-size: 16px;">再輸入一次新號碼</label>
 							<input id="checkNewPhone" type="text" class="input" style="margin-top: 6px; font-size: 16px; color:#AAA;">
 						</div>
 						<div class="group" style="margin-top: 48px;">
@@ -299,15 +298,15 @@
 					<!-- Email form -->
 					<div class="sign-up-htm" id="signup">
 						<div class="group">
-							<label for="user" class="label" style="font-size: 18px; color:#ff8033;">原Email:${memVO.getEmail() }</label>
+							<label for="user" class="label" style="font-size: 16px; color:#ff8033;">原Email:${memVO.getEmail() }</label>
 <!-- 							<input id="email" type="text" class="input" style="margin-top: 6px; font-size: 16px;"> -->
 						</div>
 						<div class="group">
-							<label for="pass" class="label" style="font-size: 18px;">新Email</label>
+							<label for="pass" class="label" style="font-size: 16px;">新Email</label>
 							<input id="newEmail" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
 						</div>
 						<div class="group">
-							<label for="pass" class="label" style="font-size: 18px;">再輸入一次新Email</label>
+							<label for="pass" class="label" style="font-size: 16px;">再輸入一次新Email</label>
 							<input id="checkNewEmail" type="text" class="input" style="margin-top: 6px; font-size: 16px;">
 						</div>
 						<div class="group" style="margin-top: 48px;">

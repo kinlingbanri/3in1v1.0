@@ -42,6 +42,8 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 					+ "sid=?, mid=? where did = ?";
 	private static final String UPDATE_STATUS_STMT = 
 			"UPDATE device set status=? where number = ?";
+	private static final String UPDATE_CONSUMPTION_STMT = 
+			"UPDATE device set status=?, machid=?, freecount=? where number = ?";
 	private static final String UPDATE_ADD_STATUS_11_STMT = 
 			"UPDATE device set add_status=?, point=? where number = ?";
 	private static final String UPDATE_ADD_STATUS_13_STMT = 
@@ -114,6 +116,8 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 		
 //		dao.updateAddStatus13("TY00031", 11, 1600);
 		
+		//Update Consumption
+		dao.updateConsumption("TY00001", 0, 8, 10);
 		
 //		// Delete
 //		DeviceVO deviceVO = new DeviceVO();
@@ -161,29 +165,29 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 //		System.out.println(deviceVO.getMid());
 		
 		// Query All
-		List<DeviceVO> list = dao.getAll();
-		for (DeviceVO deviceVO : list) {
-			System.out.print(deviceVO.getDid() + ",");
-			System.out.print(deviceVO.getNumber() + ",");
-			System.out.print(deviceVO.getCoin() + ",");
-			System.out.print(deviceVO.getPaper() + ",");
-			System.out.print(deviceVO.getLocation() + ",");
-			System.out.print(deviceVO.getRefund() + ",");
-			System.out.print(deviceVO.getUid() + ",");
-			System.out.print(deviceVO.getStatus() + ",");
-			System.out.print(deviceVO.getAdd_status() + ",");		
-			System.out.print(deviceVO.getCount_100() + ",");
-			System.out.print(deviceVO.getCount_500() + ",");
-			System.out.print(deviceVO.getCount_1000() + ",");
-			System.out.print(deviceVO.getPoint() + ",");
-			System.out.print(deviceVO.getAdd_point() + ",");		
-			System.out.print(deviceVO.getError() + ",");
-			System.out.print(deviceVO.getMachid() + ",");
-			System.out.print(deviceVO.getFreecount() + ",");
-			System.out.print(deviceVO.getFreecountset() + ",");
-			System.out.print(deviceVO.getSid() + ",");
-			System.out.println(deviceVO.getMid());
-		}
+//		List<DeviceVO> list = dao.getAll();
+//		for (DeviceVO deviceVO : list) {
+//			System.out.print(deviceVO.getDid() + ",");
+//			System.out.print(deviceVO.getNumber() + ",");
+//			System.out.print(deviceVO.getCoin() + ",");
+//			System.out.print(deviceVO.getPaper() + ",");
+//			System.out.print(deviceVO.getLocation() + ",");
+//			System.out.print(deviceVO.getRefund() + ",");
+//			System.out.print(deviceVO.getUid() + ",");
+//			System.out.print(deviceVO.getStatus() + ",");
+//			System.out.print(deviceVO.getAdd_status() + ",");		
+//			System.out.print(deviceVO.getCount_100() + ",");
+//			System.out.print(deviceVO.getCount_500() + ",");
+//			System.out.print(deviceVO.getCount_1000() + ",");
+//			System.out.print(deviceVO.getPoint() + ",");
+//			System.out.print(deviceVO.getAdd_point() + ",");		
+//			System.out.print(deviceVO.getError() + ",");
+//			System.out.print(deviceVO.getMachid() + ",");
+//			System.out.print(deviceVO.getFreecount() + ",");
+//			System.out.print(deviceVO.getFreecountset() + ",");
+//			System.out.print(deviceVO.getSid() + ",");
+//			System.out.println(deviceVO.getMid());
+//		}
 	}
 
 	@Override
@@ -218,12 +222,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -313,12 +315,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -379,12 +379,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -456,12 +454,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -512,12 +508,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -572,12 +566,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -627,12 +619,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -676,12 +666,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -717,12 +705,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -758,12 +744,10 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -798,16 +782,14 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 
 			while (rs.next()) {
 				count = rs.getInt("auto_increment");
-			}			
+			}
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -833,5 +815,46 @@ public class DeviceJDBCDAO implements DeviceDAO_interface{
 			}
 		}
 		return count;
+	}
+
+	@Override
+	public void updateConsumption(String number, int status, int serial, int freecount) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(UPDATE_CONSUMPTION_STMT);
+			
+			pstmt.setInt(1, 		status);
+			pstmt.setInt(2, 		serial);
+			pstmt.setInt(3, 		freecount);			
+			pstmt.setString(4, 	number);
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 	}
 }

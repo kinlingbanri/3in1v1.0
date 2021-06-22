@@ -2,6 +2,7 @@ package com.device.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,16 +10,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.ss.formula.functions.Count;
 import org.json.JSONObject;
 
 import com.device.model.DeviceService;
 import com.device.model.DeviceVO;
+import com.history.model.HistoryService;
+import com.history.model.HistoryVO;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
-import java.util.Timer; 
-import java.util.TimerTask;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @WebServlet("/FreeCountServlet")
 public class FreeCountServlet extends HttpServlet {
@@ -43,42 +46,58 @@ public class FreeCountServlet extends HttpServlet {
 		
 		String username = req.getParameter("username");
 		String did = req.getParameter("did");
-		int machid = Integer.parseInt(req.getParameter("machid"));
-		int status = Integer.parseInt(req.getParameter("status"));
-		String mempoint = req.getParameter("mempoint");
-		String consumptionPoint = req.getParameter("consumptionPoint");
-		int freecount = Integer.parseInt(req.getParameter("freecount"));
-		String number = req.getParameter("number");
-		req.getSession().setAttribute("DID", did);
-		req.getSession().setAttribute("MAID", number);
-		
-		System.out.println("username : " + username);
-		System.out.println("did : " + did);
-		System.out.println("machid : " + machid);
-		System.out.println("status : " + status);
-		System.out.println("mempoint : " + mempoint);
-		System.out.println("consumptionPoint : " + consumptionPoint);
-		System.out.println("freecount : " + freecount);
-		System.out.println("number : " + number);
+		String consumptioning = req.getParameter("consumptioning");
 		
 		DeviceVO deviceVO = new DeviceService().getOneDevice(did);
-		deviceVO.setMachid(machid);
-		deviceVO.setFreecount(freecount);
-		deviceVO.setStatus(status);
-		new DeviceService().updateDevice(deviceVO);
-		
-		MemVO memVO = new MemService().getOneMem(username);		
-		int balance = Integer.parseInt(mempoint) - Integer.parseInt(consumptionPoint);
-		memVO.setPoint(balance);
-		System.out.println("username : " + memVO.getUsername());
-		System.out.println("email : " + memVO.getEmail());
-		System.out.println("pwd : " + memVO.getPassword());
-		System.out.println("point:" + memVO.getPoint());
-		
-		new MemService().updateMem(memVO);
+		int status = deviceVO.getStatus();
+		if((status == 1) || (status == 2)) {
+			int freecount = Integer.parseInt(req.getParameter("freecount"));
+			int serial = Integer.parseInt(req.getParameter("serial"));
+			System.out.println("freecount : "  + freecount);
+			System.out.println("serial : "  + serial);
+			
+			new DeviceService().updateConsumption(did, 0, serial, freecount);
+			
+			if(consumptioning.equals("0")) {
+				jsonObject.put("state", 1);
+			}else {				
+				String mempointStr = req.getParameter("mempoint");
+				String consumptionPointStr = req.getParameter("consumptionPoint");
+				String storeInfo = req.getParameter("storeInfo");
+				
+				
+				MemVO memVO = new MemService().getOneMem(username);
+				int consumptionPoint = Integer.parseInt(consumptionPointStr);
+				int mempoint = Integer.parseInt(mempointStr);
+				int balance = mempoint - consumptionPoint;
+				memVO.setPoint(balance);
+				
+				new MemService().updateMem(memVO);
+				
+				HistoryVO historyVO = new HistoryVO();
+				Date date = new Date();	//Get now
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Timestamp ts = new Timestamp(date.getTime());
+				System.out.println(formatter.format(ts));
+				historyVO.setTtime(ts);
+				
+				historyVO.setDid(deviceVO.getDid());
+				historyVO.setMaid(serial);
+				historyVO.setMid(username);
+				historyVO.setFreecount(freecount);
+				historyVO.setPoint(consumptionPoint);
+				historyVO.setEvent( storeInfo + consumptionPoint + "點" );
+				new HistoryService().insertHistory(historyVO);
+				System.out.println("serial : " + serial);
+				System.out.println("insertHistory!!!");
+				
+				jsonObject.put("state", 3);
+				jsonObject.put("balance", balance);
+			}
+		}else if((status == 0) || (status == 8)) {
+			jsonObject.put("state", 2);
+		}
 
-		jsonObject.put("state", "1");
-		jsonObject.put("balance", balance);
 		out.write(jsonObject.toString());
 		out.flush();
 		out.close();

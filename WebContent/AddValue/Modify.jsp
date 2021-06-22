@@ -9,7 +9,9 @@
 	System.out.println("Session username : " + memVO.getUsername());
 	Object objectDID = session.getAttribute("DID");
 	String DID = objectDID.toString();
+	String number = (String)session.getAttribute("MACHID");
 	System.out.println("Modify.jsp session DID : " +DID );
+	System.out.println("Session number : " + number);
 	
 // 	/*****	Test *****/
 // 	String DID = "12323";
@@ -24,6 +26,20 @@
 	request.setAttribute("DID", DID);
 	request.setAttribute("memVO", memVO);
 	
+	String serviceType = number.substring(0, 2);
+	System.out.println("serviceType : " + serviceType);
+	String headerStr = "";
+	String url = "";
+	if(serviceType.equals("TY")){
+		headerStr = "加值服務";
+		url = "./AddValue.jsp";
+	}else if(serviceType.equals("WS")){
+		headerStr = "消費服務";
+		url = "./SingleConsumption.jsp";
+	}else if(serviceType.equals("DR")){
+		headerStr = "消費服務";
+		url = "./MultiConsumption.jsp";
+	}
 %>
 
 <!DOCTYPE html>
@@ -196,7 +212,6 @@
   
   <!-- .navbar-expand-{sm|md|lg|xl}決定在哪個斷點以上就出現漢堡式選單 -->
   <!-- navbar-dark 文字顏色 .bg-dark 背景顏色 -->
-
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0093E9; background-image: linear-gradient(340deg, #0093E9 0%, #80D0C7 100%); //background-color:#91989F  !important;">
     <!-- .navbar-brand 左上LOGO位置 -->
     <a class="navbar-brand" href="#">
@@ -215,10 +230,10 @@
       <ul class="navbar-nav mr-auto">
         <!-- active表示當前頁面 -->
         <li class="nav-item active">
-          <a class="nav-link" href="./MultiConsumption.jsp" style="text-align: right; color: #FFFFFF;">消費服務<span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="<%=url %>" style="text-align: right; color: #FFFFFF;"><%=headerStr %><span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./Record-M.jsp" style="text-align: right; color: #FFFFFF;">交易紀錄</a>
+          <a class="nav-link" href="./Record.jsp" style="text-align: right; color: #FFFFFF;">交易紀錄</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#" style="text-align: right; color: #FFFFFF;">會員資料</a>

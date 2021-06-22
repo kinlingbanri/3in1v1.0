@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
+import utils.EmailUtil;
 import utils.Random4;
 
 @WebServlet("/RegisterServlet")
@@ -39,9 +41,17 @@ public class RegisterServlet extends HttpServlet {
 		String registerUsername = req.getParameter("registerUsername");
 		String reqDID = req.getParameter("DID");
 		System.out.println("Register req DID = " + reqDID);
+		String reqMACHID = req.getParameter("MACHID");
+		System.out.println("Register req MACHID = " + reqMACHID);
+		
 		String sessionDID = (String)req.getSession().getAttribute("DID");
 		System.out.println("Register sessionDID = " + sessionDID);
 		req.getSession().setAttribute("DID", sessionDID);
+		
+		String sessionMACHID = (String)req.getSession().getAttribute("MACHID");
+		System.out.println("Register sessionMACHID = " + sessionMACHID);
+		req.getSession().setAttribute("MACHID", sessionMACHID);
+		
 		System.out.println("RegisterState = " + RegisterState);
 		
 		MemService memService = new MemService();
@@ -50,6 +60,8 @@ public class RegisterServlet extends HttpServlet {
 			System.out.println("RegisterState : registert");
 			
 			if(RegisterState.equals("2")) {
+				String newCode = Random4.getRandomCharArray();
+				
 				MemVO newMemVO = new MemVO();
 				String registerEmail = req.getParameter("registerEmail");
 				String registerPassword = req.getParameter("registerPassword");
@@ -62,13 +74,24 @@ public class RegisterServlet extends HttpServlet {
 				newMemVO.setAuthority(0);
 				newMemVO.setBlack(0);
 				newMemVO.setVerification(1);			//預設從1開始記算,錯誤加1,累記至3當天就不再發送
-				newMemVO.setVerificationcode(Random4.getRandomCharArray());
-				Date date = new Date();       
-				Timestamp nowTime = new Timestamp(date.getTime());
-				newMemVO.setVerificationdate(nowTime);
+				newMemVO.setVerificationcode(newCode);
+				Date current = new Date();
+				Timestamp nowDate = new Timestamp(current.getTime());
+				newMemVO.setVerificationdate(nowDate);
 				memService.insertMem(newMemVO);
-				// 這裡要放傳送簡訊的程式碼
-				//
+				
+				// 這裡要放傳送簡訊的程式碼				
+				ServletContext application=getServletConfig().getServletContext();
+				String jarpath = application.getRealPath("/WEB-INF/lib/RXTX_Demo.jar");
+				System.out.println("jarpath : " + jarpath);
+
+				String comPortNum = "COM8";
+				String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " 您的驗證碼為:" + newCode;
+				//Runtime.getRuntime().exec( "cmd /c java -jar C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar COM8 OOOOKKKK" );
+				Runtime.getRuntime().exec(commandStr);
+				
+				EmailUtil.sendEmail(registerEmail, "van@tongya.com.tw",
+						"mail.tongya.com.tw", "驗證碼", "您的驗證碼為 : " + newCode);
 				
 				//memService.addMem(registerUsername, registerEmail, registerPhone, registerPassword, 0);
 				System.out.println("Register Success!!!");

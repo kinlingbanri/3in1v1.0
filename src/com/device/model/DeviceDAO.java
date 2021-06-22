@@ -51,6 +51,8 @@ public class DeviceDAO implements DeviceDAO_interface{
 					+ "sid=?, mid=? where did = ?";
 	private static final String UPDATE_STATUS_STMT = 
 			"UPDATE device set status=? where number = ?";
+	private static final String UPDATE_CONSUMPTION_STMT = 
+			"UPDATE device set status=?, machid=?, freecount=? where number = ?";
 	private static final String UPDATE_ADD_STATUS_11_STMT = 
 			"UPDATE device set add_status=?, point=? where number = ?";
 	private static final String UPDATE_ADD_STATUS_13_STMT = 
@@ -604,7 +606,84 @@ public class DeviceDAO implements DeviceDAO_interface{
 
 	@Override
 	public int checkAutoIncrement() {
-		// TODO Auto-generated method stub
-		return 0;
+		int count = 0;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(AUTO_INCREMENT_STMT);		
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				count = rs.getInt("auto_increment");
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return count;
+	}
+
+	@Override
+	public void updateConsumption(String number, int status, int serial, int freecount) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_CONSUMPTION_STMT);
+			
+			pstmt.setInt(1, 		status);
+			pstmt.setInt(2, 		serial);
+			pstmt.setInt(3, 		freecount);			
+			pstmt.setString(4, 	number);
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 	}
 }

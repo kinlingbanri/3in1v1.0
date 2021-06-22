@@ -18,12 +18,10 @@
 	Object DIDObject = session.getAttribute("DID");
 	String did = (String)DIDObject;
 	System.out.println("AddValue.jspSession did : " + did.toString());
-	Object SIDObject = session.getAttribute("SID");
-	String SID = (String)SIDObject;
-	System.out.println("AddValue.jspSession SID : " + SID);
-	int sid = Integer.parseInt(SID);
-	System.out.println("AddValue.jspSession sid : " + sid);
-
+	Object MACHIDObject = session.getAttribute("MACHID");
+	String machid = (String)MACHIDObject;
+	System.out.println("AddValue.jspSession machid : " + machid);
+	
 	MemVO memVO = (MemVO) session.getAttribute("memVO");
 	
 	if(memVO == null){
@@ -35,23 +33,46 @@
 		String username = memVO.getUsername();
 		int point = memVO.getPoint();
 
-		StoreService storeService = new StoreService();
-		StoreVO storeVO = storeService.getOneStore(sid);
-		request.setAttribute("storeVO", storeVO);
-		
 		// Get Device Object
 		DeviceService deviceService = new DeviceService();
 		DeviceVO deviceVO = deviceService.getOneDevice(did);
 		deviceService.updateAddStatus11(did, 11, point);
 		String localName = deviceVO.getLocation();
 		
+		int sid = deviceVO.getSid();
+		System.out.println("AddValue.jspSession sid : " + sid);
+		
+		StoreService storeService = new StoreService();
+		StoreVO storeVO = storeService.getOneStore(sid);
+		
+		String title = storeVO.getName() + deviceVO.getLocation();
+		
+		request.setAttribute("storeVO", storeVO);
+		
 		request.setAttribute("memVO", memVO);
 
 		request.setAttribute("localName", localName);
 		request.setAttribute("did", did);
+		request.setAttribute("machid", machid);
 		request.setAttribute("sid", sid);
 		request.setAttribute("username", username);
 		request.setAttribute("point", point);
+		request.setAttribute("title", title);
+	}
+	
+	String serviceType = machid.substring(0, 2);
+	System.out.println("serviceType : " + serviceType);
+	String headerStr = "";
+	String url = "";
+	if(serviceType.equals("TY")){
+		headerStr = "加值服務";
+		url = "./AddValue.jsp";
+	}else if(serviceType.equals("WS")){
+		headerStr = "消費服務";
+		url = "./SingleConsumption.jsp";
+	}else if(serviceType.equals("DR")){
+		headerStr = "消費服務";
+		url = "./MultiConsumption.jsp";
 	}
 	
 %>
@@ -99,13 +120,13 @@
       <ul class="navbar-nav mr-auto">
         <!-- active表示當前頁面 -->
         <li class="nav-item active">
-          <a class="nav-link" href="#" style="text-align: right; color: #FFFFFF;">加值服務<span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="#" style="text-align: right; color: #FFFFFF;"><%=headerStr %><span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./Record-A.jsp" style="text-align: right; color: #FFFFFF;">交易紀錄</a>
+          <a class="nav-link" href="./Record.jsp" style="text-align: right; color: #FFFFFF;">交易紀錄</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./Modify-A.jsp" style="text-align: right; color: #FFFFFF;">會員資料</a>
+          <a class="nav-link" href="./Modify.jsp" style="text-align: right; color: #FFFFFF;">會員資料</a>
         </li>
 				<li class="nav-item">
 					<a class="nav-link" href="../logout.jsp" style="text-align: right; color: #FFFFFF;">登出</a>
@@ -119,7 +140,7 @@
   
   <section style="height: 1080px;">
 		<div style="text-align: center; margin:12px 0 24px 0;">
-			<h2 style="color:#777;">${localName}	</h2>
+			<h3 style="color:#777;">${title}	</h3>
 			<h5 style="color:orange; font-weight: bold;" id="h5NowPoint">現有點數: ${point}點</h5>
 		</div>
 		
@@ -164,8 +185,9 @@
 		<!-- End -->
 		
 		
-		<input type="hidden" name="did" value="<%=did %>" id="inputDid">
-		<input type="hidden" name="sid" value="<%=sid %>" id="inputSid">
+		<input type="hidden" name="did" value="${did }" id="inputDid">
+		<input type="hidden" name="machid" value="${machid }" id="inputMACHid">
+		<input type="hidden" name="sid" value="${sid }" id="inputSid">
 		<input type="hidden" name="username" value="${username }" id="inputUsername">		
 		<input type="hidden" name="count_100" value="" id="inputCount_100">
 		<input type="hidden" name="count_500" value="" id="inputCount_500">
@@ -180,10 +202,11 @@
 <!-- 			<p style="font-weight: bold; color: #FF993C; font-size: 20px;" id="addPoint">220點</p> -->
 			<div id="divInfo">
 <!-- 				<p style="margin: 0 0 0 0; font-size:16px;">系統將於以下時間結束後自動完成加值</p> -->
-				<p id="timer" style="color:red; font-weight:bold; font-size:18px; margin:0;">系統將於 秒後自動完成加值</p>
+				<p id="timer" style="color:red; font-weight:bold; font-size:18px; margin:0;">系統將於30秒後自動完成加值</p>
 				<p style="margin: 0 0 16px 0; font-size:16px;">或請按完成，手動完成加值</p>
 <!-- 				<p id="timer" style="color:red; font-weight:bold; font-size:18px;">30秒</p> -->
-				<button class="btn btn-outline-success" style="font-weight:bold;" id="btnAdd" disabled>確認</button>
+				<button class="btn btn-outline-success" style="font-weight:bold;" id="btnAdd" disabled>確認儲值</button>
+				<button class="btn btn-warning" style="font-weight: bold; margin-left: 12px;" id="logoutBtn">取消交易</button>
 			</div>
 
 			<div id="divSuccess" style="display:none;">
@@ -334,6 +357,11 @@
 				addValue();
 			}			
 		});
+
+		document.getElementById('logoutBtn').onclick = function() {
+			clearInterval(myTimerVar);
+			window.location.href = "../logout.jsp";
+		}
 
   </script>
 </body>

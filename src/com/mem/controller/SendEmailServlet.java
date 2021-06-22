@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -58,6 +59,16 @@ public class SendEmailServlet extends HttpServlet {
 					String pwd = memVO.getPassword();
 					EmailUtil.sendEmail(memVO.getEmail(), "van@tongya.com.tw",
 							"mail.tongya.com.tw", "密碼", "您的密碼為:" + pwd);
+					
+					// 這裡要放傳送簡訊的程式碼				
+					ServletContext application=getServletConfig().getServletContext();
+					String jarpath = application.getRealPath("/WEB-INF/lib/RXTX_Demo.jar");
+					System.out.println("jarpath : " + jarpath);
+
+					String comPortNum = "COM8";
+					String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " 您的驗證碼為:" + pwd;
+					//Runtime.getRuntime().exec( "cmd /c java -jar C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar COM8 OOOOKKKK" );
+					Runtime.getRuntime().exec(commandStr);
 				}				
 				System.out.println("Send email");	
 				jsonObject.put("state", "send");
@@ -73,11 +84,21 @@ public class SendEmailServlet extends HttpServlet {
 					String pwd = memVO.getPassword();
 					String phone = memVO.getPhone();
 
-					String frontStr = "powershell C:\\Users\\USER\\eclipse-workspace\\3in1\\lib\\ComPortDemo.ps1 ";					
-					String middleStr = "您的密碼為:";
-					String command = frontStr + phone + middleStr + pwd;
-					System.out.println("command : " + command);
-					Runtime.getRuntime().exec(command);
+//					String frontStr = "powershell C:\\Users\\USER\\eclipse-workspace\\3in1\\lib\\ComPortDemo.ps1 ";					
+//					String middleStr = "您的密碼為:";
+//					String command = frontStr + phone + middleStr + pwd;
+//					System.out.println("command : " + command);
+//					Runtime.getRuntime().exec(command);
+					
+					// 這裡要放傳送簡訊的程式碼				
+					ServletContext application=getServletConfig().getServletContext();
+					String jarpath = application.getRealPath("/WEB-INF/lib/RXTX_Demo.jar");
+					System.out.println("jarpath : " + jarpath);
+
+					String comPortNum = "COM8";
+					String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " 您的驗證碼為:" + pwd;
+					//Runtime.getRuntime().exec( "cmd /c java -jar C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar COM8 OOOOKKKK" );
+					Runtime.getRuntime().exec(commandStr);
 
 				}				
 				System.out.println("Send phone");	
@@ -98,11 +119,23 @@ public class SendEmailServlet extends HttpServlet {
 					jsonObject.put("state", "send");
 				}else if(method.equals("phone")) {
 					String phone = memVO.getPhone();
-					String frontStr = "powershell C:\\Users\\USER\\eclipse-workspace\\3in1\\lib\\ComPortDemo.ps1 ";					
-					String middleStr = "您的密碼為:";
-					String command = frontStr + phone + middleStr + pwd;
-					System.out.println("command : " + command);
-					Runtime.getRuntime().exec(command);
+					
+					// 這裡要放傳送簡訊的程式碼				
+					ServletContext application=getServletConfig().getServletContext();
+					String jarpath = application.getRealPath("/WEB-INF/lib/RXTX_Demo.jar");
+					System.out.println("jarpath : " + jarpath);
+
+					String comPortNum = "COM8";
+					String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " 您的驗證碼為:" + pwd;
+					//Runtime.getRuntime().exec( "cmd /c java -jar C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar COM8 OOOOKKKK" );
+					Runtime.getRuntime().exec(commandStr);
+					
+//					String frontStr = "powershell C:\\Users\\USER\\eclipse-workspace\\3in1\\lib\\ComPortDemo.ps1 ";					
+//					String middleStr = "您的密碼為:";
+//					String command = frontStr + phone + middleStr + pwd;
+//					System.out.println("command : " + command);
+//					Runtime.getRuntime().exec(command);
+					
 					System.out.println("Send phone");	
 					jsonObject.put("state", "send");
 				}

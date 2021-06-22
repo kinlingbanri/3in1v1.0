@@ -26,7 +26,7 @@ public class LogoutServlet extends HttpServlet {
 
 		HttpSession session = req.getSession(false);//防止建立Session
 		session.removeAttribute("memVO");
-		session.removeAttribute("DID");
+		//session.removeAttribute("MACHID");
 		PrintWriter out = resp.getWriter();
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("logout", "logout");

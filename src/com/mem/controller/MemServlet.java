@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
+import utils.EmailUtil;
 import utils.Random4;
 
 @WebServlet(name = "MemServlet", urlPatterns = {"/MemServlet"})
@@ -41,19 +42,19 @@ public class MemServlet extends HttpServlet {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		String DID = req.getParameter("DID");
-		String SID = req.getParameter("SID");
+		String MACHID = req.getParameter("MACHID");
 
 		System.out.println("memservlet req username : " + username);
 		System.out.println("memservlet req password : " + password);
 		System.out.println("memservlet req DID : " + DID);
-		System.out.println("memservlet req SID : " + SID);
+		System.out.println("memservlet req MACHID : " + MACHID);
 		
 		String sessionDID = req.getSession().getAttribute("DID").toString();
-		String sessionSID = req.getSession().getAttribute("SID").toString();
+		String sessionMACHID = req.getSession().getAttribute("MACHID").toString();
 		System.out.println("memservlet session DID : " + sessionDID);
-		System.out.println("memservlet sessionSID : " + sessionSID);
+		System.out.println("memservlet sessionMACHID : " + sessionMACHID);
 		
-		String machineStr = sessionDID.substring(0, 2);
+		String machineStr = sessionMACHID.substring(0, 2);
 		System.out.println("machineStr : " + machineStr);
 		
 		MemService memService = new MemService();
@@ -119,6 +120,9 @@ public class MemServlet extends HttpServlet {
 				String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " 您的驗證碼為:" + newCode;
 				//Runtime.getRuntime().exec( "cmd /c java -jar C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar COM8 OOOOKKKK" );
 				Runtime.getRuntime().exec(commandStr);
+				
+				EmailUtil.sendEmail(memVO.getEmail(), "van@tongya.com.tw",
+						"mail.tongya.com.tw", "驗證碼", "您的驗證碼為 : " + newCode);
 			}
 			jsonObject.put("state", "4");
 		}

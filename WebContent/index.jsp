@@ -7,24 +7,24 @@
 
 <%
 	String DID = request.getParameter("DID");
-	String SID = request.getParameter("SID");
+	String MACHID = request.getParameter("MACHID");
 	System.out.println("index.jsp reqDID : " + DID);
-	System.out.println("index.jsp reqSID : " + SID);
+	System.out.println("index.jsp reqMACHID : " + MACHID);
 
 	String sessionDID = (String) session.getAttribute("DID");
-	String sessionSID = (String) session.getAttribute("SID");
+	String sessionMACHID = (String) session.getAttribute("MACHID");
 
 	System.out.println("index.jsp start sessionDID : " + sessionDID);
-	System.out.println("index.jsp start sessionSID : " + sessionSID);
+	System.out.println("index.jsp start sessionMACHID : " + sessionMACHID);
 
 	if ((DID != null) && (!DID.equals(""))) {
 		session.setAttribute("DID", DID);
 	}
-	if ((SID != null) && (!SID.equals(""))) {
-		session.setAttribute("SID", SID);
+	if ((MACHID != null) && (!MACHID.equals(""))) {
+		session.setAttribute("MACHID", MACHID);
 	}
 	System.out.println("index.jsp session DID : " + session.getAttribute("DID"));
-	System.out.println("index.jsp session SID : " + session.getAttribute("SID"));
+	System.out.println("index.jsp session MACHID : " + session.getAttribute("MACHID"));
 
 	MemService memSvc = new MemService();
 	List<MemVO> list = memSvc.getAll();
@@ -283,7 +283,7 @@ a {
 						</label>
 					</div>
 					<input type="hidden" name="DID" value="<%=DID%>" id="DID">
-					<input type="hidden" name="SID" value="<%=SID%>" id="SID">
+					<input type="hidden" name="MACHID" value="<%=MACHID%>" id="MACHID">
 					<input type="hidden" name="username" value="" id="inputHiddenUsername">
 <!-- 					<input type="hidden" name="action" value="getOne_For_Display"> -->
 					<div class="group">
@@ -298,10 +298,9 @@ a {
 
 				<!-- Register form -->
 				<div class="sign-up-htm" id="signup">
-					<div class="group" id="signupSuccess"
-						style="text-align: center; font-size: 24px; font-weight: bold; color: #AAAAAA; margin-top: 24px;">
+					<div class="group" id="signupSuccess" style="text-align: center; font-size: 24px; font-weight: bold; color: #AAAAAA; margin-top: 24px;">
 						<p>註冊成功！</p>
-						<p>請稍後，將進入驗證頁面</p>
+						<p style=" line-height: 30px;">請稍後，將進入驗證頁面</p>
 					</div>
 					<div id="signupForm">
 						<div class="group">
@@ -362,10 +361,10 @@ a {
 						</div>
 						<div class="group" id="verificationWindow3" style="display:none;">
 							<label for="over" class="label" style="font-size: 20px;text-align:center; color:#AAAAAA;">驗證成功!</label>
-							<label for="over" class="label" style="font-size: 20px;text-align:center; color:#AAAAAA;">請稍後，將進入登入頁面</label>
+							<label for="over" class="label" style="font-size: 20px;text-align:center; color:#AAAAAA; line-height: 28px;">請稍後，將進入登入頁面</label>
 						</div>
-						<div class="group" id="verificationWindow4">
-							<label for="user" class="label" style="font-size: 20px;">請輸入4位數字的驗證碼</label>
+						<div class="group" id="verificationWindow4" style="text-align:center;">
+							<label for="user" class="label" style="font-size: 20px;">輸入4位數的驗證碼</label>
 							<input id="verificationcode" type="text" class="input" style="margin-top: 16px; font-size: 16px;  color:#AAAAAA">
 						</div>
 						<div class="group" id="verificationWindow5">
@@ -384,8 +383,8 @@ a {
 	/*************************** 初始化和function ***************************/
 	
 		var DID = $("#DID").val();
-		var SID = $("#SID").val();
-		console.log("DID=" + DID + "; SID=" + SID);
+		var MACHID = $("#MACHID").val();
+		console.log("DID=" + DID + "; MACHID=" + MACHID);
 
 		//隠藏右側scrollbar
 		$("#body").niceScroll({
@@ -412,7 +411,7 @@ a {
 			if (count == 0) {
 				clearInterval(myTimerVar);
 				window.location.href = "../3in1/index.jsp?DID=" + DID
-						+ "&SID=" + SID;
+						+ "&MACHID=" + MACHID;
 			} else {
 				count = count - 1;
 				console.log("count : " + count);
@@ -661,7 +660,7 @@ a {
 								var username = $("#username").val();
 								var password = $("#password").val();
 								var DID = $("#DID").val();
-								var SID = $("#SID").val();
+								var MACHID = $("#MACHID").val();
 
 								$.ajax({
 											type : 'POST', //GET or POST
@@ -671,7 +670,7 @@ a {
 												username : username,
 												password : password,
 												DID : DID,
-												SID : SID
+												MACHID : MACHID
 											},
 											success : function(jsonObject) { //當請求成功後此事件會被呼叫
 												console.log("jsonObject.username : " + jsonObject.username);
@@ -682,13 +681,18 @@ a {
 													console.log("Login success!");
 													var type = jsonObject.type;
 													console.log("type length : "	+ type.length);
+													
 													if (type == "TY") {
-														window.location.href = "./AddValue/AddValue.jsp";
+														//window.location.href = "./AddValue/AddValue.jsp";
+														setTimeout(function(){ window.location.href = "./AddValue/AddValue.jsp"; }, 3000);
 													} else if (type == "DR") {
-														window.location.href = "./AddValue/MultiConsumption.jsp";
+														//window.location.href = "./AddValue/MultiConsumption.jsp";
+														setTimeout(function(){ window.location.href = "./AddValue/MultiConsumption.jsp"; }, 3000);
 													} else if (type == "WS") {
-														window.location.href = "./AddValue/SingleConsumption.jsp";
+														//window.location.href = "./AddValue/SingleConsumption.jsp";
+														setTimeout(function(){ window.location.href = "./AddValue/SingleConsumption.jsp"; }, 3000);
 													}
+													
 												} else if (validateState == "2") {
 													$("#username") .val("無此帳號!").css('color', 'red');
 												} else if (validateState == "3") {
@@ -791,7 +795,7 @@ a {
 						RegisterState : RegisterState,
 						registerUsername : registerUsername,
 						DID : DID,
-						SID : SID
+						MACHID : MACHID
 					},
 					success : function(jsonObject) { //當請求成功後此事件會被呼叫
 						var state = jsonObject.state;
@@ -835,7 +839,7 @@ a {
 								var registerPhone = $("#registerPhone").val();
 								var registerPassword = $("#registerPassword").val();
 								var DID = $("#DID").val();
-								var SID = $("#SID").val();
+								var MACHID = $("#MACHID").val();
 
 								var registerUsername = $("#registerUsername").val();
 
@@ -858,7 +862,7 @@ a {
 													registerPhone : registerPhone,
 													registerPassword : registerPassword,
 													DID : DID,
-													SID : SID
+													MACHID : MACHID
 												},
 												success : function(jsonObject) { //當請求成功後此事件會被呼叫
 													var state = jsonObject.state;
@@ -871,11 +875,10 @@ a {
 														$("#inputHiddenUsername").val(jsonObject.username);
 														$("#signupForm").hide();
 														$("#signupSuccess").show();
+														$("#tab-11").hide();
+														$("#tab-22").hide();
 														count = 3;														
-														myTimerVar = setInterval(
-																function() {
-																	myTimerToVarification()
-																}, 1000);
+														myTimerVar = setInterval(function() {	myTimerToVarification(); }, 800);
 
 														/*
 														swal.fire({
@@ -941,11 +944,11 @@ a {
 				var verificationcode = $("#verificationcode").val();
 				var inputHiddenUsername = $("#inputHiddenUsername").val();
 				var DID = $("#DID").val();
-				var SID = $("#SID").val();
+				var MACHID = $("#MACHID").val();
 				console.log("verificationcode : " + verificationcode);
 				console.log("inputHiddenUsername : " + inputHiddenUsername);
 				console.log("DID : " + DID);
-				console.log("SID : " + SID);
+				console.log("MACHID : " + MACHID);
 				$.ajax({
 					type : 'POST', //GET or POST
 					url : "./VarificationServlet", //請求的頁面
@@ -954,7 +957,7 @@ a {
 						code : verificationcode,
 						username : inputHiddenUsername,
 						DID : DID,
-						SID : SID
+						MACHID : MACHID
 					},
 					success : function(jsonObject) { //當請求成功後此事件會被呼叫
 						$("#verificationcode").val( jsonObject.testCode);
@@ -967,16 +970,24 @@ a {
 							$("#verificationWindow1").hide();
 							$("#verificationWindow2").hide();
 							$("#verificationWindow3").show();
+							$("#verificationWindow4").hide();
+							$("#verificationWindow5").hide();
 
 							var type = jsonObject.type;
-							console.log("type length : " + type.length);
+							console.log("type" + type);
 							if (type == "TY") {
-								window.location.href = "./AddValue/AddValue.jsp";
+								//window.location.href = "./AddValue/AddValue.jsp";
+								setTimeout(function(){ window.location.href = "./AddValue/AddValue.jsp"; }, 3000);
 							} else if (type == "DR") {
-								window.location.href = "./AddValue/MultiConsumption.jsp";
+								//window.location.href = "./AddValue/MultiConsumption.jsp";
+								setTimeout(function(){ window.location.href = "./AddValue/MultiConsumption.jsp"; }, 3000);
 							} else if (type == "WS") {
-								window.location.href = "./AddValue/SingleConsumption.jsp";
+								//window.location.href = "./AddValue/SingleConsumption.jsp";
+								setTimeout(function(){ window.location.href = "./AddValue/SingleConsumption.jsp"; }, 3000);
 							}
+
+							
+							
 						}else if (validateState == "1") {
 							$("#verificationcode").val( jsonObject.testCode);
 							$("#verificationWindow2").hide();
@@ -993,9 +1004,6 @@ a {
 						console.log("e: " + e);
 					}
 				});
-
-				
-
 			}
 		});
 		

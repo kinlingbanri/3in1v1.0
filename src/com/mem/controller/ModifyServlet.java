@@ -35,12 +35,15 @@ public class ModifyServlet extends HttpServlet {
 		String type = req.getParameter("type");
 		String value = req.getParameter("value");
 		String DID = req.getParameter("DID");
+		String MACHID = req.getParameter("MACHID");
 		req.getSession().setAttribute("DID", DID);
+		req.getSession().setAttribute("MACHID", MACHID);
 		
 		System.out.println("username : " + username);
 		System.out.println("type : " + type);
 		System.out.println("value : " + value);
 		System.out.println("DID : " + DID);
+		System.out.println("MACHID : " + MACHID);
 		
 		jsonObject.put("state", "no");
 		
@@ -64,8 +67,6 @@ public class ModifyServlet extends HttpServlet {
 			new MemService().updateMem(memVO);
 			jsonObject.put("state", "ok");
 		}
-		
-		
 		
 		out.write(jsonObject.toString());
 		out.flush();
