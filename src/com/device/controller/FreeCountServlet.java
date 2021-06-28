@@ -51,16 +51,19 @@ public class FreeCountServlet extends HttpServlet {
 		DeviceVO deviceVO = new DeviceService().getOneDevice(did);
 		int status = deviceVO.getStatus();
 		if((status == 1) || (status == 2)) {
-			int freecount = Integer.parseInt(req.getParameter("freecount"));
-			int serial = Integer.parseInt(req.getParameter("serial"));
-			System.out.println("freecount : "  + freecount);
-			System.out.println("serial : "  + serial);
-			
-			new DeviceService().updateConsumption(did, 0, serial, freecount);
+
 			
 			if(consumptioning.equals("0")) {
 				jsonObject.put("state", 1);
-			}else {				
+			}else {	
+				
+				int freecount = Integer.parseInt(req.getParameter("freecount"));
+				int serial = Integer.parseInt(req.getParameter("serial"));
+				System.out.println("freecount : "  + freecount);
+				System.out.println("serial : " + serial);
+				
+				new DeviceService().updateConsumption(did, 0, serial, freecount);
+				
 				String mempointStr = req.getParameter("mempoint");
 				String consumptionPointStr = req.getParameter("consumptionPoint");
 				String storeInfo = req.getParameter("storeInfo");
@@ -88,7 +91,7 @@ public class FreeCountServlet extends HttpServlet {
 				historyVO.setPoint(consumptionPoint);
 				historyVO.setEvent( storeInfo + consumptionPoint + "點" );
 				new HistoryService().insertHistory(historyVO);
-				System.out.println("serial : " + serial);
+				
 				System.out.println("insertHistory!!!");
 				
 				jsonObject.put("state", 3);

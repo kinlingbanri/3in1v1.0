@@ -318,8 +318,7 @@ $(function() {
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table class="table table-striped table-bordered display"
-									id="dataTable" width="100%" cellspacing="0">
+								<table class="table table-striped table-bordered display" id="dataTable" width="100%" cellspacing="0">
 									<thead>
 										<tr>
 											<th>帳號</th>
