@@ -301,7 +301,7 @@ a {
 					</div>
 					<div class="hr"></div>
 					<div class="foot-lnk">
-						<a href="./forgetPassword.jsp">忘記密碼?</a>
+						<a href="./forgetPassword.jsp?DID=<%= sessionDID%>&MACHID=<%= sessionMACHID%>">忘記密碼?</a>
 					</div>
 				</div>
 				<!-- End Login form -->
@@ -372,7 +372,7 @@ a {
 					</div>
 					<div class="group" id="verificationWindow3" style="display:none;">
 						<label for="over" class="label" style="font-size: 20px;text-align:center; color:#AAAAAA;">驗證成功!</label>
-						<label for="over" class="label" style="font-size: 20px;text-align:center; color:#AAAAAA; line-height: 28px;">請稍後，將進入登入頁面</label>
+						<label for="over" class="label" style="font-size: 20px;text-align:center; color:#AAAAAA; line-height: 28px;">請稍後，將離開此頁面</label>
 					</div>
 					<div class="group" id="verificationWindow4" style="text-align:center;">
 						<label for="user" class="label" style="font-size: 20px;">輸入4位數的驗證碼</label>
@@ -668,6 +668,7 @@ a {
 	$("#loginBtn").click(function() {
 		document.getElementById("loader").style.display = "block";
 		var state = loginValidate();
+		console.log("login state " + state);
 
 		if (state == 0) {
 			var username = $("#username").val();
@@ -730,6 +731,9 @@ a {
 					}
 				}
 			});
+		}else{
+			console.log("login state " + state);
+			document.getElementById("loader").style.display = "none";
 		}
 	});
 
@@ -921,7 +925,12 @@ a {
 							//count = 3;														
 							//myTimerVar = setInterval(function() {	myTimerToVarification(); }, 800);
 							
-							setTimeout(function(){ window.location.replace("../logout.jsp"); }, 3000);
+							setTimeout(function(){ 
+								$("#signupSuccess").hide();
+								$("#verificationWindow").show();
+							}, 3000);
+
+							
 
 						}
 					},

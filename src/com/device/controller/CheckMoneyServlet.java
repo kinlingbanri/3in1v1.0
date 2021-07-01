@@ -43,9 +43,11 @@ public class CheckMoneyServlet extends HttpServlet {
 		System.out.println("CheckMoneyServlet number : " + did);
 		System.out.println("CheckMoneyServlet store id : " + sid);
 		
-		DeviceVO addStatus = new DeviceService().getAddStatus(did);
+		DeviceVO addStatusVO = new DeviceService().getAddStatus(did);
+		int addStatus = addStatusVO.getAdd_status();
 		
-		if(addStatus.getAdd_status() == 14) {
+		//if(addStatus.getAdd_status() == 14) {
+		if((addStatus >= 10) && (addStatus <= 19)) {
 			DeviceVO deviceVO = new DeviceService().getCheckMoney(did);
 			int count_100 = deviceVO.getCount_100();
 			int count_500 = deviceVO.getCount_500();
@@ -73,7 +75,11 @@ public class CheckMoneyServlet extends HttpServlet {
 			}
 			System.out.println("totalPoint : " + totalPoint);
 			
-			new DeviceService().updateAddStatus13(did, 13, totalPoint);
+			if(addStatus == 14) {
+				new DeviceService().updateAddStatus13(did, 13, totalPoint);
+			}
+			
+			
 
 			jsonObject.put("add_status", deviceVO.getAdd_status());
 			jsonObject.put("count_100", count_100);

@@ -313,7 +313,7 @@
 					<!-- Email form -->
 					<div class="sign-up-htm" id="signup">
 						<div class="group">
-							<label for="user" class="label" style="font-size: 18px; color:#ff8033;">原Email:${memVO.getEmail() }</label>
+							<label for="user" class="label" style="font-size: 18px; color:#ff8033;">原Email:Test@icemail.com </label>
 <!-- 							<input id="email" type="text" class="input" style="margin-top: 6px; font-size: 16px;"> -->
 						</div>
 						<div class="group">

@@ -18,6 +18,8 @@ import com.history.model.HistoryService;
 import com.history.model.HistoryVO;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
+import com.store.model.StoreService;
+import com.store.model.StoreVO;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -51,7 +53,6 @@ public class FreeCountServlet extends HttpServlet {
 		DeviceVO deviceVO = new DeviceService().getOneDevice(did);
 		int status = deviceVO.getStatus();
 		if((status == 1) || (status == 2)) {
-
 			
 			if(consumptioning.equals("0")) {
 				jsonObject.put("state", 1);
@@ -75,7 +76,14 @@ public class FreeCountServlet extends HttpServlet {
 				int balance = mempoint - consumptionPoint;
 				memVO.setPoint(balance);
 				
-				new MemService().updateMem(memVO);
+				new MemService().updateMem(memVO);				
+				
+				int sid = deviceVO.getSid();
+				System.out.println("sid : " + sid);
+				StoreService storeService = new StoreService();
+				StoreVO storeVO = storeService.getOneStore(sid);
+				String storename = storeVO.getName();
+				System.out.println("AddRecordServlet store name : " + storename);
 				
 				HistoryVO historyVO = new HistoryVO();
 				Date date = new Date();	//Get now
@@ -88,8 +96,9 @@ public class FreeCountServlet extends HttpServlet {
 				historyVO.setMaid(serial);
 				historyVO.setMid(username);
 				historyVO.setFreecount(freecount);
-				historyVO.setPoint(consumptionPoint);
+				historyVO.setPoint(consumptionPoint);				
 				historyVO.setEvent( storeInfo + consumptionPoint + "點" );
+				historyVO.setStorename(storename);
 				new HistoryService().insertHistory(historyVO);
 				
 				System.out.println("insertHistory!!!");

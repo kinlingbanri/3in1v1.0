@@ -228,64 +228,37 @@
                 <!-- End of Topbar -->
 
 
+
                 <!-- Begin Page Content -->
-                <div class="container-fluid" id="divStoreAdd">
+                <div class="container-fluid" id="divServerConfig"">
+<!--                 <div class="container-fluid" id="divStoreConfig" style="display:none;"> -->
 
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h4 class="m-0 font-weight-bold text-primary" style="float:left;">新增店家</h4>
-                            <button id="btnBack" type="button" class="btn btn-success" style="margin-right:12px;; float:right;">確認新增</button>
+                            <h4 class="m-0 font-weight-bold text-primary" style="float:left;">伺服器設定</h4>
                         </div>
                         
-                         <!-- Store Config -->
+                        <!-- server Config -->
                         <div class="container">
                             <div class="row">
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">店名</h4>
-            												<input type="text" class="form-control configInput" id="inputStoreName">
+														    <div class="col-md configBlock">
+														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">IP位置</h4>
+														      	<h6 id="textServerIP">目前IP:</h6>
+            												<hr class="sidebar-divider d-none d-md-block" style="width:90%; color:#FFF;">
+            												<h6>新IP</h6>
+            												<input type="text" class="form-control configInput" id="inputServerIP">
+            												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">確認</button>
 														    </div>
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">一次性消費點數</h4>
-            												<input type="text" class="form-control configInput" id="inputSinglePoint">
-														    </div>
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">連續性消費點數</h4>
-            												<input type="text" class="form-control configInput" id="inputMultiPoint">
-														    </div>
-														</div>
-
-                            <div class="row">
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">優惠方案一</h4>
-            												<h6>預設定金額</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount1Dallas">
-            												<h6 style="margin: 0.5rem;">預設定點數</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount1Point">
-														    </div>
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">優惠方案二</h4>
-            												<h6>預設定金額</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount2Dallas">
-            												<h6 style="margin: 0.5rem;">預設定點數</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount2Point">
-														    </div>
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">優惠方案三</h4>
-            												<h6>預設定金額</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount3Dallas">
-            												<h6 style="margin: 0.5rem;">預設定點數</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount3Point">
+														    <div class="col-md configBlock">
+														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">COM PORT</h4>
+														      	<h6 id="textComPort">目前COM PORT:</h6>
+            												<hr class="sidebar-divider d-none d-md-block" style="width:90%; color:#FFF;">
+            												<h6>新COM PORT</h6>
+            												<input type="text" class="form-control configInput" id="inputComPort">
+            												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">確認</button>
 														    </div>
 														</div>
-														
-														
-														<div class="row" style="width: 33.6%; margin: 6px -.75rem 12px -.75rem;">
-														    <div class="col-md4 configBlock" style="margin: 0 0 0 0.4rem; width: 100%;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">店家狀態</h4>
-																		<input id="cbStoreState" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="啟用" data-off="停用"  style="margin-bottom:6px; width:80px;" checked>
-																		<style>.toggle{margin-bottom:6px; width:80px;}</style>
-														    </div>
-														</div>
+ 
                         </div>
                     </div>
                 </div>
@@ -351,8 +324,6 @@
 		<script src="./js/bootstrap4-toggle.min.js"></script>
 
 		<script>
-
-		$(".toggle").width('80px');
 			
 			//新增datatable row
 			function addDatatble(){
@@ -403,6 +374,8 @@
 	    });
 
 		  $("#btnBack").click(function(){
+// 			  window.open("http://211.21.93.171:8080/3in1/Admin2/file/test.zip");
+			  	
 			  document.getElementById("divStoreList").style.display = "block";
 				document.getElementById("divStoreConfig").style.display = "none";
 			});

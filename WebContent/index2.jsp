@@ -6,6 +6,35 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
 <%
+
+MemService memService = new MemService();
+
+List<MemVO> memlist = memService.getAll();
+
+for (MemVO mem : memlist) {
+		System.out.print(mem.getUsername() + ",");
+		System.out.print(mem.getEmail() + ",");
+		System.out.print(mem.getPassword() + ",");
+		System.out.print(mem.getPoint());
+		System.out.print(mem.getBlack() + ",");
+		System.out.print(mem.getAuthority() + ",");
+		System.out.print(mem.getVerification() + ",");
+		System.out.print(mem.getVerificationcode() + ",");
+		System.out.print(mem.getVerificationdate() + ",");
+		System.out.print(mem.getPhone());
+		System.out.print(mem.getAdd_money() + ",");
+		System.out.print(mem.getAdd_status());
+		System.out.println();
+}
+
+
+
+
+
+
+
+
+
 		String reqDID = request.getParameter("DID");	
 		String sessionDID = (String)session.getAttribute("DID");
 		System.out.println("index.jsp reqDID : " + reqDID);

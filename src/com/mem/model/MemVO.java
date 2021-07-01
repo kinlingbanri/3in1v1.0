@@ -49,6 +49,12 @@ public class MemVO implements java.io.Serializable {
 	@Column(name = "phone")
 	private String phone;
 	
+	@Column(name = "add_money")
+	private Integer add_money;
+	
+	@Column(name = "add_status")
+	private Integer add_status;
+	
 	public MemVO() {
 		super();
 	}
@@ -133,6 +139,22 @@ public class MemVO implements java.io.Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public Integer getAdd_money() {
+		return add_money;
+	}
+
+	public void setAdd_money(Integer add_money) {
+		this.add_money = add_money;
+	}
+
+	public Integer getAdd_status() {
+		return add_status;
+	}
+
+	public void setAdd_status(Integer add_status) {
+		this.add_status = add_status;
 	}
 	
 }

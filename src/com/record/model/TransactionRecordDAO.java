@@ -19,9 +19,9 @@ public class TransactionRecordDAO implements TransactionRecordDAO_interface{
 	TransactionRecordDAO_interface dao;
 	
 	private static final String GET_30_ADDRECORD_STMT = 
-			"SELECT STOREDATETIME, POINT, LOCATION  FROM addrecord WHERE USERNAME = ? ORDER BY STOREDATETIME DESC LIMIT 30";
+			"SELECT STOREDATETIME, POINT, STORENAME  FROM addrecord WHERE USERNAME = ? ORDER BY STOREDATETIME DESC LIMIT 30";
 	private static final String GET_30_HISTORY_STMT = 
-			"SELECT TTIME, POINT, LOCATION  FROM history WHERE MID = ? AND FREECOUNT > 0 AND POINT > 0 ORDER BY TTIME DESC LIMIT 30";
+			"SELECT TTIME, POINT, STORENAME  FROM history WHERE MID = ? AND FREECOUNT > 0 AND POINT > 0 ORDER BY TTIME DESC LIMIT 30";
 	
 	// 一個應用程式中,針對一個資料庫 ,共用一個DataSource即可
 	private static DataSource ds = null;
@@ -53,7 +53,7 @@ public class TransactionRecordDAO implements TransactionRecordDAO_interface{
 				transactionRecordVO = new TransactionRecordVO();
 				transactionRecordVO.setRecordTimeStamp(rs.getTimestamp("ttime"));
 				transactionRecordVO.setPoint(rs.getInt("point"));
-				transactionRecordVO.setLocation(rs.getString("location"));
+				transactionRecordVO.setStorename(rs.getString("storename"));
 				transactionRecordVO.setType("消費");
 				transactionRecordVOs.add(transactionRecordVO);
 			}
@@ -69,7 +69,7 @@ public class TransactionRecordDAO implements TransactionRecordDAO_interface{
 				transactionRecordVO = new TransactionRecordVO();
 				transactionRecordVO.setRecordTimeStamp(rs.getTimestamp("storedatetime"));
 				transactionRecordVO.setPoint(rs.getInt("point"));
-				transactionRecordVO.setLocation(rs.getString("location"));
+				transactionRecordVO.setStorename(rs.getString("storename"));
 				transactionRecordVO.setType("加值");
 				transactionRecordVOs.add(transactionRecordVO);
 			}
@@ -80,8 +80,7 @@ public class TransactionRecordDAO implements TransactionRecordDAO_interface{
 		
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {

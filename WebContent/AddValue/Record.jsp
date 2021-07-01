@@ -41,7 +41,7 @@
 		System.out.print(transactionRecordVO.getRecordTimeStamp() + ",");
 		System.out.print(transactionRecordVO.getType() + ",");
 		System.out.print(transactionRecordVO.getPoint() + ",");
-		System.out.println(transactionRecordVO.getLocation());
+		System.out.println(transactionRecordVO.getStorename());
 	}
 	
 	request.setAttribute("transactionRecordVOs", transactionRecordVOs);
@@ -252,8 +252,6 @@
   
   <!-- .navbar-expand-{sm|md|lg|xl}決定在哪個斷點以上就出現漢堡式選單 -->
   <!-- navbar-dark 文字顏色 .bg-dark 背景顏色 -->
-  <!-- .navbar-expand-{sm|md|lg|xl}決定在哪個斷點以上就出現漢堡式選單 -->
-  <!-- navbar-dark 文字顏色 .bg-dark 背景顏色 -->
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0093E9; background-image: linear-gradient(340deg, #0093E9 0%, #80D0C7 100%); //background-color:#91989F  !important;">
     <!-- .navbar-brand 左上LOGO位置 -->
     <a class="navbar-brand" href="#">
@@ -304,7 +302,7 @@
 		      <th scope="col" style="text-align: center;">#</th>
 		      <th scope="col" style="width: 28%;">日期</th>
 		      <th scope="col" style="text-align: center;">交易點數</th>
-		      <th scope="col">所屬店家</th>
+		      <th scope="col">店家</th>
 				</tr>
 		  </thead>
 		  <tbody>
@@ -315,7 +313,7 @@
 			      <td style="text-align: center;">
 			      	${transactionRecord.type }${transactionRecord.point }
 			      </td>
-			      <td>${transactionRecord.location }</td>
+			      <td>${transactionRecord.storename }</td>
 			    </tr>
 	   		</c:forEach>
 		  </tbody>

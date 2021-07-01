@@ -5,40 +5,42 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class HistoryJDBCDAO implements HistoryDAO_interface{
 	
 	String driver = "com.mysql.cj.jdbc.Driver";
-	String url = "jdbc:mysql://192.168.100.165:3306/rm_58?useUnicode=true&characterEncoding=utf-8";
+	String url = "jdbc:mysql://211.21.93.170:3306/rm_58?useUnicode=true&characterEncoding=utf-8";
 	String userid = "van";
 	String passwd = "34182958";
 	
 	private static final String GET_COUNT_STMT = 
 			"SELECT COUNT(*) FROM history WHERE did = ?";
 	private static final String GET_ALL_DID_STMT = 
-			"SELECT hid, ttime, event, ip, uid, did, maid, mid, point, location FROM history where did = ?  ORDER BY TTIME DESC LIMIT ?, ?;";
+			"SELECT hid, ttime, event, ip, uid, did, maid, mid, point, location, sid, storename FROM history where did = ?  ORDER BY TTIME DESC LIMIT ?, ?;";
 	private static final String GET_ALL_STMT = 
 			"SELECT hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, exchangecount,"
-					+ "papercount FROM history";
+					+ "papercount, location, sid, storename FROM history";
 	private static final String GET_MEMBERID_STMT = 
-			"SELECT hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, exchangecount,"
-					+ "papercount FROM history where mid = ?";
+			"SELECT hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, point, exchangecount,"
+					+ "papercount, sid, storename FROM history where mid = ?";
 	private static final String GET_ONE_STMT = 
 			"select hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, exchangecount,"
-					+ "papercount from history where hid = ?";
+					+ "papercount, point, sid, storename from history where hid = ?";
 	private static final String GET_30_STMT = 
-			"SELECT TTIME, MID, POINT, LOCATION FROM history "
+			"SELECT TTIME, MID, POINT, LOCATION, sid, storename FROM history "
 			+ "WHERE MID = ? AND FREECOUNT > 0 AND POINT > 0 ORDER BY TTIME DESC LIMIT 30;";
 	private static final String INSERT_STMT = 
 			"INSERT INTO history (ttime, event, ip, uid, did, maid, mid, refundcount, freecount,"
-					+ "point, exchangecount, papercount, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					+ "point, exchangecount, papercount, location, sid, storename) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
 			"UPDATE history set ttime=?, event=?, ip=?, uid=?, did=?, maid=?, mid=?, refundcount=?,"
-					+ "freecount=?, exchangecount=?, papercount=? where hid = ?";
+					+ "freecount=?, point=?, exchangecount=?, papercount=?, location=?, sid=?, storename=? where hid = ?";
 	private static final String DELETE_STMT = 
 			"DELETE FROM history where hid = ?";
 	
@@ -46,7 +48,7 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 		
 		HistoryDAO_interface dao = new HistoryJDBCDAO();
 
-//		//Add
+		//Add
 //		HistoryVO historyVO = new HistoryVO();
 //		Date date = new Date();	//Get now
 //		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -65,26 +67,32 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 //		historyVO.setExchangecount(0);
 //		historyVO.setPapercount(0);
 //		historyVO.setLocation("樹林站前");
+//		historyVO.setSid(12);
+//		historyVO.setStorename("三峽恩主公店");
 //		dao.insert(historyVO);
 		
-//		//Update
+		//Update
 //		HistoryVO historyVO = new HistoryVO();
 //		Date date = new Date();	//Get now
 //		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //		Timestamp ts = new Timestamp(date.getTime());
 //		System.out.println(formatter.format(ts));
-//		historyVO.setHid(1552967);
+//		historyVO.setHid(3482383);
 //		historyVO.setTtime(ts);
 //		historyVO.setEvent("");
 //		historyVO.setIp("192.168.100.165");
 //		historyVO.setUid(0);
 //		historyVO.setDid(8);
 //		historyVO.setMaid(1);
-//		historyVO.setMid("小邰");
+//		historyVO.setMid("陳啟展");
 //		historyVO.setRefundcount(0);
 //		historyVO.setFreecount(0);
+//		historyVO.setPoint(90);
 //		historyVO.setExchangecount(10);
 //		historyVO.setPapercount(1);
+//		historyVO.setLocation("樹林站後");
+//		historyVO.setSid(12);
+//		historyVO.setStorename("三峽恩主公店");
 //		dao.update(historyVO);
 		
 //		// Delete
@@ -92,20 +100,26 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 //		historyVO.setHid(537483);
 //		dao.delete(historyVO);
 		
-//		//Query one
-//		HistoryVO historyVO = dao.findByPrimaryId(2010555);
-//		System.out.print(historyVO.getHid() + ",");
-//		System.out.print(historyVO.getTtime() + ",");
-//		System.out.print(historyVO.getEvent() + ",");
-//		System.out.print(historyVO.getIp() + ",");
-//		System.out.print(historyVO.getUid() + ",");
-//		System.out.print(historyVO.getDid() + ",");
-//		System.out.print(historyVO.getRefundcount() + ",");
-//		System.out.print(historyVO.getFreecount() + ",");
-//		System.out.print(historyVO.getExchangecount() + ",");
-//		System.out.println(historyVO.getPapercount());
+		//Query one
+//		HistoryVO history = dao.findByPrimaryId(3482383);
+//		System.out.print(history.getHid() + ",");
+//		System.out.print(history.getTtime() + ",");
+//		System.out.print(history.getEvent() + ",");
+//		System.out.print(history.getIp() + ",");
+//		System.out.print(history.getUid() + ",");
+//		System.out.print(history.getDid() + ",");
+//		System.out.print(history.getMaid() + ",");
+//		System.out.print(history.getMid() + ",");
+//		System.out.print(history.getRefundcount() + ",");
+//		System.out.print(history.getFreecount() + ",");
+//		System.out.print(history.getPoint() + ",");
+//		System.out.print(history.getExchangecount() + ",");
+//		System.out.print(history.getPapercount() + ",");
+//		System.out.print(history.getLocation() + ",");
+//		System.out.print(history.getSid() + ",");
+//		System.out.println(history.getStorename());
 		
-//		// Query By MemberID
+		// Query By MemberID
 //		List<HistoryVO> list = dao.getByMemberId("陳啟展");
 //		for (HistoryVO history : list) {
 //			System.out.print(history.getHid() + ",");
@@ -118,47 +132,55 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 //			System.out.print(history.getMid() + ",");
 //			System.out.print(history.getRefundcount() + ",");
 //			System.out.print(history.getFreecount() + ",");
-//			System.out.print(history.getExchangecount() + ",");
-//			System.out.println(history.getPapercount());
-//		}
-		
-//		// Query 30
-//		List<HistoryVO> list = dao.getByMemberId("陳啟展");
-//		for (HistoryVO history : list) {
-//			System.out.print(history.getTtime() + ",");
-//			System.out.print(history.getMid() + ",");
 //			System.out.print(history.getPoint() + ",");
-//			System.out.println(history.getLocation());
+//			System.out.print(history.getExchangecount() + ",");
+//			System.out.print(history.getPapercount() + ",");
+//			System.out.print(history.getLocation() + ",");
+//			System.out.print(history.getSid() + ",");
+//			System.out.println(history.getStorename());
 //		}
 		
-		// Query All
-		List<HistoryVO> list = dao.getAll();
+		
+		// Query 30
+		List<HistoryVO> list = dao.getByMemberId("陳啟展");
 		for (HistoryVO history : list) {
-			System.out.print(history.getHid() + ",");
 			System.out.print(history.getTtime() + ",");
-			System.out.print(history.getEvent() + ",");
-			System.out.print(history.getIp() + ",");
-			System.out.print(history.getUid() + ",");
-			System.out.print(history.getDid() + ",");
-			System.out.print(history.getRefundcount() + ",");
-			System.out.print(history.getFreecount() + ",");
-			System.out.print(history.getExchangecount() + ",");
-			System.out.println(history.getPapercount());
+			System.out.print(history.getMid() + ",");
+			System.out.print(history.getPoint() + ",");
+			System.out.print(history.getLocation() + ",");
+			System.out.println(history.getStorename());
 		}
 		
+		// Query All
+//		List<HistoryVO> list = dao.getAll();
+//		for (HistoryVO history : list) {
+//			System.out.print(history.getHid() + ",");
+//			System.out.print(history.getTtime() + ",");
+//			System.out.print(history.getEvent() + ",");
+//			System.out.print(history.getIp() + ",");
+//			System.out.print(history.getUid() + ",");
+//			System.out.print(history.getDid() + ",");
+//			System.out.print(history.getMaid() + ",");
+//			System.out.print(history.getMid() + ",");
+//			System.out.print(history.getRefundcount() + ",");
+//			System.out.print(history.getFreecount() + ",");
+//			System.out.print(history.getPoint() + ",");
+//			System.out.print(history.getExchangecount() + ",");
+//			System.out.println(history.getPapercount());
+//			System.out.print(history.getSid() + ",");
+//			System.out.print(history.getStorename() + ",");
+//		}
+
+		
+		// Query By DID
 //		int count = dao.getCount(1);
-//		System.out.println("count : " + count);
-//		
-//		int lastCount = count - 50;
-//		
-//		// Query By DID
+//		System.out.println("count : " + count);		
+//		int lastCount = count - 50;		
 //		List<DeviceJsonObject> list = dao.getAllByDid(1, lastCount, 50);
 //		for (DeviceJsonObject deviceJsonObject : list) {
 //			System.out.print(deviceJsonObject.getTtime() + ",");
 //			System.out.print(deviceJsonObject.getEvent() + ",");
 //		}
-		
-
 
 	}
 
@@ -185,6 +207,8 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 			pstmt.setInt(11, historyVO.getExchangecount());
 			pstmt.setInt(12, historyVO.getPapercount());
 			pstmt.setString(13, historyVO.getLocation());
+			pstmt.setInt(14, historyVO.getSid());
+			pstmt.setString(15, historyVO.getStorename());
 
 			pstmt.executeUpdate();
 
@@ -224,7 +248,7 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(UPDATE_STMT);
-
+			
 			pstmt.setTimestamp(1, historyVO.getTtime());
 			pstmt.setString(2, historyVO.getEvent());
 			pstmt.setString(3, historyVO.getIp());
@@ -234,9 +258,13 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 			pstmt.setString(7, historyVO.getMid());
 			pstmt.setInt(8, historyVO.getRefundcount());
 			pstmt.setInt(9, historyVO.getFreecount());
-			pstmt.setInt(10, historyVO.getExchangecount());
-			pstmt.setInt(11, historyVO.getPapercount());
-			pstmt.setInt(12, historyVO.getHid());
+			pstmt.setInt(10, historyVO.getPoint());
+			pstmt.setInt(11, historyVO.getExchangecount());
+			pstmt.setInt(12, historyVO.getPapercount());
+			pstmt.setString(13, historyVO.getLocation());
+			pstmt.setInt(14, historyVO.getSid());
+			pstmt.setString(15, historyVO.getStorename());
+			pstmt.setInt(16, historyVO.getHid());
 
 			pstmt.executeUpdate();
 
@@ -332,8 +360,11 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 				historyVO.setMid(rs.getString("mid"));
 				historyVO.setRefundcount(rs.getInt("refundcount"));
 				historyVO.setFreecount(rs.getInt("freecount"));
+				historyVO.setPoint(rs.getInt("point"));
 				historyVO.setExchangecount(rs.getInt("exchangecount"));
 				historyVO.setPapercount(rs.getInt("papercount"));
+				historyVO.setSid(rs.getInt("sid"));
+				historyVO.setStorename(rs.getString("storename"));
 			}
 
 			// Handle any driver errors
@@ -398,8 +429,12 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 				historyVO.setMid(rs.getString("mid"));
 				historyVO.setRefundcount(rs.getInt("refundcount"));
 				historyVO.setFreecount(rs.getInt("freecount"));
+				historyVO.setPoint(rs.getInt("point"));
 				historyVO.setExchangecount(rs.getInt("exchangecount"));
 				historyVO.setPapercount(rs.getInt("papercount"));
+				historyVO.setLocation(rs.getString("location"));
+				historyVO.setSid(rs.getInt("sid"));
+				historyVO.setStorename(rs.getString("storename"));
 
 				list.add(historyVO); // Store the row in the list
 			}
@@ -466,8 +501,11 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 				historyVO.setMid(rs.getString("mid"));
 				historyVO.setRefundcount(rs.getInt("refundcount"));
 				historyVO.setFreecount(rs.getInt("freecount"));
+				historyVO.setPoint(rs.getInt("point"));
 				historyVO.setExchangecount(rs.getInt("exchangecount"));
 				historyVO.setPapercount(rs.getInt("papercount"));
+				historyVO.setSid(rs.getInt("sid"));
+				historyVO.setStorename(rs.getString("storename"));
 				list.add(historyVO);
 			}
 
@@ -528,6 +566,8 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 				historyVO.setMid(rs.getString("mid"));
 				historyVO.setPoint(rs.getInt("point"));
 				historyVO.setLocation(rs.getString("location"));
+				historyVO.setSid(rs.getInt("sid"));
+				historyVO.setStorename(rs.getString("storename"));
 				list.add(historyVO);
 			}
 
@@ -596,6 +636,7 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 				
 				deviceJsonObject.setTtime(dateStr);
 				deviceJsonObject.setEvent(rs.getString("event"));
+				deviceJsonObject.setStorename(rs.getString("storename"));
 				list.add(deviceJsonObject);
 			}
 

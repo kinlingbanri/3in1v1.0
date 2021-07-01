@@ -228,71 +228,52 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid"  id="divStoreList">
-<!-- 								<div class="container-fluid"  id="divStoreList" style="display:none;"> -->
+<!--                 <div class="container-fluid"  id="divStoreList"> -->
+								<div class="container-fluid"  id="divStoreList" style="display:none;">
 
-                    <!-- Page Heading -->
-<!--                     <h1 class="h3 mb-2 text-gray-800">Tables</h1> -->
-<!--                     <p class="mb-4">點擊該列任一處，即可進入該店家的設定畫面 -->
-
-                    
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">店家列表 (點擊該列任一處，即可進入該店家的設定畫面)</h6><p>
+                            <h6 class="m-0 font-weight-bold text-primary">加值機列表 (點擊該列任一處，即可進入該加值機的設定畫面)</h6><p>
                         </div>
                         
                         <!-- Store List -->
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="dataTable" class="table table-bordered" style="font-size:14px;"width="100%" cellspacing="0">
+                                <table id="dataTable" class="table table-bordered" style="font-size:14px;" width="100%" cellspacing="0">
                                     <thead>
                                         <tr style="text-align:center;">
-                                            <th>店名</th>
-                                            <th>一次性<br>消費點數</th>
-                                            <th>連續性<br>消費點數</th>
-                                            <th>優惠一<br>金額/點數</th>
-                                            <th>優惠二<br>金額/點數</th>
-                                            <th>優惠三<br>金額/點數</th>
+                                            <th>名稱</th>
+                                            <th>所屬店家</th>
+                                            <th>目前儲幣數</th>
+                                            <th>目前紙鈔數</th>
                                             <th>狀態</th>
                                         </tr>
                                     </thead>
 <!--                                     <tfoot> -->
-<!--                                         <tr> -->
-<!--                                         <tr> -->
-<!--                                             <th>店名</th> -->
-<!--                                             <th>一次性消費點數</th> -->
-<!--                                             <th>連續性消費點數</th> -->
-<!--                                             <th>優惠一:金額/費用</th> -->
-<!--                                             <th>優惠二:金額/費用</th> -->
-<!--                                             <th>優惠三:金額/費用</th> -->
+<!--                                             <th>名稱</th> -->
+<!--                                             <th>目前儲幣數</th> -->
+<!--                                             <th>目前紙鈔數</th> -->
 <!--                                             <th>狀態</th> -->
-<!--                                         </tr> -->
 <!--                                     </tfoot> -->
                                     <tbody>
                                         <tr  style="text-align:center;">
-                                            <th>樹林站後店</th>
-                                            <th>100點</th>
-                                            <th>10點</th>
-                                            <th>200元/300點</th>
-                                            <th>500元/700點</th>
-                                            <th>1000元/1300點</th>
-                                            <th>啟用</th>
+                                            <th>加值1號</th>
+                                            <th>樹林站前店</th>
+                                            <th>121枚</th>
+                                            <th>11張</th>
+                                            <th>正常</th>
                                         </tr>
                                         <tr style="text-align:center;">
-                                            <th>樹林站前店</th>
-                                            <th>100點</th>
-                                            <th>10點</th>
-                                            <th>200元/300點</th>
-                                            <th>500元/700點</th>
-                                            <th>1000元/1300點</th>
-                                            <th>停用</th>
+                                            <th>加值1號</th>
+                                            <th>樹林站後店</th>
+                                            <th>213枚</th>
+                                            <th>17張</th>
+                                            <th>紙鈔機故障</th>
                                         </tr>
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <!-- /.container-fluid -->
@@ -303,91 +284,105 @@
 
 
                 <!-- Begin Page Content -->
-<!--                 <div class="container-fluid" id="divStoreConfig""> -->
-                <div class="container-fluid" id="divStoreConfig" style="display:none;">
+                <div class="container-fluid" id="divStoreConfig"">
+<!--                 <div class="container-fluid" id="divStoreConfig" style="display:none;"> -->
 
-                    <!-- Page Heading -->
-<!--                     <h1 class="h3 mb-2 text-gray-800">Tables</h1> -->
-<!--                     <p class="mb-4">點擊該列任一處，即可進入該店家的設定畫面 -->
-                    
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h4 class="m-0 font-weight-bold text-primary" style="float:left;">設定店家</h4>
-                            <button id="btnBack" type="button" class="btn btn-warning" style="margin-right:12px;; float:right;">回到店家列表</button>
+                            <h4 class="m-0 font-weight-bold text-primary" style="float:left;">加值1號</h4>
+                            <button id="btnBack" type="button" class="btn btn-warning" style="margin-right:12px;; float:right;">回到加值機列表</button>
                         </div>
                         
                          <!-- Store Config -->
                         <div class="container">
                             <div class="row">
 														    <div class="col-md configBlock">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">店名</h4>
-														      	<h6 id="textStoreName">樹林站前店</h6>
+														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">名稱</h4>
+														      	<h6 id="textAddValueName">加值1號</h6>
             												<hr class="sidebar-divider d-none d-md-block" style="width:90%; color:#FFF;">
-            												<h6>預更換店名</h6>
-            												<input type="text" class="form-control configInput" id="inputStoreName">
+            												<h6>預更換名稱</h6>
+            												<input type="text" class="form-control configInput" id="inputAddValueName">
             												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">確認</button>
 														    </div>
 														    <div class="col-md configBlock">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">一次性消費點數</h4>
-														      	<h6 id="textSinglePoint">目前消費點數:</h6>
+														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">設定儲幣數</h4>
+														      	<h6 id="textStoreDallas">目前儲幣數:</h6>
             												<hr class="sidebar-divider d-none d-md-block" style="width:90%; color:#FFF;">
-            												<h6>預更換消費點數</h6>
-            												<input type="text" class="form-control configInput" id="inputSinglePoint">
+            												<h6>預更新儲幣數</h6>
+            												<input type="text" class="form-control configInput" id="inputStoreDallas">
             												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">確認</button>
 														    </div>
 														    <div class="col-md configBlock">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">連續性消費點數</h4>
-														      	<h6 id="textSMultiPoint">目前消費點數:</h6>
+														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">退幣</h4>
+														      	<h6 id="textRefund">目前儲幣數:</h6>
             												<hr class="sidebar-divider d-none d-md-block" style="width:90%; color:#FFF;">
-            												<h6>預更換消費點數</h6>
-            												<input type="text" class="form-control configInput" id="inputMultiPoint">
+            												<h6>預退幣數</h6>
+            												<input type="text" class="form-control configInput" id="inputRefund">
             												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">確認</button>
 														    </div>
 														</div>
 
-                            <div class="row">
+                            <div class="row" style="width: 34.44%;">
+<!-- 														    <div class="col-md configBlock"> -->
+<!-- 														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">免費服務次數</h4> -->
+<!-- 																		<h6 id="textFreeServiceCount">目前設定枚數:</h6> -->
+<!--             												<hr class="sidebar-divider d-none d-md-block" style="width:90%; color:#FFF;"> -->
+            												
+<!--             												放置dropdown, 20至30 -->
+<!--             												<div class="btn-group" style="display:block;"> -->
+<!-- 																			  <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
+<!-- 																			    選擇枚數 -->
+<!-- 																			  </button> -->
+<!-- 																			  <div class="dropdown-menu"> -->
+<!-- 																			    <a class="dropdown-item" href="#">20</a> -->
+<!-- 																			    <a class="dropdown-item" href="#">21</a> -->
+<!-- 																			    <a class="dropdown-item" href="#">22</a> -->
+<!-- 																			    <a class="dropdown-item" href="#">23</a> -->
+<!-- 																			    <a class="dropdown-item" href="#">24</a> -->
+<!-- 																			    <a class="dropdown-item" href="#">25</a> -->
+<!-- 																			    <a class="dropdown-item" href="#">26</a> -->
+<!-- 																			    <a class="dropdown-item" href="#">27</a> -->
+<!-- 																			    <a class="dropdown-item" href="#">28</a> -->
+<!-- 																			    <a class="dropdown-item" href="#">29</a> -->
+<!-- 																			    <a class="dropdown-item" href="#">30</a> -->
+<!-- 																			  </div> -->
+<!-- 																		</div> -->
+
+<!--             												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">確認</button> -->
+<!-- 														    </div> -->
+
+
+<!-- 														    <div class="col-md configBlock"> -->
+<!-- 														    		<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">免費洗衣或烘衣</h4> -->
+<!-- 														    		switch button -->
+<!-- 														      	<div class="row" style="width:240px; margin:0 auto;"> -->
+<!-- 																        <div class="col-sm-3 mx-auto" style="min-width:172px;"> -->
+<!-- 																            <div class="input-group"> -->
+<!-- 																                <span class="input-group-prepend"> -->
+<!-- 																                    <button type="button" id="btnMinus" class="btn btn-danger btn-number" data-type="minus" data-field="quant[1]"> -->
+<!-- 																                        <span class="fa fa-minus" id="spanMinus"></span> -->
+<!-- 																                    </button> -->
+<!-- 																                </span> -->
+<!-- 																                <input type="text" id="inputUsePoint" name="quant[1]" class="form-control input-number" value="1" min="11" max="30" style="text-align: center; font-weight: bold; color: #FF993C; font-size: 20px;"disabled="disabled"> -->
+<!-- 																                <span class="input-group-append"> -->
+<!-- 																                    <button type="button" id="btnPlus"  class="btn btn-success  btn-number" data-type="plus" data-field="quant[1]"> -->
+<!-- 																                        <span class="fa fa-plus" id="spanPlus"></span> -->
+<!-- 																                    </button> -->
+<!-- 																                </span> -->
+<!-- 																            </div> -->
+<!-- 																        </div> -->
+<!-- 																    </div> -->
+<!--             												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">確認</button> -->
+<!-- 														    </div> -->
+														    
+														    
 														    <div class="col-md configBlock">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">優惠方案一</h4>
-														      	<h6 id="textDiscount1Dallas">目前設定金額:</h6>
-														      	<h6 id="textDiscount1Point">目前設定點數:</h6>
-            												<hr class="sidebar-divider d-none d-md-block" style="width:90%; color:#FFF;">
-            												<h6>預設定金額</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount1Dallas">
-            												<h6 style="margin: 0.5rem;">預設定點數</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount1Point">
-            												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">確認</button>
+														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">清除紙鈔</h4>
+														      	<h6 id="textClearPaper">目前紙鈔數:</h6>
+<!--             												<hr class="sidebar-divider d-none d-md-block" style="width:90%; color:#FFF;"> -->
+            												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">清除</button>
 														    </div>
-														    <div class="col-md configBlock">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">優惠方案二</h4>
-														      	<h6 id="textDiscount2Dallas">目前設定金額:</h6>
-														      	<h6 id="textDiscount2Point">目前設定點數:</h6>
-            												<hr class="sidebar-divider d-none d-md-block" style="width:90%; color:#FFF;">
-            												<h6>預設定金額</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount2Dallas">
-            												<h6 style="margin: 0.5rem;">預設定點數</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount2Point">
-            												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">確認</button>
-														    </div>
-														    <div class="col-md configBlock">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">優惠方案三</h4>
-														      	<h6 id="textDiscount3Dallas">目前設定金額:</h6>
-														      	<h6 id="textDiscount3Point">目前設定點數:</h6>
-            												<hr class="sidebar-divider d-none d-md-block" style="width:90%; color:#FFF;">
-            												<h6>預設定金額</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount3Dallas">
-            												<h6 style="margin: 0.5rem;">預設定點數</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount3Point">
-            												<button type="button" class="btn btn-success" style="margin:12px 0 6px 0;">確認</button>
-														    </div>
-														</div>
-														
-														
-														<div class="row" style="width: 33.6%; margin: 6px -.75rem 12px -.75rem;">
-														    <div class="col-md4 configBlock" style="margin: 0 0 0 0.4rem; width: 100%;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">店家狀態</h4>
-																		<input id="cbStoreState" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="啟用" data-off="停用"  style="margin-bottom:6px;" checked>
-																		<style>.toggle{margin-bottom:6px;}</style>
-														    </div>
+														    
 														</div>
                         </div>
                     </div>
@@ -504,10 +499,10 @@
 	    });
 
 		  $("#btnBack").click(function(){
-			  window.open("http://211.21.93.171:8080/3in1/Admin2/file/test.zip");
+// 			  window.open("http://211.21.93.171:8080/3in1/Admin2/file/test.zip");
 			  	
-// 			  document.getElementById("divStoreList").style.display = "block";
-// 				document.getElementById("divStoreConfig").style.display = "none";
+			  document.getElementById("divStoreList").style.display = "block";
+				document.getElementById("divStoreConfig").style.display = "none";
 			});
 
 		</script>

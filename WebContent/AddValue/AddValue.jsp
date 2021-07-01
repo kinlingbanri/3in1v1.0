@@ -274,7 +274,14 @@
 			$("#successPoint").text( "本次儲值" + totalPoint + "點");
 
 			if(totalPoint > 0){
+				$('.navbar-toggler').attr('disabled', true);
 				$("#btnAdd").attr("disabled", false);
+				$('#logoutBtn').attr('disabled', true);
+				
+			}else if(totalPoint <= 0){
+				$('.navbar-toggler').attr('disabled', false);
+				$("#btnAdd").attr("disabled", true);
+				$('#logoutBtn').attr('disabled', false);
 			}
 
 			if( totalMoneyTemp != totalPoint ){

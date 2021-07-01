@@ -7,6 +7,7 @@ public class TransactionRecordVO {
 	private Date recordTimeStamp;
 	private int point;
 	private String location;
+	private String Storename;
 	private String type;	//交易類型:消費,加值
 	public Date getRecordTimeStamp() {
 		return recordTimeStamp;
@@ -31,5 +32,11 @@ public class TransactionRecordVO {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getStorename() {
+		return Storename;
+	}
+	public void setStorename(String storename) {
+		Storename = storename;
 	}	
 }

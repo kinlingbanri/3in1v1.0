@@ -21,9 +21,9 @@ public class TransactionRecordJDBCDAO implements TransactionRecordDAO_interface{
 	String passwd = "34182958";
 	
 	private static final String GET_30_ADDRECORD_STMT = 
-			"SELECT STOREDATETIME, POINT, LOCATION  FROM addrecord WHERE USERNAME = ? ORDER BY STOREDATETIME DESC LIMIT 30";
+			"SELECT STOREDATETIME, POINT, STORENAME  FROM addrecord WHERE USERNAME = ? ORDER BY STOREDATETIME DESC LIMIT 30";
 	private static final String GET_30_HISTORY_STMT = 
-			"SELECT TTIME, POINT, LOCATION  FROM history WHERE MID = ? AND FREECOUNT > 0 AND POINT > 0 ORDER BY TTIME DESC LIMIT 30";
+			"SELECT TTIME, POINT, STORENAME  FROM history WHERE MID = ? AND FREECOUNT > 0 AND POINT > 0 ORDER BY TTIME DESC LIMIT 30";
 
 	public static void main(String[] args) {
 		TransactionRecordDAO_interface dao = new TransactionRecordJDBCDAO();
@@ -33,7 +33,7 @@ public class TransactionRecordJDBCDAO implements TransactionRecordDAO_interface{
 			System.out.print(transactionRecordVO.getRecordTimeStamp() + ",");
 			System.out.print(transactionRecordVO.getType() + ",");
 			System.out.print(transactionRecordVO.getPoint() + ",");
-			System.out.println(transactionRecordVO.getLocation());
+			System.out.println(transactionRecordVO.getStorename());
 		}
 	}
 
@@ -63,7 +63,7 @@ public class TransactionRecordJDBCDAO implements TransactionRecordDAO_interface{
 				transactionRecordVO = new TransactionRecordVO();
 				transactionRecordVO.setRecordTimeStamp(rs.getTimestamp("ttime"));
 				transactionRecordVO.setPoint(rs.getInt("point"));
-				transactionRecordVO.setLocation(rs.getString("location"));
+				transactionRecordVO.setStorename(rs.getString("storename"));
 				transactionRecordVO.setType("消費");
 				transactionRecordVOs.add(transactionRecordVO);
 			}
@@ -79,7 +79,7 @@ public class TransactionRecordJDBCDAO implements TransactionRecordDAO_interface{
 				transactionRecordVO = new TransactionRecordVO();
 				transactionRecordVO.setRecordTimeStamp(rs.getTimestamp("storedatetime"));
 				transactionRecordVO.setPoint(rs.getInt("point"));
-				transactionRecordVO.setLocation(rs.getString("location"));
+				transactionRecordVO.setStorename(rs.getString("storename"));
 				transactionRecordVO.setType("加值");
 				transactionRecordVOs.add(transactionRecordVO);
 			}

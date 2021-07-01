@@ -36,7 +36,6 @@
 			<!--======================================-->
 			
 			<mapping class="com.device.model.DeviceVO"/>
-			<mapping class="com.history.model.HistoryVO"/>
 <!-- 			<mapping class="com.mem.model.MemVO"/> -->
 			<mapping resource="mbm.nhb.xml" />
 			<mapping class="com.addrecord.model.AddRecordVO"/>

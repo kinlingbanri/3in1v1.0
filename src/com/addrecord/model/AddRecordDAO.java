@@ -29,22 +29,23 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 	
 	private static final String GET_ALL_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
-			+ "point, errorcode, username, deviceid, devicenumber, storeid, cardid FROM addrecord order by id";
+			+ "point, errorcode, username, deviceid, devicenumber, storeid, storename, cardid FROM addrecord order by id";
 	private static final String QUERY_RANGEDATE_STORENAME_STMT = 
 			"SELECT id, storedatetime, paper100, paper500, paper1000, point FROM addrecord " + 
 			"WHERE STR_TO_DATE(storedatetime, '%Y-%m-%d') >= ? AND " + 
 			"		STR_TO_DATE(storedatetime, '%Y-%m-%d') <= ? AND " + 
 			"		storename = ?";
+	
 	private static final String GET_TodayTotal_STMT = 
 			"SELECT sum( (coin10*10) + (coin50*50) + (paper100*100) + (paper500*500) + (paper1000*1000)) totalMoney, (point) totalpoint "
 			+ "from addrecord where DATE(storedatetime) = curdate();";
 	
 	private static final String GET_ONE_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
-					+ "point, errorcode, username, deviceid, devicenumber, storeid, cardid FROM addrecord where id = ?";
+					+ "point, errorcode, username, deviceid, devicenumber, storeid, storename, cardid FROM addrecord where id = ?";
 	private static final String GET_BYUSERNAME_STMT = 
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
-					+ "point, errorcode, username, deviceid, devicenumber, storeid, cardid FROM addrecord where username = ?"
+					+ "point, errorcode, username, deviceid, devicenumber, storeid, storename, cardid FROM addrecord where username = ?"
 					+ "order by storedatetime DESC LIMIT 30";
 	private static final String GET_AFTER30_STMT = 
 			"SELECT ADDRECORD.STOREDATETIME, ADDRECORD.POINT, ADDRECORD.DEVICENUMBER, STORE.NAME, STORE.CITY FROM ADDRECORD " + 
@@ -52,10 +53,10 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 			"					order by STOREDATETIME DESC LIMIT 30";
 	private static final String INSERT_STMT = 
 			"INSERT INTO addrecord (storedatetime, coin10, coin50, paper100, paper500, paper1000, "
-			+ "point, errorcode, username, deviceid, devicenumber, storeid, cardid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			+ "point, errorcode, username, deviceid, devicenumber, storeid, storename, cardid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
 			"UPDATE addrecord set storedatetime=?, coin10=?, coin50=?, paper100=?, paper500=?,"
-			+ " paper1000=?, point=?, errorcode=?, username=?, deviceid=?,  devicenumber = ?, storeid=?, cardid=? where id = ?";
+			+ " paper1000=?, point=?, errorcode=?, username=?, deviceid=?,  devicenumber = ?, storeid=?, storename=?, cardid=? where id = ?";
 	private static final String DELETE_STMT = 
 			"DELETE FROM addrecord where id = ?";
 
@@ -80,14 +81,14 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 			pstmt.setInt(10, addRecordVO.getDeviceid());
 			pstmt.setString(11, addRecordVO.getDeviceNumber());
 			pstmt.setInt(12, addRecordVO.getStoreid());
-			pstmt.setString(13, addRecordVO.getCardid());
+			pstmt.setString(13, addRecordVO.getStorename());
+			pstmt.setString(14, addRecordVO.getCardid());
 
 			pstmt.executeUpdate();
 
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -128,15 +129,15 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 			pstmt.setInt(10, addRecordVO.getDeviceid());
 			pstmt.setString(11, addRecordVO.getDeviceNumber());
 			pstmt.setInt(12, addRecordVO.getStoreid());
-			pstmt.setString(13, addRecordVO.getCardid());
-			pstmt.setInt(14, addRecordVO.getId());
+			pstmt.setString(13, addRecordVO.getStorename());
+			pstmt.setString(14, addRecordVO.getCardid());
+			pstmt.setInt(15, addRecordVO.getId());
 
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -222,6 +223,7 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 				addRecordVO.setDeviceid(rs.getInt("deviceid"));
 				addRecordVO.setDeviceNumber(rs.getString("deviceNumber"));
 				addRecordVO.setStoreid(rs.getInt("storeid"));
+				addRecordVO.setStorename(rs.getString("storename"));
 				addRecordVO.setCardid(rs.getString("cardid"));
 			}
 
@@ -285,6 +287,7 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 				addRecordVO.setDeviceid(rs.getInt("deviceid"));
 				addRecordVO.setDeviceNumber(rs.getString("deviceNumber"));
 				addRecordVO.setStoreid(rs.getInt("storeid"));
+				addRecordVO.setStorename(rs.getString("storename"));
 				addRecordVO.setCardid(rs.getString("cardid"));
 
 				list.add(addRecordVO); // Store the row in the list
@@ -351,6 +354,7 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 				addRecordVO.setDeviceid(rs.getInt("deviceid"));
 				addRecordVO.setDeviceNumber(rs.getString("deviceNumber"));
 				addRecordVO.setStoreid(rs.getInt("storeid"));
+				addRecordVO.setStorename(rs.getString("storename"));
 				addRecordVO.setCardid(rs.getString("cardid"));
 
 				list.add(addRecordVO); // Store the row in the list

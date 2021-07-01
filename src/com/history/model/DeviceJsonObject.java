@@ -4,6 +4,7 @@ public class DeviceJsonObject {
 	private int len;
 	private String ttime;
 	private String event;
+	private String storename;
 	
 	public int getLen() {
 		return len;
@@ -22,6 +23,12 @@ public class DeviceJsonObject {
 	}
 	public void setEvent(String event) {
 		this.event = event;
+	}
+	public String getStorename() {
+		return storename;
+	}
+	public void setStorename(String storename) {
+		this.storename = storename;
 	}
 
 }

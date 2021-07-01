@@ -16,22 +16,22 @@ public class MemJDBCDAO implements MemDAO_interface {
 	
 	private static final String GET_ALL_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode, "
-			+ "verificationdate, phone FROM mem order by username";
+			+ "verificationdate, phone, add_money, add_status FROM mem order by username";
 	private static final String GET_ONE_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," 
-			+"verificationdate, phone FROM mem where username = ?";
+			+"verificationdate, phone, add_money, add_status FROM mem where username = ?";
 	private static final String GET_ONEEMAIL_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," + 
-			"verificationdate, phone FROM mem where email = ?";
+			"verificationdate, phone, add_money, add_status FROM mem where email = ?";
 	private static final String GET_ONEPHONE_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," + 
-			"verificationdate, phone FROM mem where phone = ?";
+			"verificationdate, phone, add_money, add_status FROM mem where phone = ?";
 	private static final String INSERT_STMT = 
 			"INSERT INTO mem (username, email, password, point, black, authority, verification, verificationcode," + 
-			"verificationdate, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			"verificationdate, phone, add_money, add_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE = 
 			"UPDATE mem set email=?, password=?, point=?, black=?, authority=?, verification=?, " + 
-			"verificationcode=?, verificationdate=?, phone=? where username = ?";
+			"verificationcode=?, verificationdate=?, phone=?, add_money=?, add_status=? where username = ?";
 	private static final String DELETE = 
 			"DELETE FROM mem where username = ?";
 
@@ -57,17 +57,17 @@ public class MemJDBCDAO implements MemDAO_interface {
 			pstmt.setString(8, memVO.getVerificationcode());
 			pstmt.setTimestamp(9, memVO.getVerificationdate());
 			pstmt.setString(10, memVO.getPhone());
+			pstmt.setInt(11, memVO.getAdd_money());
+			pstmt.setInt(12, memVO.getAdd_status());
 
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -107,18 +107,18 @@ public class MemJDBCDAO implements MemDAO_interface {
 			pstmt.setString(7, memVO.getVerificationcode());
 			pstmt.setTimestamp(8, memVO.getVerificationdate());
 			pstmt.setString(9, memVO.getPhone());
-			pstmt.setString(10, memVO.getUsername());			
+			pstmt.setInt(10, memVO.getAdd_money());
+			pstmt.setInt(11, memVO.getAdd_status());
+			pstmt.setString(12, memVO.getUsername());			
 
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -148,19 +148,15 @@ public class MemJDBCDAO implements MemDAO_interface {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(DELETE);
-
 			pstmt.setString(1, username);
-
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -192,9 +188,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(GET_ONE_STMT);
-
 			pstmt.setString(1, username);
-
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -210,16 +204,16 @@ public class MemJDBCDAO implements MemDAO_interface {
 				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
+				memVO.setAdd_money(rs.getInt("add_money"));
+				memVO.setAdd_status(rs.getInt("add_status"));
 			}
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -261,10 +255,8 @@ public class MemJDBCDAO implements MemDAO_interface {
 
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, userid, passwd);
-			pstmt = con.prepareStatement(GET_ONEEMAIL_STMT);
-			
-			pstmt.setString(1, email);
-			
+			pstmt = con.prepareStatement(GET_ONEEMAIL_STMT);			
+			pstmt.setString(1, email);			
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -280,6 +272,8 @@ public class MemJDBCDAO implements MemDAO_interface {
 				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
+				memVO.setAdd_money(rs.getInt("add_money"));
+				memVO.setAdd_status(rs.getInt("add_status"));
 				list.add(memVO); // Store the row in the list
 			}
 
@@ -346,17 +340,17 @@ public class MemJDBCDAO implements MemDAO_interface {
 				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
+				memVO.setAdd_money(rs.getInt("add_money"));
+				memVO.setAdd_status(rs.getInt("add_status"));
 				list.add(memVO); // Store the row in the list
 			}
 
 			// Handle any driver errors
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. "
-					+ e.getMessage());
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -387,7 +381,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 	public static void main(String[] args) {
 		MemJDBCDAO dao = new MemJDBCDAO();
 		
-//		//Add
+		//Add
 //		MemVO memVO = new MemVO();
 //		memVO.setUsername("林阿金");
 //		memVO.setEmail("Kim@hotmail.com");
@@ -397,13 +391,16 @@ public class MemJDBCDAO implements MemDAO_interface {
 //		memVO.setAuthority(0);
 //		memVO.setVerification(0);
 //		memVO.setVerificationcode("5491");
+//		memVO.setAdd_money(100);
+//		memVO.setAdd_status(14);
 //		
 //		Date date = new Date();       
 //		Timestamp nousedate = new Timestamp(date.getTime());
 //		
 //		memVO.setVerificationdate(nousedate);
 //		memVO.setPhone("0935276906");
-//		memVO.setBlack(1);
+//		memVO.setAdd_money(100);
+//		memVO.setAdd_status(14);
 //		dao.insert(memVO);
 		
 
@@ -424,6 +421,8 @@ public class MemJDBCDAO implements MemDAO_interface {
 //		memVO.setVerificationdate(nousedate);
 //		memVO.setPhone("0935276906");
 //		memVO.setBlack(0);
+//		memVO.setAdd_money(0);
+//		memVO.setAdd_status(0);
 //		dao.update(memVO);
 		
 //		// Delete
@@ -441,11 +440,13 @@ public class MemJDBCDAO implements MemDAO_interface {
 //		System.out.print(memVO.getVerification() + ",");
 //		System.out.print(memVO.getVerificationcode() + ",");
 //		System.out.print(memVO.getVerificationdate() + ",");
-//		System.out.print(memVO.getPhone());
+//		System.out.print(memVO.getPhone() + ",");
+//		System.out.print(memVO.getAdd_money() + ",");
+//		System.out.print(memVO.getAdd_status());
 //		System.out.println();
 		
 		
-//		// Query Email All
+		// Query Email All
 //		List<MemVO> list = dao.findByEmail("Van@tongya.com.tw");
 //		for (MemVO mem : list) {
 //			System.out.print(mem.getUsername() + ",");
@@ -458,40 +459,46 @@ public class MemJDBCDAO implements MemDAO_interface {
 //			System.out.print(mem.getVerificationcode() + ",");
 //			System.out.print(mem.getVerificationdate() + ",");
 //			System.out.print(mem.getPhone());
+//			System.out.print(mem.getAdd_money() + ",");
+//			System.out.print(mem.getAdd_status());
 //			System.out.println();
 //		}
 		
 		// Query Phone All
-		List<MemVO> list = dao.findByPhone("0935276906");
-		for (MemVO mem : list) {
-			System.out.print(mem.getUsername() + ",");
-			System.out.print(mem.getEmail() + ",");
-			System.out.print(mem.getPassword() + ",");
-			System.out.print(mem.getPoint());
-			System.out.print(mem.getBlack() + ",");
-			System.out.print(mem.getAuthority() + ",");
-			System.out.print(mem.getVerification() + ",");
-			System.out.print(mem.getVerificationcode() + ",");
-			System.out.print(mem.getVerificationdate() + ",");
-			System.out.print(mem.getPhone());
-			System.out.println();
-		}
-		
-//		// Query All
-//		List<MemVO> list = dao.getAll();
+//		List<MemVO> list = dao.findByPhone("0935276906");
 //		for (MemVO mem : list) {
 //			System.out.print(mem.getUsername() + ",");
 //			System.out.print(mem.getEmail() + ",");
 //			System.out.print(mem.getPassword() + ",");
-//			System.out.print(mem.getPoint() + ",");
+//			System.out.print(mem.getPoint());
 //			System.out.print(mem.getBlack() + ",");
 //			System.out.print(mem.getAuthority() + ",");
 //			System.out.print(mem.getVerification() + ",");
 //			System.out.print(mem.getVerificationcode() + ",");
 //			System.out.print(mem.getVerificationdate() + ",");
-//			System.out.print(mem.getPhone());
+//			System.out.print(mem.getPhone() + ",");
+//			System.out.print(mem.getAdd_money() + ",");
+//			System.out.print(mem.getAdd_status());
 //			System.out.println();
 //		}
+		
+		// Query All
+		List<MemVO> list = dao.getAll();
+		for (MemVO mem : list) {
+			System.out.print(mem.getUsername() + ",");
+			System.out.print(mem.getEmail() + ",");
+			System.out.print(mem.getPassword() + ",");
+			System.out.print(mem.getPoint() + ",");
+			System.out.print(mem.getBlack() + ",");
+			System.out.print(mem.getAuthority() + ",");
+			System.out.print(mem.getVerification() + ",");
+			System.out.print(mem.getVerificationcode() + ",");
+			System.out.print(mem.getVerificationdate() + ",");
+			System.out.print(mem.getPhone() + ",");
+			System.out.print(mem.getAdd_money() + ",");
+			System.out.print(mem.getAdd_status());
+			System.out.println();
+		}
 		
 	}
 

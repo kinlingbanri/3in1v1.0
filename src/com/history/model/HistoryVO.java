@@ -59,6 +59,11 @@ public class HistoryVO  implements java.io.Serializable  {
 	@Column(name = "location")
 	private String location;
 	
+	@Column(name = "sid")
+	private int sid;
+	
+	@Column(name = "storename")
+	private String storename;
 
 	public int getHid() {
 		return hid;
@@ -143,6 +148,18 @@ public class HistoryVO  implements java.io.Serializable  {
 	}
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	public int getSid() {
+		return sid;
+	}
+	public void setSid(int sid) {
+		this.sid = sid;
+	}
+	public String getStorename() {
+		return storename;
+	}
+	public void setStorename(String storename) {
+		this.storename = storename;
 	}
 
 }

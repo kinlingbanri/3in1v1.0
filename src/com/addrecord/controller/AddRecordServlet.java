@@ -52,8 +52,8 @@ public class AddRecordServlet extends HttpServlet {
 		String sidStr = req.getParameter("sid");
 		int sid = Integer.parseInt(sidStr);
 		System.out.println("username : " + username);
-		System.out.println("CheckMoneyServlet number : " + did);
-		System.out.println("CheckMoneyServlet store id : " + sid);
+		System.out.println("AddRecordServlet number : " + did);
+		System.out.println("AddRecordServlet store id : " + sid);
 		
 		
 		DeviceVO deviceVO = new DeviceService().getCheckMoney(did);
@@ -61,9 +61,14 @@ public class AddRecordServlet extends HttpServlet {
 		int count_500 = deviceVO.getCount_500();
 		int count_1000 = deviceVO.getCount_1000();
 		int totalMoney = (count_100 * 100) + (count_500 * 500) + (count_1000 * 1000);
+		System.out.println("count_100 : " + count_100);
+		System.out.println("count_500 : " + count_500);
+		System.out.println("count_1000 : " + count_1000);
+		System.out.println("totalMoney : " + totalMoney);
 		
 		StoreService storeService = new StoreService();
 		StoreVO storeVO = storeService.getOneStore(sid);
+		System.out.println("AddRecordServlet store name : " + storeVO.getName());
 		
 		int totalPoint = 0;
 		if(totalMoney >= storeVO.getDiscount_3_money()) {
@@ -72,9 +77,11 @@ public class AddRecordServlet extends HttpServlet {
 			totalPoint = totalMoney + ( storeVO.getDiscount_2_point() - storeVO.getDiscount_2_money());
 		}else if(totalMoney >= storeVO.getDiscount_1_money()) {
 			totalPoint = totalMoney + ( storeVO.getDiscount_1_point() - storeVO.getDiscount_1_money());
-		}
-		System.out.println("totalPoint : " + totalPoint);		
+		}else {
+			totalPoint = totalMoney;
+		}		
 
+		System.out.println("totalPoint : " + totalPoint);
 		
 		Date date = new Date();	//Get now
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

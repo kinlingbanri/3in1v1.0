@@ -12,11 +12,21 @@
 
 <%
 	String reqDID = request.getParameter("DID");
+	String reqMACHID = request.getParameter("MACHID");
+	System.out.println("reqDID : " + reqDID);
+	System.out.println("reqMACHID : " + reqMACHID);
 
 	if ((reqDID != null)) {
 		session.setAttribute("DID", reqDID);
 	}
+
+	if ((reqMACHID != null)) {
+		session.setAttribute("MACHID", reqMACHID);
+	}
+	String sessionDID = request.getParameter("DID");
+	String sessionMACHID = request.getParameter("MACHID");
 	System.out.println("session DID : " + session.getAttribute("DID"));
+	System.out.println("session MACHID : " + session.getAttribute("MACHID"));
 
 	MemService memSvc = new MemService();
 	List<MemVO> list = memSvc.getAll();
@@ -274,7 +284,7 @@ a {
 					</div>
 					<div class="hr" style="margin: 280px 0 40px 0;"></div>
 					<div class="foot-lnk">
-						<a href="./index.jsp">已有帳號?</a>
+						<a href="./index.jsp?DID=<%= sessionDID%>&MACHID=<%= sessionMACHID%>">已有帳號?</a>
 					</div>
 				</div>
 				
@@ -305,7 +315,7 @@ a {
 					</div>
 					<div class="hr" style="margin: 280px 0 40px 0;"></div>
 					<div class="foot-lnk">
-						<a href="./index.jsp">已有帳號?</a>
+						<a href="./index.jsp?<%= sessionDID%>&<%= sessionMACHID%>">已有帳號?</a>
 					</div>
 				</div>
 			</div>
@@ -393,9 +403,9 @@ a {
 							$("#phoneWarn").text("密碼已送出，3秒後自動跳至登入頁面!").css( "color", "red");
 						}
 
-// 						setTimeout(function() {
-// 							window.location.href = "./logout.jsp";
-// 						}, 3000);
+						setTimeout(function() {
+							window.location.href = "./logout.jsp";
+						}, 3000);
 
 // 						swal.fire({
 // 						    title: '密碼已送出！',

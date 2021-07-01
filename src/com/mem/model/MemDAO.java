@@ -28,22 +28,22 @@ public class MemDAO implements MemDAO_interface {
 	
 	private static final String GET_ALL_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode, "
-			+ "verificationdate, phone FROM mem order by username";
+			+ "verificationdate, phone, add_money, add_status FROM mem order by username";
 	private static final String GET_ONE_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," 
-			+"verificationdate, phone FROM mem where username = ?";
+			+"verificationdate, phone, add_money, add_status FROM mem where username = ?";
 	private static final String GET_ONEEMAIL_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," + 
-			"verificationdate, phone FROM mem where email = ?";
+			"verificationdate, phone, add_money, add_status FROM mem where email = ?";
 	private static final String GET_ONEPHONE_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," + 
-			"verificationdate, phone FROM mem where phone = ?";
+			"verificationdate, phone, add_money, add_status FROM mem where phone = ?";
 	private static final String INSERT_STMT = 
 			"INSERT INTO mem (username, email, password, point, black, authority, verification, verificationcode," + 
-			"verificationdate, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			"verificationdate, phone, add_money, add_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE = 
 			"UPDATE mem set email=?, password=?, point=?, black=?, authority=?, verification=?, " + 
-			"verificationcode=?, verificationdate=?, phone=? where username = ?";
+			"verificationcode=?, verificationdate=?, phone=?, add_money=?, add_status=? where username = ?";
 	private static final String DELETE = 
 			"DELETE FROM mem where username = ?";
 
@@ -66,6 +66,8 @@ public class MemDAO implements MemDAO_interface {
 			pstmt.setString(8, memVO.getVerificationcode());
 			pstmt.setTimestamp(9, memVO.getVerificationdate());
 			pstmt.setString(10, memVO.getPhone());
+			pstmt.setInt(11, memVO.getAdd_money());
+			pstmt.setInt(12, memVO.getAdd_status());
 
 			pstmt.executeUpdate();
 
@@ -111,7 +113,9 @@ public class MemDAO implements MemDAO_interface {
 			pstmt.setString(7, memVO.getVerificationcode());
 			pstmt.setTimestamp(8, memVO.getVerificationdate());
 			pstmt.setString(9, memVO.getPhone());
-			pstmt.setString(10, memVO.getUsername());	
+			pstmt.setInt(10, memVO.getAdd_money());
+			pstmt.setInt(11, memVO.getAdd_status());
+			pstmt.setString(12, memVO.getUsername());		
 
 			pstmt.executeUpdate();
 
@@ -204,6 +208,8 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
+				memVO.setAdd_money(rs.getInt("add_money"));
+				memVO.setAdd_status(rs.getInt("add_status"));
 			}
 
 			// Handle any driver errors
@@ -249,10 +255,8 @@ public class MemDAO implements MemDAO_interface {
 		
 		try {			
 			con = ds.getConnection();
-			pstmt = con.prepareStatement(GET_ONEEMAIL_STMT);
-			
-			pstmt.setString(1, email);
-			
+			pstmt = con.prepareStatement(GET_ONEEMAIL_STMT);			
+			pstmt.setString(1, email);			
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -268,6 +272,8 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
+				memVO.setAdd_money(rs.getInt("add_money"));
+				memVO.setAdd_status(rs.getInt("add_status"));
 				list.add(memVO); // Store the row in the list
 			}
 			// Handle any driver errors
@@ -327,6 +333,8 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
+				memVO.setAdd_money(rs.getInt("add_money"));
+				memVO.setAdd_status(rs.getInt("add_status"));
 				list.add(memVO); // Store the row in the list
 			}
 
@@ -391,6 +399,8 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
+				memVO.setAdd_money(rs.getInt("add_money"));
+				memVO.setAdd_status(rs.getInt("add_status"));
 				list.add(memVO); // Store the row in the list
 			}
 			// Handle any driver errors
