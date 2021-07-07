@@ -39,11 +39,17 @@ public class DeviceVO  implements java.io.Serializable  {
 	@Column(name = "status")
 	private int status;
 	
+	@Column(name = "point")
+	private int point;
+	
 	@Column(name = "add_status")
 	private int add_status;
 	
-	@Column(name = "point")
-	private int point;
+	@Column(name = "add_life_status")
+	private int add_life_status;
+	
+	@Column(name = "add_money")
+	private int add_money;
 	
 	@Column(name = "add_point")
 	private int add_point;
@@ -194,6 +200,18 @@ public class DeviceVO  implements java.io.Serializable  {
 	}
 	public void setAdd_point(int add_point) {
 		this.add_point = add_point;
+	}
+	public int getAdd_life_status() {
+		return add_life_status;
+	}
+	public void setAdd_life_status(int add_life_status) {
+		this.add_life_status = add_life_status;
+	}
+	public int getAdd_money() {
+		return add_money;
+	}
+	public void setAdd_money(int add_money) {
+		this.add_money = add_money;
 	}
 	
 }

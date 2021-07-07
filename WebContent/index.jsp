@@ -46,6 +46,9 @@ body {
 	font: 600 16px/18px 'Open Sans', sans-serif;
 }
 
+* { touch-action: pan-y; -ms-touch-action: none;
+touch-action: none;}
+
 *, :after, :before {
 	box-sizing: border-box
 }
@@ -259,7 +262,7 @@ a {
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
 
-<script src="./js/nicescroll.js"></script>
+<!-- <script src="./js/nicescroll.js"></script> -->
 <script src="./js/core.js"></script>
 <script src="./js/sweetalert2.js"></script>
 <!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script> -->
@@ -410,12 +413,12 @@ a {
 	console.log("DID=" + DID + "; MACHID=" + MACHID);
 
 	//隠藏右側scrollbar
-	$("#body").niceScroll({
-		cursorcolor : "#0026BF",
-		cursorborder : "1px solid #30BAFF",
-		autohidemode : "hidden",
-		cursorwidth : "10px"
-	});
+// 	$("#body").niceScroll({
+// 		cursorcolor : "#0026BF",
+// 		cursorborder : "1px solid #30BAFF",
+// 		autohidemode : "hidden",
+// 		cursorwidth : "10px"
+// 	});
 	
 		//初始化各元素
 	$(function() {
@@ -443,6 +446,8 @@ a {
 
 		$("#signupSuccess").hide();
 		$("#signupForm").show();
+
+		
 	});
 
 	//倒數計時,時間到自動登出
@@ -845,8 +850,7 @@ a {
 					var state = jsonObject.state;
 					console.log("state : " + state);
 					if (state == "repeat") {
-						$("#registerUsername").val("此帳號已註冊!").css('color',
-								'red');
+						$("#registerUsername").val("此帳號已註冊!").css('color', 'red');
 					} else if (state == "register") {
 						//alert("註冊成功!");
 						//window.location.href = "../index.jsp";
@@ -918,6 +922,7 @@ a {
 							console.log("註冊成功!");
 							$(window).scrollTop(0);
 							$("#inputHiddenUsername").val(jsonObject.username);
+							$("#signinForm").hide();
 							$("#signupForm").hide();
 							$("#signupSuccess").show();
 							$("#tab-11").hide();
@@ -925,7 +930,8 @@ a {
 							//count = 3;														
 							//myTimerVar = setInterval(function() {	myTimerToVarification(); }, 800);
 							
-							setTimeout(function(){ 
+							setTimeout(function(){
+								$("#signup").hide();
 								$("#signupSuccess").hide();
 								$("#verificationWindow").show();
 							}, 3000);

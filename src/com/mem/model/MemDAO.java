@@ -31,7 +31,7 @@ public class MemDAO implements MemDAO_interface {
 			+ "verificationdate, phone, add_money, add_status FROM mem order by username";
 	private static final String GET_ONE_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," 
-			+"verificationdate, phone, add_money, add_status FROM mem where username = ?";
+			+"verificationdate, phone, now_money, add_money, add_status FROM mem where username = ?";
 	private static final String GET_ONEEMAIL_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," + 
 			"verificationdate, phone, add_money, add_status FROM mem where email = ?";
@@ -44,6 +44,10 @@ public class MemDAO implements MemDAO_interface {
 	private static final String UPDATE = 
 			"UPDATE mem set email=?, password=?, point=?, black=?, authority=?, verification=?, " + 
 			"verificationcode=?, verificationdate=?, phone=?, add_money=?, add_status=? where username = ?";
+	private static final String UPDATE_CUECK_MONEY = 
+			"UPDATE mem set now_money=?, add_money=?, add_status=? where username = ?";
+	private static final String UPDATE_NOW_MONEY = 
+			"UPDATE mem set now_money=? where username = ?";
 	private static final String DELETE = 
 			"DELETE FROM mem where username = ?";
 
@@ -190,9 +194,7 @@ public class MemDAO implements MemDAO_interface {
 
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_STMT);
-
 			pstmt.setString(1, username);
-
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
@@ -208,6 +210,7 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setVerificationcode(rs.getString("verificationcode"));
 				memVO.setVerificationdate(rs.getTimestamp("verificationdate"));
 				memVO.setPhone(rs.getString("phone"));
+				memVO.setNow_money(rs.getInt("now_money"));
 				memVO.setAdd_money(rs.getInt("add_money"));
 				memVO.setAdd_status(rs.getInt("add_status"));
 			}
@@ -432,6 +435,82 @@ public class MemDAO implements MemDAO_interface {
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public void updateCheckMoney(String username, int now_money, int add_money, int add_status) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_CUECK_MONEY);
+
+			pstmt.setInt(1, now_money);
+			pstmt.setInt(2, add_money);
+			pstmt.setInt(3, add_status);
+			pstmt.setString(4, username);		
+
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void updateNowMoney(String username, int now_money) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_NOW_MONEY);
+
+			pstmt.setInt(1, now_money);
+			pstmt.setString(2, username);		
+
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 	}
 
 

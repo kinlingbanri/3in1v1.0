@@ -20,6 +20,7 @@ import com.mem.model.MemVO;
 
 import utils.EmailUtil;
 import utils.Random4;
+import utils.SerialPortMessage;
 
 @WebServlet(name = "MemServlet", urlPatterns = {"/MemServlet"})
 public class MemServlet extends HttpServlet {
@@ -106,6 +107,10 @@ public class MemServlet extends HttpServlet {
 				memService.updateMem(memVO);
 				System.out.println(" updateMem");
 				// 這裡要放傳送簡訊的程式碼
+				SerialPortMessage serialPortMessage = new SerialPortMessage();
+				serialPortMessage.SendMessage(memVO.getPhone(), ("code:" + newCode));
+				
+				/*
 				ServletContext application=getServletConfig().getServletContext();
 				String jarpath = application.getRealPath("/WEB-INF/lib/RXTX_Demo.jar");
 				System.out.println("jarpath : " + jarpath);
@@ -120,6 +125,7 @@ public class MemServlet extends HttpServlet {
 				String commandStr = "cmd /c java -jar " + jarpath + " " +  comPortNum + " 您的驗證碼為:" + newCode;
 				//Runtime.getRuntime().exec( "cmd /c java -jar C:\\Users\\USER\\eclipse-workspace\\3in1\\WebContent\\WEB-INF\\lib\\RXTX_Demo.jar COM8 OOOOKKKK" );
 				Runtime.getRuntime().exec(commandStr);
+				*/
 				
 				EmailUtil.sendEmail(memVO.getEmail(), "van@tongya.com.tw",
 						"mail.tongya.com.tw", "驗證碼", "您的驗證碼為 : " + newCode);

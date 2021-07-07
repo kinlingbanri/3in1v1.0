@@ -53,7 +53,8 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 			"					order by STOREDATETIME DESC LIMIT 30";
 	private static final String INSERT_STMT = 
 			"INSERT INTO addrecord (storedatetime, coin10, coin50, paper100, paper500, paper1000, "
-			+ "point, errorcode, username, deviceid, devicenumber, storeid, storename, cardid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			+ "money, point,errorcode, username, deviceid, devicenumber, storeid, storename, cardid)"
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
 			"UPDATE addrecord set storedatetime=?, coin10=?, coin50=?, paper100=?, paper500=?,"
 			+ " paper1000=?, point=?, errorcode=?, username=?, deviceid=?,  devicenumber = ?, storeid=?, storename=?, cardid=? where id = ?";
@@ -75,14 +76,15 @@ public class AddRecordDAO implements AddRecordDAO_interface{
 			pstmt.setInt(4, addRecordVO.getPaper100());
 			pstmt.setInt(5, addRecordVO.getPaper500());
 			pstmt.setInt(6, addRecordVO.getPaper1000());
-			pstmt.setInt(7, addRecordVO.getPoint());
-			pstmt.setInt(8, addRecordVO.getErrorcode());
-			pstmt.setString(9, addRecordVO.getUsername());
-			pstmt.setInt(10, addRecordVO.getDeviceid());
-			pstmt.setString(11, addRecordVO.getDeviceNumber());
-			pstmt.setInt(12, addRecordVO.getStoreid());
-			pstmt.setString(13, addRecordVO.getStorename());
-			pstmt.setString(14, addRecordVO.getCardid());
+			pstmt.setInt(7, addRecordVO.getMoney());
+			pstmt.setInt(8, addRecordVO.getPoint());
+			pstmt.setInt(9, addRecordVO.getErrorcode());
+			pstmt.setString(10, addRecordVO.getUsername());
+			pstmt.setInt(11, addRecordVO.getDeviceid());
+			pstmt.setString(12, addRecordVO.getDeviceNumber());
+			pstmt.setInt(13, addRecordVO.getStoreid());
+			pstmt.setString(14, addRecordVO.getStorename());
+			pstmt.setString(15, addRecordVO.getCardid());
 
 			pstmt.executeUpdate();
 

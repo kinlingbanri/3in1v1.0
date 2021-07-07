@@ -30,6 +30,14 @@ public class MemService {
 		dao.update(memVO);
 	}
 	
+	public void updateNowMoney(String username, int now_money) {
+		dao.updateNowMoney(username, now_money);
+	}
+	
+	public void updateCheckMoney(String username, int now_money, int add_money, int add_status) {
+		dao.updateCheckMoney(username, now_money, add_money, add_status);
+	}
+	
 	public void deleteMem(String username) {
 		dao.delete(username);
 	}

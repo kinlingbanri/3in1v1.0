@@ -29,11 +29,11 @@
 
 	DeviceService deviceService = new DeviceService();
 	DeviceVO device = deviceService.getOneDevice(DID);
-	
+	System.out.print("device");
 	MachineService machineService = new MachineService();
 	MachineVO machineVO = machineService.getOneMachineNumber(number);
 	int serial = machineVO.getSerial();
-	
+	System.out.print("serial");
 	StoreService storeService = new StoreService();
 	StoreVO storeVO = storeService.getOneStore( device.getSid() );	
 

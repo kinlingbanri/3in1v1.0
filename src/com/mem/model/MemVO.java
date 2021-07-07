@@ -49,6 +49,9 @@ public class MemVO implements java.io.Serializable {
 	@Column(name = "phone")
 	private String phone;
 	
+	@Column(name = "now_money")
+	private Integer now_money;
+	
 	@Column(name = "add_money")
 	private Integer add_money;
 	
@@ -139,6 +142,14 @@ public class MemVO implements java.io.Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public int getNow_money() {
+		return now_money;
+	}
+
+	public void setNow_money(int now_money) {
+		this.now_money = now_money;
 	}
 
 	public Integer getAdd_money() {

@@ -56,7 +56,7 @@ public class DeviceService {
 		dao.updateAddStatus11(number, add_status, point);
 	}
 	
-	public void updateAddStatus13(String number, int add_status, int add_point) {
-		dao.updateAddStatus13(number, add_status, add_point);
+	public void updateAddStatus13(String number, int add_status, int add_point, int add_money, int add_life_status) {
+		dao.updateAddStatus13(number, add_status, add_point, add_money, add_life_status);
 	}
 }

@@ -13,6 +13,8 @@ import org.json.JSONObject;
 
 import com.device.model.DeviceService;
 import com.device.model.DeviceVO;
+import com.mem.model.MemService;
+import com.mem.model.MemVO;
 import com.store.model.StoreService;
 import com.store.model.StoreVO;
 
@@ -39,9 +41,11 @@ public class CheckMoneyServlet extends HttpServlet {
 		
 		String did = req.getParameter("did");
 		String sidStr = req.getParameter("sid");
+		String username = req.getParameter("username");
 		int sid = Integer.parseInt(sidStr);
 		System.out.println("CheckMoneyServlet number : " + did);
 		System.out.println("CheckMoneyServlet store id : " + sid);
+		System.out.println("CheckMoneyServlet username : " + username);
 		
 		DeviceVO addStatusVO = new DeviceService().getAddStatus(did);
 		int addStatus = addStatusVO.getAdd_status();
@@ -54,6 +58,28 @@ public class CheckMoneyServlet extends HttpServlet {
 			int count_1000 = deviceVO.getCount_1000();
 			int totalMoney = (count_100 * 100) + (count_500 * 500) + (count_1000 * 1000);
 			
+			MemService memService = new MemService();
+			MemVO memVO = memService.getOneMem(username);
+			
+			int add_money = memVO.getAdd_money();
+			System.out.println("CheckMoneyServlet add_money : " + add_money);
+			int now_money = memVO.getNow_money();
+			System.out.println("CheckMoneyServlet now_money : " + now_money);
+			
+			//???
+//			memVO.setAdd_money(totalMoney);
+//			memVO.setAdd_status(addStatus);
+//			memService.updateMem(memVO);	
+			
+			int new_add_money = totalMoney - now_money + add_money;
+			
+			MemVO updateMemVO = new MemVO();
+			updateMemVO.setUsername(username);
+			updateMemVO.setAdd_money(new_add_money);
+			updateMemVO.setNow_money(totalMoney);
+			updateMemVO.setAdd_status(addStatus);
+			memService.updateCheckMoney(username, totalMoney, new_add_money, addStatus);
+			
 			System.out.print(deviceVO.getDid() + ",");
 			System.out.print(deviceVO.getNumber() + ",");
 			System.out.print(deviceVO.getAdd_status() + ",");
@@ -64,28 +90,27 @@ public class CheckMoneyServlet extends HttpServlet {
 			StoreVO storeVO = storeService.getOneStore(sid);
 			
 			int totalPoint = 0;
-			if(totalMoney >= storeVO.getDiscount_3_money()) {
-				totalPoint = totalMoney + ( storeVO.getDiscount_3_point() - storeVO.getDiscount_3_money());
-			}else if(totalMoney >= storeVO.getDiscount_2_money()) {
-				totalPoint = totalMoney + ( storeVO.getDiscount_2_point() - storeVO.getDiscount_2_money());
-			}else if(totalMoney >= storeVO.getDiscount_1_money()) {
-				totalPoint = totalMoney + ( storeVO.getDiscount_1_point() - storeVO.getDiscount_1_money());
+			if(new_add_money >= storeVO.getDiscount_3_money()) {
+				totalPoint = new_add_money + ( storeVO.getDiscount_3_point() - storeVO.getDiscount_3_money());
+			}else if(new_add_money >= storeVO.getDiscount_2_money()) {
+				totalPoint = new_add_money + ( storeVO.getDiscount_2_point() - storeVO.getDiscount_2_money());
+			}else if(new_add_money >= storeVO.getDiscount_1_money()) {
+				totalPoint = new_add_money + ( storeVO.getDiscount_1_point() - storeVO.getDiscount_1_money());
 			}else {
-				totalPoint = totalMoney;
+				totalPoint = new_add_money;
 			}
 			System.out.println("totalPoint : " + totalPoint);
 			
-			if(addStatus == 14) {
-				new DeviceService().updateAddStatus13(did, 13, totalPoint);
-			}
+//			if(addStatus == 14) {
+//				new DeviceService().updateAddStatus13(did, 13, totalPoint, new_add_money, 1);
+//			}
+			new DeviceService().updateAddStatus13(did, 13, totalPoint, new_add_money, 1);
 			
-			
-
 			jsonObject.put("add_status", deviceVO.getAdd_status());
 			jsonObject.put("count_100", count_100);
 			jsonObject.put("count_500", count_500);
 			jsonObject.put("count_1000", count_1000);
-			jsonObject.put("totalMoney", totalMoney);
+			jsonObject.put("totalMoney", new_add_money);
 			jsonObject.put("totalPoint", totalPoint);
 			jsonObject.put("state", 1);
 			

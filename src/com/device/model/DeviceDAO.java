@@ -27,12 +27,12 @@ public class DeviceDAO implements DeviceDAO_interface{
 	
 	private static final String GET_ALL_STMT = 
 			"SELECT did, number, coin, paper, location, refund, uid, status, add_status, error, "
-			+ "100_count, 500_count, 1000_count, point, add_point, machid, freecount, freecountset, "
-			+ "sid, mid FROM device";
+			+ "100_count, 500_count, 1000_count, point, add_point, add_money, add_life_status,"
+			+ "machid, freecount, freecountset, sid, mid FROM device";
 	private static final String GET_ONE_STMT = 
 			"SELECT did, number, coin, paper, location, refund, uid, status, add_status, error, "
-			+ "100_count, 500_count, 1000_count, point, add_point, machid, freecount, freecountset, "
-			+ "sid, mid FROM device where number = ?";
+			+ "100_count, 500_count, 1000_count, point, add_point, add_money, add_life_status,"
+			+ "machid, freecount, freecountset, sid, mid FROM device where number = ?";
 	private static final String GET_DEVICE_ADD_STATUS_STMT = 
 			"SELECT add_status FROM device where number = ?";
 	private static final String GET_DEVICE_STATUS_STMT = 
@@ -53,10 +53,12 @@ public class DeviceDAO implements DeviceDAO_interface{
 			"UPDATE device set status=? where number = ?";
 	private static final String UPDATE_CONSUMPTION_STMT = 
 			"UPDATE device set status=?, machid=?, freecount=? where number = ?";
+//	private static final String UPDATE_ADD_STATUS_11_STMT = 
+//	"UPDATE device set add_status=?, point=? where number = ?";
 	private static final String UPDATE_ADD_STATUS_11_STMT = 
-			"UPDATE device set add_status=?, point=? where number = ?";
+			"UPDATE device set add_status=?, point=?, 100_count=?, 500_count=?, 1000_count=?, add_point=? where number = ?";
 	private static final String UPDATE_ADD_STATUS_13_STMT = 
-			"UPDATE device set add_status=?, add_point=? where number = ?";
+			"UPDATE device set add_status=?, add_point=?, add_money=?, add_life_status=? where number = ?";
 	private static final String DELETE_STMT = 
 			"DELETE FROM device where did = ?";
 	private static final String AUTO_INCREMENT_STMT = "SELECT `AUTO_INCREMENT`" + 
@@ -231,6 +233,8 @@ public class DeviceDAO implements DeviceDAO_interface{
 				deviceVO.setUid(rs.getInt("uid"));
 				deviceVO.setStatus(rs.getInt("status"));
 				deviceVO.setAdd_status(rs.getInt("add_status"));
+				deviceVO.setAdd_life_status(rs.getInt("add_life_status"));
+				deviceVO.setAdd_money(rs.getInt("add_money"));
 				deviceVO.setCount_100(rs.getInt("100_count"));
 				deviceVO.setCount_500(rs.getInt("500_count"));
 				deviceVO.setCount_1000(rs.getInt("1000_count"));
@@ -300,6 +304,8 @@ public class DeviceDAO implements DeviceDAO_interface{
 				deviceVO.setUid(rs.getInt("uid"));
 				deviceVO.setStatus(rs.getInt("status"));
 				deviceVO.setAdd_status(rs.getInt("add_status"));
+				deviceVO.setAdd_life_status(rs.getInt("add_life_status"));
+				deviceVO.setAdd_money(rs.getInt("add_money"));
 				deviceVO.setCount_100(rs.getInt("100_count"));
 				deviceVO.setCount_500(rs.getInt("500_count"));
 				deviceVO.setCount_1000(rs.getInt("1000_count"));
@@ -543,8 +549,12 @@ public class DeviceDAO implements DeviceDAO_interface{
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE_ADD_STATUS_11_STMT);
 			pstmt.setInt(1, add_status);
-			pstmt.setInt(2, point);
-			pstmt.setString(3, number);
+			pstmt.setInt(2, point);			
+			pstmt.setInt(3, 0);
+			pstmt.setInt(4, 0);
+			pstmt.setInt(5, 	0);
+			pstmt.setInt(6, 	0);
+			pstmt.setString(7, number);
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
@@ -570,7 +580,7 @@ public class DeviceDAO implements DeviceDAO_interface{
 	}
 
 	@Override
-	public void updateAddStatus13(String number, int add_status, int add_point) {
+	public void updateAddStatus13(String number, int add_status, int add_point, int add_money, int add_life_status) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
@@ -579,7 +589,9 @@ public class DeviceDAO implements DeviceDAO_interface{
 			pstmt = con.prepareStatement(UPDATE_ADD_STATUS_13_STMT);
 			pstmt.setInt(1, add_status);
 			pstmt.setInt(2, add_point);
-			pstmt.setString(3, number);
+			pstmt.setInt(3, add_money);
+			pstmt.setInt(4, add_life_status);
+			pstmt.setString(5, number);
 			pstmt.executeUpdate();
 
 			// Handle any driver errors

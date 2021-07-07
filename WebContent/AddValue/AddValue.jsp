@@ -1,3 +1,4 @@
+<%@page import="com.mem.model.MemService"%>
 <%@page import="com.store.model.StoreVO"%>
 <%@page import="com.store.model.StoreService"%>
 <%@page import="com.device.model.DeviceVO"%>
@@ -23,6 +24,7 @@
 	System.out.println("AddValue.jspSession machid : " + machid);
 	
 	MemVO memVO = (MemVO) session.getAttribute("memVO");
+
 	
 	if(memVO == null){
 		System.out.println("Session memVO Null ");
@@ -32,7 +34,13 @@
 		System.out.println("Session username : " + memVO.getUsername());
 		String username = memVO.getUsername();
 		int point = memVO.getPoint();
-
+		
+		int add_money = memVO.getAdd_money();
+		System.out.println("add_money " + add_money);
+		
+		MemService memService = new MemService();
+		memService.updateNowMoney(username, 0);
+		
 		// Get Device Object
 		DeviceService deviceService = new DeviceService();
 		DeviceVO deviceVO = deviceService.getOneDevice(did);
@@ -293,6 +301,7 @@
 		function checkMoney(){
 			var did = $("#inputDid").val();
 			var sid = $("#inputSid").val();
+			var username = $("#inputUsername").val();
 			console.log("check Money DID : " + did);
 			console.log("check Money SID : " + sid);
 			$.ajax({
@@ -301,7 +310,8 @@
 				cache : false, //防止抓到快取的回應
 				data : { //要傳送到頁面的參數
 					did : did,
-					sid : sid
+					sid : sid,
+					username:username
 				},
 				success : function(jsonObject) { //當請求成功後此事件會被呼叫
 

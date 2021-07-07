@@ -330,4 +330,16 @@ public class MemJNDIDAO implements MemDAO_interface {
 		return null;
 	}
 
+	@Override
+	public void updateCheckMoney(String username, int now_money, int add_money, int add_status) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateNowMoney(String username, int now_money) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

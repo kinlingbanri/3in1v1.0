@@ -42,6 +42,9 @@ public class AddRecordVO implements java.io.Serializable  {
 	@Column(name = "paper1000")
 	private int paper1000;
 	
+	@Column(name = "money")
+	private int money;
+	
 	@Column(name = "point")
 	private int point;
 	
@@ -126,6 +129,14 @@ public class AddRecordVO implements java.io.Serializable  {
 
 	public void setPaper1000(int paper1000) {
 		this.paper1000 = paper1000;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public void setMoney(int money) {
+		this.money = money;
 	}
 
 	public int getPoint() {

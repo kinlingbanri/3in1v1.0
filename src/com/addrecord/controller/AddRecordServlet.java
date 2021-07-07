@@ -60,17 +60,22 @@ public class AddRecordServlet extends HttpServlet {
 		int count_100 = deviceVO.getCount_100();
 		int count_500 = deviceVO.getCount_500();
 		int count_1000 = deviceVO.getCount_1000();
-		int totalMoney = (count_100 * 100) + (count_500 * 500) + (count_1000 * 1000);
-		System.out.println("count_100 : " + count_100);
-		System.out.println("count_500 : " + count_500);
-		System.out.println("count_1000 : " + count_1000);
-		System.out.println("totalMoney : " + totalMoney);
+		//int totalMoney = (count_100 * 100) + (count_500 * 500) + (count_1000 * 1000);
+		
+		MemService memService = new MemService();
+		MemVO memVO = memService.getOneMem(username);
+		
+		int totalMoney = memVO.getAdd_money();
+//		System.out.println("count_100 : " + count_100);
+//		System.out.println("count_500 : " + count_500);
+//		System.out.println("count_1000 : " + count_1000);
+//		System.out.println("totalMoney : " + totalMoney);
 		
 		StoreService storeService = new StoreService();
 		StoreVO storeVO = storeService.getOneStore(sid);
 		System.out.println("AddRecordServlet store name : " + storeVO.getName());
 		
-		int totalPoint = 0;
+		int totalPoint = 0;	
 		if(totalMoney >= storeVO.getDiscount_3_money()) {
 			totalPoint = totalMoney + ( storeVO.getDiscount_3_point() - storeVO.getDiscount_3_money());
 		}else if(totalMoney >= storeVO.getDiscount_2_money()) {
@@ -93,6 +98,7 @@ public class AddRecordServlet extends HttpServlet {
 		addRecordVO.setPaper100(count_100);
 		addRecordVO.setPaper500(count_500);
 		addRecordVO.setPaper1000(count_1000);
+		addRecordVO.setPoint(totalMoney);
 		addRecordVO.setPoint(totalPoint);
 		addRecordVO.setUsername(username);
 		addRecordVO.setDeviceid(deviceVO.getDid());
@@ -104,13 +110,21 @@ public class AddRecordServlet extends HttpServlet {
 		//完成交易,更新Device狀態
 		//19 : 完成交易
 		//totalPoint : 更新device add_point的數值 
-		new DeviceService().updateAddStatus13(did, 19, totalPoint);
+		new DeviceService().updateAddStatus13(did, 19, totalPoint, totalMoney, 1);
 		
-		MemService memService = new MemService();
-		MemVO memVO = memService.getOneMem(username);
+
 		int nowPoint = memVO.getPoint() + totalPoint;
 		memVO.setPoint(nowPoint);
+		memVO.setAdd_money(0);
+		memVO.setAdd_status(19);
+		
+		System.out.println(memVO.getPoint());
+		System.out.println(memVO.getAdd_money());
+		System.out.println(memVO.getAdd_status());
+		
+		
 		memService.updateMem(memVO);
+
 		
 		jsonObject.put("state", "19");
 		jsonObject.put("nowPoint", nowPoint);
