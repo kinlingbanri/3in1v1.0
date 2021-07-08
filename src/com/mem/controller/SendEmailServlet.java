@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import com.adminconfig.model.AdminConfigService;
+import com.adminconfig.model.AdminConfigVO;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
@@ -70,8 +72,10 @@ public class SendEmailServlet extends HttpServlet {
 					String phone = memVO.getPhone();
 					
 					// 這裡要放傳送簡訊的程式碼	
+					AdminConfigService adminConfigService = new AdminConfigService();
+					String comport = adminConfigService.getAdminConfig().getComPort();
 					SerialPortMessage serialPortMessage = new SerialPortMessage();
-					serialPortMessage.SendMessage(phone, ("password:" + pwd)); 
+					serialPortMessage.SendMessage(comport, phone, ("password:" + pwd)); 
 					
 					/*
 					ServletContext application=getServletConfig().getServletContext();
@@ -106,8 +110,14 @@ public class SendEmailServlet extends HttpServlet {
 					String phone = memVO.getPhone();
 					
 					// 這裡要放傳送簡訊的程式碼	
+					AdminConfigService adminConfigService = new AdminConfigService();
+					System.out.println("1");
+					AdminConfigVO adminConfigVO =  adminConfigService.getAdminConfig();
+					System.out.println("2");
+					String comport = adminConfigVO.getComPort();
+					System.out.println("comport : " + comport);
 					SerialPortMessage serialPortMessage = new SerialPortMessage();
-					serialPortMessage.SendMessage(phone, ("password:" + pwd)); 
+					serialPortMessage.SendMessage(comport, phone, ("password:" + pwd)); 
 					
 					/*
 					ServletContext application=getServletConfig().getServletContext();

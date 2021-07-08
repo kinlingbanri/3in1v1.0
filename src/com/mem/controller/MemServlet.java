@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import com.adminconfig.model.AdminConfigService;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
@@ -107,8 +108,10 @@ public class MemServlet extends HttpServlet {
 				memService.updateMem(memVO);
 				System.out.println(" updateMem");
 				// 這裡要放傳送簡訊的程式碼
+				AdminConfigService adminConfigService = new AdminConfigService();
+				String comport = adminConfigService.getAdminConfig().getComPort();
 				SerialPortMessage serialPortMessage = new SerialPortMessage();
-				serialPortMessage.SendMessage(memVO.getPhone(), ("code:" + newCode));
+				serialPortMessage.SendMessage(comport, memVO.getPhone(), ("code:" + newCode));
 				
 				/*
 				ServletContext application=getServletConfig().getServletContext();

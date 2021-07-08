@@ -477,10 +477,10 @@ a {
 		
 
 		$("#CancelBtn1").click(function() {
-			window.location.href = "./index.jsp";
+			window.location.href = "./index.jsp?DID=" + sessionDID + "&MACHID=" + sessionMACHID;
 		});
 		$("#CancelBtn2").click(function() {
-			window.location.href = "./index.jsp";
+			window.location.href = "./index.jsp?DID=" + sessionDID + "&MACHID=" + sessionMACHID;
 		});
 
 		$("#sendEmailBtn").click(function() {

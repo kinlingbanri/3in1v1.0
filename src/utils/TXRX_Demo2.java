@@ -6,7 +6,9 @@ public class TXRX_Demo2 {
 		long startTime=System.currentTimeMillis();
 
 		SerialPortMessage serialPortMessage = new SerialPortMessage();
-		serialPortMessage.SendMessage("0935276906", "password:127Tdf0jl^0^!@#$");
+		
+		
+		serialPortMessage.SendMessage("COM9", "0935276906", "password:127Tdf0jl^0^!@#$");
 		
 		/*
 		//	status == 0,success

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import com.adminconfig.model.AdminConfigService;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
@@ -83,9 +84,11 @@ public class RegisterServlet extends HttpServlet {
 				newMemVO.setAdd_status(0);
 				memService.insertMem(newMemVO);
 				
-				// 這裡要放傳送簡訊的程式碼	
+				// 這裡要放傳送簡訊的程式碼
+				AdminConfigService adminConfigService = new AdminConfigService();
+				String comport = adminConfigService.getAdminConfig().getComPort();
 				SerialPortMessage serialPortMessage = new SerialPortMessage();
-				serialPortMessage.SendMessage(registerPhone, ("code:" + newCode));
+				serialPortMessage.SendMessage(comport, registerPhone, ("code:" + newCode));
 				/*
 				ServletContext application=getServletConfig().getServletContext();
 				String jarpath = application.getRealPath("/WEB-INF/lib/RXTX_Demo.jar");

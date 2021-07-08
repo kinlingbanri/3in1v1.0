@@ -1,8 +1,11 @@
 package utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class SerialPortMessage {
 
-	public void SendMessage(String number, String Content) {
+	public void SendMessage(String comport, String number, String Content) {
 		long startTime=System.currentTimeMillis();
 
 		//status == 0,success; tatus == 1, false
@@ -20,12 +23,17 @@ public class SerialPortMessage {
 		
 		String hexSetNumberStr = hexHeaderAT + hexNumberString + hexNumberTailAT;
 		System.out.println("hexSetNumberStr : " + hexSetNumberStr);
-		ProcessBuilder pb = new ProcessBuilder("D:\\GoProjects\\Demo\\Serial\\serial.exe", hexSetNumberStr);
+		//ProcessBuilder pb = new ProcessBuilder("D:\\GoProjects\\Demo\\Serial\\serial.exe", comport, hexSetNumberStr);
+		//ProcessBuilder pb = new ProcessBuilder("D:\\GoProjects\\Demo\\Serial\\serial.exe", (comport + " " +  hexSetNumberStr));
+		
+		List<String> numberList = Arrays.asList("D:\\GoProjects\\Demo\\Serial\\serial.exe", comport, hexSetNumberStr);
+		ProcessBuilder pb = new ProcessBuilder(numberList);
+		
 		pb.inheritIO(); // <-- passes IO from forked process.
 		try {
 		    Process p = pb.start(); // <-- forkAndExec on Unix
 		    int status = p.waitFor(); // <-- waits for the forked process to complete.
-		    System.out.print("prcocess status : " + status);
+		    System.out.println("prcocess status : " + status);
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
@@ -44,7 +52,13 @@ public class SerialPortMessage {
         String hexSetContentStr = hexContentStr + hexContentTailAT;
         System.out.println("hexSetContentStr : " + hexSetContentStr);
 
-		pb.command("D:\\GoProjects\\Demo\\Serial\\serial.exe", hexSetContentStr);
+		//pb.command("D:\\GoProjects\\Demo\\Serial\\serial.exe", comport, number);
+//        pb.command("D:\\GoProjects\\Demo\\Serial\\serial.exe", (comport + " " +  number));
+		
+		List<String> comportList = Arrays.asList("D:\\GoProjects\\Demo\\Serial\\serial.exe", comport, hexSetContentStr);
+		pb.command(comportList);
+		
+		
 		pb.inheritIO(); // <-- passes IO from forked process.
 		try {
 		    Process p = pb.start(); // <-- forkAndExec on Unix

@@ -1,10 +1,19 @@
+<%@page import="utils.SerialPortMessage"%>
+<%@page import="com.adminconfig.model.AdminConfigService"%>
+<%@page import="com.adminconfig.model.AdminConfigVO"%>
 <%@page import="utils.Random4"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
     
 <%
-Random4.getRandomCharArray();
+AdminConfigService adminConfigService = new AdminConfigService();
+String comport = adminConfigService.getAdminConfig().getComPort();
+System.out.println("COM : " + comport);
+String phone = "0935276906";
+String pwd = "12dsafuioUR";
+SerialPortMessage serialPortMessage = new SerialPortMessage();
+serialPortMessage.SendMessage(comport, phone, ("password:" + pwd)); 
 
 %>
     

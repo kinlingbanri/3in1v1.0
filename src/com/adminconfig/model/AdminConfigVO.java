@@ -8,11 +8,22 @@ import javax.persistence.Table;
 @Table(name = "adminconfig")
 public class AdminConfigVO {
 	
+	@Column(name = "id")
+	private int id;
+	
 	@Column(name = "ip")
 	private String ip;
 	
 	@Column(name = "comPort")
 	private String comPort;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getIp() {
 		return ip;
