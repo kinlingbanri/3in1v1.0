@@ -18,6 +18,10 @@ import com.device.model.DeviceService;
 import com.device.model.DeviceVO;
 import com.history.model.HistoryService;
 import com.history.model.HistoryVO;
+import com.machine.model.MachineService;
+import com.machine.model.MachineVO;
+import com.store.model.StoreService;
+import com.store.model.StoreVO;
 
 @WebServlet("/HistoryRecordServlet")
 public class HistoryRecordServlet extends HttpServlet {
@@ -58,6 +62,8 @@ public class HistoryRecordServlet extends HttpServlet {
 		
 		DeviceVO deviceVO = new DeviceService().getOneDevice(did);
 		HistoryVO historyVO = new HistoryVO();
+		int sid = deviceVO.getSid();
+		StoreVO storeVO = new StoreService().getOneStore(sid);
 		
 		Date date = new Date();	//Get now
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -81,13 +87,18 @@ public class HistoryRecordServlet extends HttpServlet {
 		historyVO.setFreecount(freecount);
 		historyVO.setPoint(point);
 		
+		historyVO.setSid(sid);
 		historyVO.setUid(-1);
 		historyVO.setRefundcount(0);
 		historyVO.setExchangecount(0);
 		historyVO.setPapercount(0);
 		
+		
+		
+		/*
+		//20210714之前
 		String event = "";
-		String numberType = number.substring(0, 3);		
+		String numberType = number.substring(0, 3);
 		System.out.println("numberType : " + numberType);
 		if(numberType.equals("NOT")) {
 			event = "加值" + point + "點";
@@ -96,7 +107,27 @@ public class HistoryRecordServlet extends HttpServlet {
 		}else if(numberType.equals("DRY")) {
 			event = "烘衣" + point + "點";
 		}
-		historyVO.setEvent(event);
+		*/
+		
+		String event = "";
+		String deviceName = "";
+		String numberType = number.substring(0, 2);
+		System.out.println("numberType : " + numberType);
+		if(numberType.equals("TY")) {
+			event = "加值" + point + "點";
+			deviceName = deviceVO.getLocation();
+		}else if(numberType.equals("WS")) {
+			event = "洗衣" + point + "點";
+			MachineVO machineVO = new MachineService().getOneMachineNumber(number);
+			deviceName = machineVO.getName();
+		}else if(numberType.equals("DR")) {
+			event = "烘衣" + point + "點";
+			MachineVO machineVO = new MachineService().getOneMachineNumber(number);
+			deviceName = machineVO.getName();
+		}
+		System.out.println("deviceName : " + deviceName);
+		historyVO.setEvent(event);		
+		historyVO.setStorename( storeVO.getName() );
 		
 		new HistoryService().insertHistory(historyVO);
 		

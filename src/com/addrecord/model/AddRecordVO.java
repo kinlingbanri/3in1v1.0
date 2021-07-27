@@ -74,6 +74,9 @@ public class AddRecordVO implements java.io.Serializable  {
 	
 	@Column(name = "location")
 	private String location;
+	
+	@Column(name = "machid")
+	private int machid;
 
 	public int getId() {
 		return id;
@@ -218,5 +221,13 @@ public class AddRecordVO implements java.io.Serializable  {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
+
+	public int getMachid() {
+		return machid;
+	}
+
+	public void setMachid(int machid) {
+		this.machid = machid;
+	}
+
 }

@@ -16,6 +16,9 @@ public class AdminConfigVO {
 	
 	@Column(name = "comPort")
 	private String comPort;
+	
+	@Column(name = "url")
+	private String url;
 
 	public int getId() {
 		return id;
@@ -39,5 +42,13 @@ public class AdminConfigVO {
 
 	public void setComPort(String comPort) {
 		this.comPort = comPort;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

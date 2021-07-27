@@ -33,11 +33,13 @@
 	MachineService machineService = new MachineService();
 	MachineVO machineVO = machineService.getOneMachineNumber(number);
 	int serial = machineVO.getSerial();
+	int machid = machineVO.getMachid();
 	System.out.print("serial");
 	StoreService storeService = new StoreService();
 	StoreVO storeVO = storeService.getOneStore( device.getSid() );	
 
-	String title = storeVO.getName() + " 烘衣機" + serial + "號";
+// 	String title = storeVO.getName() + " 烘衣機" + serial + "號";
+String title = storeVO.getName() + " - " + machineVO.getName();
 	System.out.print("title : " + title);
 	
 	String serviceType = number.substring(0, 2);
@@ -61,7 +63,7 @@
 
 	System.out.println("MultiConsumption.jsp");
 
-	int usePoint = 10;
+	int usePoint = machineVO.getPoint();
 	int useMinute = 6;
 %>
 
@@ -361,15 +363,15 @@
 			</div>
 
 			<div id="timerDiv" style="margin: 0 0 12px 0;">
-				<p style="margin: 0 0 0 0; font-size: 16px;">請按確認交易，手動完成服務</p>
+				<p style="margin: 0 0 0 0; font-size: 16px;">系統將於60秒後自動完成服務</p>
 				<p style="margin: 0 0 0 0; font-size: 16px;">或於時間結束後由系統自動完成服務</p>
-				<p id="timer" style="color: red; font-weight: bold; font-size: 18px;">30秒</p>
+				<p id="timer" style="color: red; font-weight: bold; font-size: 18px;">60秒</p>
 			</div>
 
 
 		  
 		  <input type="hidden" name="DID" value="<%=DID %>" id="inputDIid">
-		  <input type="hidden" name="MACHID" value="2" id="inputMachid">
+		  <input type="hidden" name="MACHID" value="<%=machid %>" id="inputMachid">
 		  <input type="hidden" name="username" value="<%=username %>" id="inputUsername">
 		  <input type="hidden" name="serial" value="<%= serial %>" id="inputSerial">
 		  <input type="hidden" name="memPoint" value="<%=memPoint %>" id="inputMemPoint">
@@ -384,7 +386,7 @@
 			
 			<div>
 				<button type="submit" class="btn btn-success" style="font-weight: bold; margin-right: 12px;" id="confirmBtn">確認交易</button>
-				<button class="btn btn-warning" style="font-weight: bold; margin-left: 12px;" id="logoutBtn">取消交易</button>
+				<button class="btn btn-warning" style="font-weight: bold; margin-left: 12px;" id="logoutBtn">返回</button>
 			</div>
 		</div>
 		<div style="text-align: center; margin-top: 24px; display: none;" id="successDiv">
@@ -401,7 +403,7 @@
 
 	<script>
 		//初始化各元素
-		var count = 30;
+		var count = 60;
 		var myTimerVar= setInterval(function(){ myTimer()}, 1000);
 		
 		//隠藏右側scrollbar
@@ -613,7 +615,20 @@
 		function myTimer() {
 			if (count == 0) {
 				clearInterval(myTimerVar);
-				window.location.href = "../logout.jsp";
+				//window.location.href = "../logout.jsp";
+				
+			var did =  $("#inputDIid").val();
+			var machid =  $("#inputMachid").val();
+			var username =  $("#inputUsername").val();
+			var serial =  $("#inputSerial").val();
+			var mempoint =  $("#inputMemPoint").val();
+			var consumptionPoint =  $("#inputConsumptionPoint").val();
+			var freecount =  $("#inputFreecount").val();
+			var number =  $("#inputNumber").val();
+			var storeInfo =  $("#storeInfo").text();
+				consumpTimerVar = setInterval(function(){
+					Consumption(username, did, machid, freecount, mempoint, serial, consumptionPoint, number, storeInfo)
+				}, 1000);
 			} else {
 				count = count - 1;
 				console.log("count : " + count);
@@ -623,7 +638,7 @@
 		}
 
 		function resetTimer() {
-			count = 30;
+			count = 60;
 			var countStr = count + "秒";
 			document.getElementById("timer").innerText = countStr;
 			clearInterval(myTimerVar);
@@ -676,7 +691,8 @@
 						$("#divSuccess").show();
 
 						console.log("consumption End!");
-						setTimeout(function(){ window.location.replace("../logout.jsp"); }, 3000);
+						historyRecord(username, did, machid, freecount, consumptionPoint, number);
+						setTimeout(function(){ window.location.replace("../logout.jsp"); }, 15000);
 						
 				  }else if(state == 1){
 					  consumptioning = 1;
@@ -829,6 +845,9 @@
 
 		$("#confirmBtn").click(function() {
 			clearInterval(myTimerVar);
+
+			document.getElementById("confirmBtn").disabled = true;
+			document.getElementById("logoutBtn").disabled = true;
 			
 			var did =  $("#inputDIid").val();
 			var machid =  $("#inputMachid").val();

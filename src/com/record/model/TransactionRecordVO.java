@@ -9,12 +9,14 @@ public class TransactionRecordVO {
 	private String location;
 	private String Storename;
 	private String type;	//交易類型:消費,加值
+	
 	public Date getRecordTimeStamp() {
 		return recordTimeStamp;
 	}
 	public void setRecordTimeStamp(Date recordTimeStamp) {
 		this.recordTimeStamp = recordTimeStamp;
 	}
+	
 	public int getPoint() {
 		return point;
 	}

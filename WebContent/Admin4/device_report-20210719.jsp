@@ -1,5 +1,37 @@
+<%@page import="com.device.model.DeviceVO"%>
+<%@page import="com.device.model.DeviceService"%>
+<%@page import="com.store.model.StoreVO"%>
+<%@page import="java.util.List"%>
+<%@page import="com.store.model.StoreService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%
+StoreService storeService = new StoreService();
+List<StoreVO> storeVOs = storeService.getAll();
+
+request.setAttribute("storeVOs", storeVOs);
+
+
+// Query All
+for (StoreVO store : storeVOs) {
+	System.out.print(store.getSid() + ",");
+	System.out.print(store.getName() + ",");
+	System.out.print(store.getCity() + ",");
+	System.out.print(store.getDistrict()+ ",");
+	System.out.print(store.getPause()+ ",");
+	System.out.print(store.getSingle_count()+ ",");
+	System.out.print(store.getMulti_count()+ ",");
+	System.out.print(store.getDiscount_1_money()+ ",");
+	System.out.print(store.getDiscount_1_point()+ ",");
+	System.out.print(store.getDiscount_2_money()+ ",");
+	System.out.print(store.getDiscount_2_point()+ ",");
+	System.out.print(store.getDiscount_3_money()+ ",");
+	System.out.println(store.getDiscount_3_point());
+}
+
+
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +44,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>複合式加值機後台管理</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -26,6 +58,9 @@
     
     <!-- Bootstrap Switch Button bootstrap4-toggle@3.6.1 -->
     <link href="./css/bootstrap4-toggle.min.css" rel="stylesheet">
+    
+    <!-- lightpick -->
+    <link href="./css/lightpick.css" rel="stylesheet">
     
     <style>
     	.configBlock{
@@ -44,18 +79,6 @@
     		text-align: center;
     		height: 2rem;
     	}
-    	
-/*     	.btn-circle { */
-/*     			color:#FFF; */
-/* 			    width: 30px; */
-/* 			    height: 30px; */
-/* 			    padding: 6px 0px; */
-/* 			    border-radius: 15px; */
-/* 			    text-align: center; */
-/* 			    font-size: 12px; */
-/* 			    line-height: 1.42857; */
-/* 			} */
-    	
     </style>
 
 </head>
@@ -69,11 +92,11 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./index.jsp">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">複合式加值機<br>系統管理</div>
             </a>
 
             <!-- Divider -->
@@ -122,7 +145,7 @@
                 </a>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="./member_setting.jsp.jsp">會員設定</a>
+                        <a class="collapse-item" href="./member_setting.jsp">會員設定</a>
                     </div>
                 </div>
             </li>
@@ -136,7 +159,7 @@
                 </a>
                 <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                    		<a class="collapse-item" href="./server_setting">參數設定</a>
+                    		<a class="collapse-item" href="./server_setting.jsp">參數設定</a>
                     </div>
                 </div>
             </li>
@@ -240,8 +263,8 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-<!--                 <div class="container-fluid"  id="divStoreList"> -->
-								<div class="container-fluid"  id="divStoreList" style="display:none;">
+                <div class="container-fluid">
+<!-- 								<div class="container-fluid"  id="divStoreList" style="display:none;"> -->
 
                     <!-- Page Heading -->
 <!--                     <h1 class="h3 mb-2 text-gray-800">Tables</h1> -->
@@ -250,214 +273,91 @@
                     
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">店家列表 (點擊該列任一處，即可進入該店家的設定畫面)</h6><p>
+                           <h4 id="title" class="m-0 font-weight-bold text-primary" style="float:left;">統計資料</h6>
+								           <button id="btnNextConsumption" type="button" class="btn btn-primary" style="margin-right:12px;; float:right; display:none;">設定消費機</button>
                         </div>
                         
+                        <div>
+                            		<div style="float:left;">
+                            				<div class="btn-group" style="margin-top: 8px; ;">
+																			  <button id="btnSelectStore" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin: 8px 0 0 12px;">
+																			  		按此選擇店家
+																			  </button>
+																			  <div id="dropdownStore" class="dropdown-menu">
+																			  		<c:forEach items="${storeVOs}" var="store" varStatus="id">
+																			  			<a class="dropdown-item" href="#">${store.name}</a>
+																			  		</c:forEach>
+																				    
+																			  </div>
+																		</div>
+                            		</div>
+                            		
+                            		<div style="float:left;">
+                            				<div class="btn-group" style="margin-top: 8px; ;">
+																			  <button id="btnSelectType" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin: 8px 0 0 12px;">
+																			  		按此選擇設備類型
+																			  </button>
+																			  <div id="dropdownType" class="dropdown-menu">
+																			  		<a class="dropdown-item" href="#">洗衣機1號</a>
+																				    <a class="dropdown-item" href="#">洗衣機2號</a>
+																				    <a class="dropdown-item" href="#">烘衣機1號</a>
+																				    <a class="dropdown-item" href="#">烘衣機2號</a>
+																				    <a class="dropdown-item" href="#">烘衣機3號</a>
+																			  </div>
+																		</div>
+                            		</div>
+
+                            		
+                            		<input id="datepicker" value="按此選擇起始日期" type="text" style="float:left; height:38px; width:206px; margin:16px 0 0 16px; padding-left:8px; text-align: center; background-color: #3BB8F2; border-style: none; color: #FFF; border-radius: 6px;"/>
+                            		
+                            		<button id="btnNextConsumption" type="button" class="btn btn-success" style="margin: 16px 12px 0 0; float:right;">輸出Excel</button>
+                            		<button id="btnNextConsumption" type="button" class="btn btn-success" style="margin: 16px 12px 0 0; float:right;">查詢</button>
+                        </div>
+                        
+                        <!-- Divider -->
+            						<hr class="sidebar-divider">
+                   
+                        
                         <!-- Store List -->
-                        <div class="card-body">
+                        <div class="card-body" id="divStoreList">
+<!--                         <div class="card-body" id=""divStoreList"" style="display:none;"> -->
                             <div class="table-responsive">
                                 <table id="dataTable" class="table table-bordered" style="font-size:14px;"width="100%" cellspacing="0">
                                     <thead>
                                         <tr style="text-align:center;">
+                                        		<th>#</th>
                                             <th>店名</th>
-                                            <th>所屬加值機</th>
-                                            <th>所屬消費機</th>
+                                            <th>儲值金額</th>
+                                            <th>儲值點數</th>
+                                            <th>消費點數</th>
                                         </tr>
                                     </thead>
 <!--                                     <tfoot> -->
 <!--                                         <tr> -->
-<!--                                         <tr> -->
+<!--                                         		<th>#</th> -->
 <!--                                             <th>店名</th> -->
-<!--                                             <th>加值機名稱</th> -->
-<!--                                             <th>消費機名稱</th> -->
+<!--                                             <th>儲值金額</th> -->
+<!--                                             <th>儲值點數</th> -->
+<!--                                             <th>消費點數</th> -->
 <!--                                         </tr> -->
 <!--                                     </tfoot> -->
                                     <tbody>
-                                    		<tr style="text-align:center;">
-                                            <th>樹林站前店</th>
-                                            <th>加值機1號; 加值機2號;</th>
-                                            <th>
-                                            		<p style="margin:0px;">
-                                            			洗衣機1號; 洗衣機2號;
-                                            		</p>
-                                            		<p style="margin:0px;">
-                                            			烘衣機1號; 烘衣機2號; 烘衣機3號;
-                                            		</p>
-                                            </th>
-                                        </tr>
-                                        <tr style="text-align:center;">
-                                            <th>樹林站後店</th>
-                                            <th>加值機1號; 加值機2號;</th>
-                                            <th>
-                                            		<p style="margin:0px;">
-                                            			洗衣機1號; 洗衣機2號; 洗衣機3號; 洗衣機4號;
-                                            		</p>
-                                            		<p style="margin:0px;">
-                                            			烘衣機1號; 烘衣機2號; 烘衣機3號; 烘衣機4號; 烘衣機5號;
-                                            		</p>
-                                            </th>
-                                        </tr>
+                                    
+                                    
+                                    	<c:forEach items="${storeVOs}" var="store" varStatus="id">
+																					<tr  style="text-align:center;" id="${store.sid}">
+																					<th scope="row" style="text-align: center;">${id.index + 1}</th>
+																					<th>${store.name}</th>
+																					<th>52800元</th>
+																					<th>60400點</th>
+																					<th>48000點</th>
+															   			</c:forEach>
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
-                    </div>
-                </div>
-                <!-- /.container-fluid -->
-                
-                
-                
-
-
-
-                <!-- Begin Page Store Add -->
-                <div class="container-fluid" id="divStoreAdd">
-<!--                 <div class="container-fluid" id="divStoreAdd" style="display:none;"> -->
-
-                    <!-- Page Heading -->
-<!--                     <h1 class="h3 mb-2 text-gray-800">Tables</h1> -->
-<!--                     <p class="mb-4">點擊該列任一處，即可進入該店家的設定畫面 -->
-                    
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h4 class="m-0 font-weight-bold text-primary" style="float:left;">樹林站前店</h4>
-                            <button id="btnBack" type="button" class="btn btn-warning" style="margin-right:12px;; float:right;">回到店家列表</button>
-                        </div>
-                        
-                        <!-- AddValue Machine add -->
-                        <div class="container" style="background-color:#FFF7FB; padding-bottom:20px;">
-                            <div style="margin:18px 0 6px 12px;">
-                            		<h4 style="font-weight:900; float:left; margin-top:8px;">加值機</h4>
-<!--                             		<button type="button" class="btn btn-default btn-circle" style="background-color:#0B0;"> -->
-<!--                             				<i class="fa fa-plus"></i> -->
-<!--                             		</button> -->
-                            		<div class="btn-group" style="float:left; margin-left:18px;">
-																	  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-																	  		按此新增加值機
-																	  </button>
-																	  <div class="dropdown-menu">
-																		    <a class="dropdown-item" href="#">加值機3號</a>
-																		    <a class="dropdown-item" href="#">加值機4號</a>
-																		    <a class="dropdown-item" href="#">加值機5號</a>
-																	  </div>
-																</div>
-                            </div>
-                            <div>
-		                            <table class="table table-hover" style="text-align: center;">
-																	  <thead>
-																	    <tr>																	      
-																	      <th scope="col" style="padding: 12px 0 18px 0;">名稱</th>
-																	      <th scope="col" style="padding: 12px 0 18px 0;">QR code</th>
-																	      <th scope="col">
-																	      		<button type="button" class="btn btn-primary">批次下載QR code</button>
-																	      </th>
-																	      <th scope="col"></th>
-																	    </tr>
-																	  </thead>
-																	  <tbody>
-																	    <tr>
-																	      <td style="padding: 1.2rem 0 0 0;">加值機1號</td>
-																	      <td><button type="button" class="btn btn-primary">下載QR code</button></td>
-																	      <td>
-																	      		<input type="checkbox" class="form-check-input" value="" style="height:20px; width:20px; margin: 9px 0px 0 -0.625rem;">
-																	      </td>
-																	      <td><button type="button" class="btn btn-danger" style="margin-right:12px;">刪除</button></td>
-																	    </tr>
-																	    <tr>
-																	      <td style="padding: 1.2rem 0 0 0;">加值機2號</td>
-																	      <td><button type="button" class="btn btn-primary">下載QR code</button></td>
-																	      <td>
-																	      		<input type="checkbox" class="form-check-input" value="" style="height:20px; width:20px; margin: 9px 0px 0 -0.625rem;">
-																	      </td>
-																	      <td><button type="button" class="btn btn-danger" style="margin-right:12px;">刪除</button></td>
-																	    </tr>
-																	  </tbody>
-																</table>
-                            </div>
-                        </div>
-                        
-                        
-                      	<!-- Consumption Machine add -->
-                        <div class="container" style="background-color:#ECF5FF;">
-                            <div style="margin:18px 0 6px 12px;">
-                            		<h4 style="font-weight:900; float:left; margin-top:8px;">消費機</h4>
-                            		<div class="btn-group" style="float:left; margin-left:18px;">
-																	  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-																	  		按此新增消費機
-																	  </button>
-																	  <div class="dropdown-menu">
-																		    <a class="dropdown-item" href="#">洗衣機3號</a>
-																		    <a class="dropdown-item" href="#">洗衣機4號</a>
-																		    <a class="dropdown-item" href="#">洗衣機5號</a>
-																		    <a class="dropdown-item" href="#">烘衣機4號</a>
-																		    <a class="dropdown-item" href="#">烘衣機5號</a>
-																		    <a class="dropdown-item" href="#">烘衣機6號</a>
-																	  </div>
-																</div>
-                            </div>
-                            <div>
-		                            <table class="table table-hover" style="text-align: center;">
-																	  <thead>
-																	    <tr>																	      
-																	      <th scope="col" style="padding: 12px 0 18px 0;">名稱</th>
-																	      <th scope="col" style="padding: 12px 0 18px 0;">QR code</th>
-																	      <th scope="col">
-																	      		<button type="button" class="btn btn-primary">批次下載QR code</button>
-																	      </th>
-																	      <th scope="col"></th>
-																	    </tr>
-																	  </thead>
-																	  <tbody>
-																	    <tr>
-																	      <td style="padding: 1.2rem 0 0 0;">洗衣機1號</td>
-																	      <td><button type="button" class="btn btn-primary">下載QR code</button></td>
-																	      <td>
-																	      		<input type="checkbox" class="form-check-input" value="" style="height:20px; width:20px; margin: 9px 0px 0 -0.625rem;">
-																	      </td>
-																	      <td><button type="button" class="btn btn-danger" style="margin-right:12px;">刪除</button></td>
-																	    </tr>
-																	    <tr>
-																	      <td style="padding: 1.2rem 0 0 0;">洗衣機2號</td>
-																	      <td><button type="button" class="btn btn-primary">下載QR code</button></td>
-																	      <td>
-																	      		<input type="checkbox" class="form-check-input" value="" style="height:20px; width:20px; margin: 9px 0px 0 -0.625rem;">
-																	      </td>
-																	      <td><button type="button" class="btn btn-danger" style="margin-right:12px;">刪除</button></td>
-																	    </tr>
-																	    <tr>
-																	      <td style="padding: 1.2rem 0 0 0;">烘衣機1號</td>
-																	      <td><button type="button" class="btn btn-primary">下載QR code</button></td>
-																	      <td>
-																	      		<input type="checkbox" class="form-check-input" value="" style="height:20px; width:20px; margin: 9px 0px 0 -0.625rem;">
-																	      </td>
-																	      <td><button type="button" class="btn btn-danger" style="margin-right:12px;">刪除</button></td>
-																	    </tr>
-																	    <tr>
-																	      <td style="padding: 1.2rem 0 0 0;">烘衣機2號</td>
-																	      <td><button type="button" class="btn btn-primary">下載QR code</button></td>
-																	      <td>
-																	      		<input type="checkbox" class="form-check-input" value="" style="height:20px; width:20px; margin: 9px 0px 0 -0.625rem;">
-																	      </td>
-																	      <td><button type="button" class="btn btn-danger" style="margin-right:12px;">刪除</button></td>
-																	    </tr>	
-																	    <tr>
-																	      <td style="padding: 1.2rem 0 0 0;">烘衣機3號</td>
-																	      <td><button type="button" class="btn btn-primary">下載QR code</button></td>
-																	      <td>
-																	      		<input type="checkbox" class="form-check-input" value="" style="height:20px; width:20px; margin: 9px 0px 0 -0.625rem;">
-																	      </td>
-																	      <td><button type="button" class="btn btn-danger" style="margin-right:12px;">刪除</button></td>
-																	    </tr>
-																	    
-																	    
-																	  </tbody>
-																</table>
-                            </div>
-                        </div>
-                        
-                        
-                        
                     </div>
                 </div>
                 <!-- /.container-fluid -->
@@ -520,8 +420,65 @@
 
 		<!-- Bootstrap Switch Button bootstrap4-toggle@3.6.1 -->
 		<script src="./js/bootstrap4-toggle.min.js"></script>
+		
+		<!-- lightpick -->
+		<script src="./js/momnet-2.22.2.min.js"></script>		
+		
+		<!-- lightpick -->
+		<script src="./js/lightpick.js"></script>
+		
+		<script>
+		    //var picker = new Lightpick({ field: document.getElementById('datepicker') });
+
+		    var picker = new Lightpick({
+		        field: document.getElementById('datepicker'),
+		        singleDate: false,
+		        format:"YYYY-MM-DD",
+		        onSelect: function(start, end){
+		            var str = '';
+		            str += start ? start.format('Do MMMM YYYY') + ' to ' : '';
+		            str += end ? end.format('Do MMMM YYYY') : '...';
+		            document.getElementById('datepicker').innerHTML = str;
+		        }
+		    });
+		</script>
 
 		<script>
+
+		$(document).ready(function(){
+			$("#datepicker").val("按此選擇起始日期");
+			
+			var table = $('#dataTable').DataTable();
+		     
+		    $('#dataTable tbody').on('click', 'tr', function () {
+// 		    		var id = table.row( this ).id();
+// 			    	$("#inputSid").val(id);
+			    	
+			    	
+// 		        var data = table.row( this ).data();
+// 		        //alert( 'You clicked on '+ data[0] +'\'s row' );
+// 		        $("#textStoreName").text(data[0]);
+// 		        $("#textSinglePoint").text( "目前消費點數:" + data[1]);
+// 		        $("#textMultiPoint").text("目前消費點數:" + data[2]);
+// 		        var str = data[3].split("/");
+		        
+// 		        $("#textDiscount1Dallas").text("目前設定金額:" + str[0]);
+// 		        $("#textDiscount1Point").text("目前設定點數:" + str[1]);
+// 		        var str = data[4].split("/");
+// 		        $("#textDiscount2Dallas").text("目前設定金額:" + str[0]);
+// 		        $("#textDiscount2Point").text("目前設定點數:" + str[1]);
+// 		        var str = data[5].split("/");
+// 		        $("#textDiscount3Dallas").text("目前設定金額:" + str[0]);
+// 		        $("#textDiscount3Point").text("目前設定點數:" + str[1]);
+// 		        var pause = data[6];
+		        
+// 		        if(pause =="啟用"){
+// 		        	$('#cbStoreState').bootstrapToggle('on')
+// 				    }else if(pause == "停用"){
+// 				    	$('#cbStoreState').bootstrapToggle('off')
+// 					  }
+		    } );
+		});
 			
 			//新增datatable row
 			function addDatatble(){
@@ -545,35 +502,113 @@
 					  }
 			});
 
-		  $('#dataTable tbody').on('click', 'tr', function (event) {
 
-			  /*
-				var id = $(this).attr('id');
-		    var num =  id.substring(2, id.length);
-		    $("#hiddenNumber").val(num);
-	    	
-				$("#username").text( $("#thun" + num).text() ) ;
-				$("#inputemail").val( $("#them" + num).text() );
-				$("#inputpoint").val( $("#thpo" + num).text() );
-				$("#inputphone").val( $("#thph" + num).text() );
-				$("#inputpassword").val( $("#thpw" + num).text() );
 
-				var blackVal = $("#thbl" + num).text();
-				if(blackVal == 0){
-					$("#cbblack").prop('checked', false);
-				}else if(blackVal == 1){
-					$("#cbblack").prop('checked', true);
-				}
-				*/
 
-			  document.getElementById("divStoreList").style.display = "none";
-				document.getElementById("divStoreAdd").style.display = "block";
-	    });
+		    
 
-		  $("#btnBack").click(function(){
-			  document.getElementById("divStoreList").style.display = "block";
-				document.getElementById("divStoreAdd").style.display = "none";
+		  $(".modify").click(function(){
+			  $("#title").text("樹林站前店 - 設定加值機");
+				$("#divStoreList").hide();
+				$("#divAddvalueSetting").show();
+				$("#btnNextConsumption").show();
+				$("#btnUpdateAddvalue").show();
+				$("#btnBackList").show();
 			});
+
+		  $("#btnNextConsumption").click(function(){
+			  $("#title").text("樹林站前店 - 設定消費機");
+			  $("#divAddvalueSetting").hide();
+			  $("#divConsumptionSetting").show();
+				$("#btnUpdtateConsumption").show();
+				$("#btnBackAddvalue").show();			  
+			  $("#btnNextConsumption").hide();
+				$("#btnUpdateAddvalue").hide();
+				$("#btnBackList").hide();
+			});
+
+		  $("#btnUpdateAddvalue").click(function(){
+			  alert("btnComplete!");
+			});
+
+		  $("#btnBackList").click(function(){
+			  $("#title").text("店家配置");
+			  $("#divAddvalueSetting").hide();
+			  $("#divStoreList").show();
+			  $("#btnNextConsumption").hide();
+				$("#btnUpdateAddvalue").hide();
+				$("#btnBackList").hide();
+			});
+
+		  $("#btnUpdtateConsumprio").click(function(){
+			  alert("btnComplete!");
+			});
+
+		  $("#btnBackAddvalue").click(function(){
+			  $("#title").text("樹林站前店 - 設定加值機");
+			  $("#divConsumptionSetting").hide();
+			  $("#divAddvalueSetting").show();
+				$("#btnUpdtateConsumption").hide();
+				$("#btnBackAddvalue").hide();
+				$("#btnNextConsumption").show();
+				$("#btnUpdateAddvalue").show();
+				$("#btnBackList").show();
+			});
+
+		  $('#dropdownStore a').click(function () {
+			    $('#btnSelectStore').text($(this).text());
+			});
+
+		  $('#dropdownType a').click(function () {
+			    $('#btnSelectType').text($(this).text());
+			});
+			
+
+			//第1個參數:store id
+			//第2個參數:type(傳要改變的欄位名稱))
+			//第2個參數:總共要傳幾個有效參數
+			//第3個以後的參數:依第1個參數設定相同數量的參數值,超過的部份以""替代
+			function updateStore(coulumName, arg1, arg2 ){
+				var sid = $("#inputSid").val();
+				$.ajax({
+					type : 'POST', //GET or POST
+					url : "../Store_Setting_Servlet", //請求的頁面
+					cache : false, //防止抓到快取的回應
+					data : {
+						sid : sid,
+						coulumName : coulumName,
+						arg1 : arg1,
+						arg2 : arg2
+					},
+					success : function(jsonObject) { //當請求成功後此事件會被呼叫
+						
+					},
+					error : function(e) {
+						console.log("e: " + e);
+					}, //當請求失敗後此事件會被呼叫
+					statusCode : { //狀態碼處理
+						404 : function() {
+							alert("page not found");
+						}
+					}
+				});
+			}
+
+
+			
+
+			$('#cbStoreState').change(function() {
+				var pause = document.getElementById('cbStoreState').checked;
+				
+				if(pause == true){
+					console.log("pause", pause);
+					updateStore("pause", 1, "");
+				}else if(pause == false){
+					console.log("pause", pause);
+					updateStore("pause", 0, "");
+				}
+				//updateStore("pause", state, "");
+			 });
 
 		</script>
 </body>

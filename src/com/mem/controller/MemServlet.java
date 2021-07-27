@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import com.adminconfig.model.AdminConfigService;
+import com.device.model.DeviceService;
+import com.device.model.DeviceVO;
 import com.mem.model.MemService;
 import com.mem.model.MemVO;
 
@@ -73,9 +75,17 @@ public class MemServlet extends HttpServlet {
 			jsonObject.put("state", "3");
 			System.out.println("state : " + 3);
 		}else if((password.equals(memVO.getPassword()) && (memVO.getVerification() == 10))) {
+			
+			DeviceService deviceService = new DeviceService();
+			DeviceVO deviceVO = deviceService.getOneDevice(DID);
+			deviceVO.setMid(username);
+			deviceService.updateDevice(deviceVO);
+			
 			jsonObject.put("state", "1");
 			jsonObject.put("type", machineStr);
 			req.getSession().setAttribute("memVO", memVO);
+			memVO.setAdd_life_status(1);
+			new MemService().updateMem(memVO);
 			System.out.println("verification OK");
 		}else if((password.equals(memVO.getPassword()) && (memVO.getVerification() != 10))) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");

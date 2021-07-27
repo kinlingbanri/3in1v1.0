@@ -8,6 +8,7 @@ public interface HistoryDAO_interface {
 	public void delete(HistoryVO historyVO);
 	public HistoryVO findByPrimaryId(int hid);
 	public List<HistoryVO> getByMemberId(String mid);
+	public List<HistoryVO> getListByMaid(String startDate, String endDate, int maid);
 	public List<HistoryVO> get30(String mid);
 	public List<HistoryVO> getAll();
 	public int getCount(int did);

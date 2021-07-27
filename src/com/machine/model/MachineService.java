@@ -13,6 +13,10 @@ public class MachineService {
 		dao.insert(machineVO);
 	}
 	
+	public long insertGetMachid(MachineVO machineVO){
+		return dao.insertGetMachid(machineVO);
+	}
+	
 	public void updateMachine(MachineVO machineVO){
 		dao.update(machineVO);
 	}
@@ -31,5 +35,13 @@ public class MachineService {
 	
 	public List<MachineVO>getAll(){
 		return dao.getAll();
+	}
+	
+	public List<MachineVO> getAllBySid(int sid){
+		return dao.getAllBySid(sid);
+	}
+	
+	public List<MachineVO> getAllByDid(int did){
+		return dao.getAllByDid(did);
 	}
 }

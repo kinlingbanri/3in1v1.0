@@ -10,4 +10,8 @@ public class AdminConfigService {
 	public AdminConfigVO getAdminConfig() {
 		return dao.getAdminConfig();
 	}
+	
+	public void updateAdminConfig(AdminConfigVO adminConfigVO) {
+		dao.updateAdminConfig(adminConfigVO);
+	}
 }

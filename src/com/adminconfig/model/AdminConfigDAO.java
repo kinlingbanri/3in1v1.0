@@ -23,7 +23,8 @@ public class AdminConfigDAO implements AdminConfigDAO_interface{
 		}
 	}
 	
-	private static final String GET_STMT = "SELECT id, ip, comport FROM adminconfig";
+	private static final String GET_STMT = "SELECT id, ip, comport, url FROM adminconfig";
+	private static final String UPDATE_STMT = "UPDATE adminconfig set ip=?, comport=? where id = ?";
 
 	@Override
 	public AdminConfigVO getAdminConfig() {
@@ -41,6 +42,7 @@ public class AdminConfigDAO implements AdminConfigDAO_interface{
 				adminConfigVO.setId(rs.getInt("id"));
 				adminConfigVO.setIp(rs.getString("ip"));
 				adminConfigVO.setComPort(rs.getString("comport"));
+				adminConfigVO.setUrl(rs.getString("url"));
 			}
 
 			// Handle any driver errors
@@ -71,6 +73,43 @@ public class AdminConfigDAO implements AdminConfigDAO_interface{
 			}
 		}
 		return adminConfigVO;
+	}
+
+	@Override
+	public void updateAdminConfig(AdminConfigVO adminConfigVO) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_STMT);
+
+			pstmt.setString(1, adminConfigVO.getIp());
+			pstmt.setString(2, adminConfigVO.getComPort());
+			pstmt.setInt(3, adminConfigVO.getId());
+
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 	}
 
 }

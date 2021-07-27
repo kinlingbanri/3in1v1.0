@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.device.model.DeviceVO;
+import com.machine.model.MachineVO;
+
 public class StoreJDBCDAO implements StoreDAO_interface{
 	
 	String driver = "com.mysql.cj.jdbc.Driver";
@@ -31,6 +34,26 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 								+ "discount_3_point=? where sid = ?";
 	private static final String DELETE_STMT = 
 			"DELETE FROM store where sid = ?";
+	
+	private static final String GET_ADD_Statistics_STMT = 
+			"SELECT storeid, SUM(POINT) add_point, SUM(money) add_money FROM addrecord WHERE STR_TO_DATE(storedatetime, '%Y-%m-%d') >= ?"
+			+ " AND STR_TO_DATE(storedatetime, '%Y-%m-%d') <= ? GROUP BY storeid;";
+
+	private static final String GET_HISTORY_Statistics_STMT = 
+			"SELECT sid, SUM(POINT) point FROM history WHERE STR_TO_DATE(ttime, '%Y-%m-%d') >= ? "
+			+ "AND STR_TO_DATE(ttime, '%Y-%m-%d') <= ? GROUP BY sid;";
+
+	private static final String GET_DEVICE_ALL_BY_SID_STMT = 
+			"SELECT did, number, location FROM device where sid = ?";
+	private static final String GET_MACHINE_ALL_BY_SID_STMT = 
+			"SELECT machid, number, name FROM machine WHERE sid = ?";
+	
+	private static final String GET_ADD_Statistics_By_DID_STMT = 
+			"SELECT SUM(POINT) add_point, SUM(money) add_money FROM addrecord WHERE STR_TO_DATE(storedatetime, '%Y-%m-%d') >= ?"
+			+ " AND STR_TO_DATE(storedatetime, '%Y-%m-%d') <= ? AND deviceid = ?;";
+	private static final String GET_HISTORY_Statistics_BY_MAID_STMT = 
+			"SELECT SUM(POINT) point FROM history WHERE STR_TO_DATE(ttime, '%Y-%m-%d') >= ?"
+			+ "AND STR_TO_DATE(ttime, '%Y-%m-%d') <= ? AND maid = ? AND sid = ?;";
 
 	public static void main(String[] args) {
 		StoreJDBCDAO dao = new StoreJDBCDAO();
@@ -92,22 +115,41 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 //		System.out.print(store.getDiscount_3_money()+ ",");
 //		System.out.println(store.getDiscount_3_point());
 		
-		// Query All
-		List<StoreVO> list = dao.getAll();
-		for (StoreVO store : list) {
-			System.out.print(store.getSid() + ",");
-			System.out.print(store.getName() + ",");
-			System.out.print(store.getCity() + ",");
-			System.out.print(store.getDistrict()+ ",");
-			System.out.print(store.getPause()+ ",");
-			System.out.print(store.getSingle_count()+ ",");
-			System.out.print(store.getMulti_count()+ ",");
-			System.out.print(store.getDiscount_1_money()+ ",");
-			System.out.print(store.getDiscount_1_point()+ ",");
-			System.out.print(store.getDiscount_2_money()+ ",");
-			System.out.print(store.getDiscount_2_point()+ ",");
-			System.out.print(store.getDiscount_3_money()+ ",");
-			System.out.println(store.getDiscount_3_point());
+//		// Query All
+//		List<StoreVO> list = dao.getAll();
+//		for (StoreVO store : list) {
+//			System.out.print(store.getSid() + ",");
+//			System.out.print(store.getName() + ",");
+//			System.out.print(store.getCity() + ",");
+//			System.out.print(store.getDistrict()+ ",");
+//			System.out.print(store.getPause()+ ",");
+//			System.out.print(store.getSingle_count()+ ",");
+//			System.out.print(store.getMulti_count()+ ",");
+//			System.out.print(store.getDiscount_1_money()+ ",");
+//			System.out.print(store.getDiscount_1_point()+ ",");
+//			System.out.print(store.getDiscount_2_money()+ ",");
+//			System.out.print(store.getDiscount_2_point()+ ",");
+//			System.out.print(store.getDiscount_3_money()+ ",");
+//			System.out.println(store.getDiscount_3_point());
+//		}
+		
+//		List<StatisticsAllVO> list = dao.getAllStatistics("2021-06-11", "2021-06-30");
+//		for (StatisticsAllVO statisticsAllVO : list) {
+//			System.out.print(statisticsAllVO.getSid() + ",");
+//			System.out.print(statisticsAllVO.getName() + ",");
+//			System.out.print(statisticsAllVO.getAdd_money() + ",");
+//			System.out.print(statisticsAllVO.getAdd_point() + ",");
+//			System.out.println(statisticsAllVO.getConsumption_point());
+//		}
+		
+		List<StatisticsAllVO> list = dao.getAllStatisticsBySid(1, "2020-06-11", "2021-07-15");
+		for (StatisticsAllVO statisticsAllVO : list) {
+			System.out.print(statisticsAllVO.getSid() + ",");
+			System.out.print(statisticsAllVO.getName() + ",");
+			System.out.print(statisticsAllVO.getNumber() + ",");
+			System.out.print(statisticsAllVO.getAdd_money() + ",");
+			System.out.print(statisticsAllVO.getAdd_point() + ",");
+			System.out.println(statisticsAllVO.getConsumption_point());
 		}
 	}
 
@@ -362,6 +404,229 @@ public class StoreJDBCDAO implements StoreDAO_interface{
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<StatisticsAllVO> getAllStatistics(String startDate, String endDate) {
+		List<StatisticsAllVO> list = new ArrayList<StatisticsAllVO>();
+		StatisticsAllVO statisticsAllVO = null;
+		
+		List<StatisticsAllVO> add_list = new ArrayList<StatisticsAllVO>();		
+		StatisticsAllVO addVO = null;
+		
+		List<StatisticsAllVO> consumption_list = new ArrayList<StatisticsAllVO>();		
+		StatisticsAllVO consumptionVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_ALL_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// memVO 也稱為 Domain objects
+				statisticsAllVO = new StatisticsAllVO();
+				statisticsAllVO.setSid(rs.getInt("sid"));
+				statisticsAllVO.setName(rs.getString("name"));
+				list.add(statisticsAllVO); // Store the row in the list
+			}
+			
+			pstmt = con.prepareStatement(GET_ADD_Statistics_STMT);
+			pstmt.setString(1, startDate);
+			pstmt.setString(2, endDate);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				addVO = new StatisticsAllVO();
+				addVO.setSid(rs.getInt("storeid"));
+				addVO.setAdd_money(rs.getInt("add_money"));
+				addVO.setAdd_point(rs.getInt("add_point"));
+				add_list.add(addVO); // Store the row in the list
+			}
+			
+			for (StatisticsAllVO vo1 : add_list) {				
+				for (StatisticsAllVO vo2 : list) {
+					if(vo1.getSid() == vo2.getSid()) {
+						vo2.setAdd_money(vo1.getAdd_money());
+						vo2.setAdd_point(vo1.getAdd_point());
+					}
+				}
+			}
+			
+			pstmt = con.prepareStatement(GET_HISTORY_Statistics_STMT);
+			pstmt.setString(1, startDate);
+			pstmt.setString(2, endDate);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				consumptionVO = new StatisticsAllVO();
+				consumptionVO.setSid(rs.getInt("sid"));
+				consumptionVO.setConsumption_point(rs.getInt("point"));
+				consumption_list.add(consumptionVO); // Store the row in the list
+			}
+			
+			for (StatisticsAllVO vo1 : consumption_list) {				
+				for (StatisticsAllVO vo2 : list) {
+					if(vo1.getSid() == vo2.getSid()) {
+						vo2.setConsumption_point(vo1.getConsumption_point());
+					}
+				}
+			}
+			
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<StatisticsAllVO> getAllStatisticsBySid(int sid, String startDate, String endDate) {
+		List<StatisticsAllVO> list = new ArrayList<StatisticsAllVO>();
+		StatisticsAllVO statisticsAllVO = null;
+		
+		List<StatisticsAllVO> add_list = new ArrayList<StatisticsAllVO>();		
+		StatisticsAllVO addVO = null;
+		
+		List<StatisticsAllVO> consumption_list = new ArrayList<StatisticsAllVO>();		
+		StatisticsAllVO consumptionVO = null;
+		
+		List<DeviceVO> deviceVOs = new ArrayList<DeviceVO>();
+		DeviceVO deviceVO = null;
+		
+		List<MachineVO> machineVOs = new ArrayList<MachineVO>();
+		MachineVO machineVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_DEVICE_ALL_BY_SID_STMT);
+			pstmt.setInt(1, sid);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// memVO 也稱為 Domain objects
+				deviceVO = new DeviceVO();
+				deviceVO.setDid(rs.getInt("did"));
+				deviceVO.setNumber(rs.getString("number"));
+				deviceVO.setLocation(rs.getString("location"));
+				deviceVOs.add(deviceVO); // Store the row in the list
+			}
+			
+			pstmt = con.prepareStatement(GET_ADD_Statistics_By_DID_STMT);			
+			for(DeviceVO device : deviceVOs) {
+				
+				pstmt.setString(1, startDate);
+				pstmt.setString(2, endDate);
+				pstmt.setInt(3, device.getDid());
+				rs = pstmt.executeQuery();
+				
+				while (rs.next()) {
+					statisticsAllVO = new StatisticsAllVO();
+					statisticsAllVO.setName(device.getLocation());
+					statisticsAllVO.setNumber(device.getNumber());
+					statisticsAllVO.setAdd_money(rs.getInt("add_money"));
+					statisticsAllVO.setAdd_point(rs.getInt("add_point"));
+					list.add(statisticsAllVO);					
+				}
+		    }
+			
+			pstmt = con.prepareStatement(GET_MACHINE_ALL_BY_SID_STMT);
+			pstmt.setInt(1, sid);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// memVO 也稱為 Domain objects
+				machineVO = new MachineVO();
+				machineVO.setMachid(rs.getInt("machid"));
+				machineVO.setNumber(rs.getString("number"));
+				machineVO.setName(rs.getString("name"));
+				machineVOs.add(machineVO); // Store the row in the list
+			}
+
+			pstmt = con.prepareStatement(GET_HISTORY_Statistics_BY_MAID_STMT);	
+			for(MachineVO machine : machineVOs) {
+				
+				pstmt.setString(1, startDate);
+				pstmt.setString(2, endDate);
+				pstmt.setInt(3, machine.getMachid());
+				pstmt.setInt(4, sid);
+				rs = pstmt.executeQuery();
+				
+				while (rs.next()) {
+					statisticsAllVO = new StatisticsAllVO();
+					statisticsAllVO.setName(machine.getName());
+					statisticsAllVO.setNumber(machine.getNumber());
+					statisticsAllVO.setConsumption_point(rs.getInt("point"));
+					list.add(statisticsAllVO);					
+				}
+		    }
+			
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {

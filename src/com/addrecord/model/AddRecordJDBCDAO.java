@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mem.model.MemVO;
+import com.store.model.StatisticsAllVO;
 
 public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 	
@@ -38,6 +39,13 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 			"SELECT id, storedatetime, coin10, coin50, paper100, paper500, paper1000, "
 					+ "point, errorcode, username, deviceid, devicenumber, storeid, storename, cardid FROM addrecord where username = ?"
 					+ "order by storedatetime DESC LIMIT 30";
+	private static final String GET_LIST_BY_DID_STMT = 
+			"SELECT id, storedatetime, money, point, username, deviceid, devicenumber, storeid, storename " + 
+			"FROM addrecord " + 
+			"WHERE	STR_TO_DATE(storedatetime, '%Y-%m-%d') >= ? AND " + 
+			"			STR_TO_DATE(storedatetime, '%Y-%m-%d') <= ? AND " + 
+			"			deviceid = ? " + 
+			"order by storedatetime DESC;";
 	private static final String GET_AFTER30_STMT = 
 			"SELECT ADDRECORD.STOREDATETIME, ADDRECORD.POINT, ADDRECORD.DEVICENUMBER, STORE.NAME, STORE.CITY FROM ADDRECORD " + 
 			"					INNER JOIN STORE ON ADDRECORD.STOREID = STORE.SID AND ADDRECORD.USERNAME = ? " + 
@@ -50,6 +58,9 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 			+ " paper1000=?, point=?, errorcode=?, username=?, deviceid=?,  devicenumber = ?, storeid=?, storename=?, cardid=? where id = ?";
 	private static final String DELETE_STMT = 
 			"DELETE FROM addrecord where id = ?";
+	
+	private static final String GET_ADD_Statistics_ALL_STMT = 
+			"SELECT storeid, SUM(POINT), SUM(money) FROM addrecord GROUP BY storeid;";	
 
 	public static void main(String[] args)  {
 		
@@ -211,6 +222,27 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 //			System.out.println(addRecord.getCardid());
 //		}	
 
+		// Query List By Did
+		List<AddRecordVO> list = dao.getListByDid("2021-03-15", "2021-06-15", 1);
+		for (AddRecordVO addRecord : list) {
+			System.out.print(addRecord.getId() + ",");
+			System.out.print(addRecord.getStoredatetime() + ",");
+			System.out.print(addRecord.getMoney() + ",");
+			System.out.print(addRecord.getPoint() + ",");
+			System.out.print(addRecord.getUsername() + ",");
+			System.out.print(addRecord.getDeviceid() + ",");
+			System.out.print(addRecord.getDeviceNumber() + ",");
+			System.out.print(addRecord.getStoreid() + ",");
+			System.out.print(addRecord.getStorename() + ",");
+			System.out.print(addRecord.getCardid() + ",");
+			System.out.println();
+		}	
+		
+//		List<StatisticsAllVO> list = dao.getAddStatistics();
+//		for (StatisticsAllVO statisticsAllVO : list) {
+//			System.out.print(statisticsAllVO.getSid() + ",");
+//			System.out.println(statisticsAllVO.getName());
+//		}
 	}
 
 	@Override
@@ -724,6 +756,142 @@ public class AddRecordJDBCDAO implements AddRecordDAO_interface {
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<StatisticsAllVO> getAddStatistics() {
+		List<StatisticsAllVO> list = new ArrayList<StatisticsAllVO>();
+		StatisticsAllVO statisticsAllVO = null;
+		
+		List<StatisticsAllVO> templist = new ArrayList<StatisticsAllVO>();		
+		StatisticsAllVO tempstoreVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_ADD_Statistics_ALL_STMT);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				tempstoreVO.setSid(rs.getInt("storeid"));
+				tempstoreVO.setAdd_money(rs.getInt("money"));
+				tempstoreVO.setAdd_point(rs.getInt("point"));
+				templist.add(tempstoreVO); // Store the row in the list
+			}
+			
+//			for (StatisticsAllVO vo : templist) {
+//				System.out.print(vo.getSid() + ",");
+//				System.out.println(vo.getAdd_money());
+//				System.out.println(vo.getAdd_point());
+//			}
+			
+
+			
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<AddRecordVO> getListByDid(String startDate, String endDate, int did) {
+		List<AddRecordVO> list = new ArrayList<AddRecordVO>();
+		AddRecordVO addRecordVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_LIST_BY_DID_STMT);
+			
+			pstmt.setString(1, startDate);
+			pstmt.setString(2, endDate);
+			pstmt.setInt(3, did);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// addRecordVO 也稱為 Domain objects
+				addRecordVO = new AddRecordVO();
+				addRecordVO.setId(rs.getInt("id"));
+				addRecordVO.setStoredatetime(rs.getTimestamp("storedatetime"));
+				addRecordVO.setMoney(rs.getInt("money"));
+				addRecordVO.setPoint(rs.getInt("point"));
+				addRecordVO.setUsername(rs.getString("username"));
+				addRecordVO.setDeviceid(rs.getInt("deviceid"));
+				addRecordVO.setDeviceNumber(rs.getString("deviceNumber"));
+				addRecordVO.setStoreid(rs.getInt("storeid"));
+				addRecordVO.setStorename(rs.getString("storename"));
+
+				list.add(addRecordVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {

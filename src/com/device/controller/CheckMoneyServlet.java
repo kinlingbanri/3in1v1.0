@@ -50,9 +50,51 @@ public class CheckMoneyServlet extends HttpServlet {
 		DeviceVO addStatusVO = new DeviceService().getAddStatus(did);
 		int addStatus = addStatusVO.getAdd_status();
 		
-		//if(addStatus.getAdd_status() == 14) {
-		if((addStatus >= 10) && (addStatus <= 19)) {
-			DeviceVO deviceVO = new DeviceService().getCheckMoney(did);
+		MemService memService = new MemService();
+		MemVO memVO = memService.getOneMem(username);
+		
+		int add_life_status = memVO.getAdd_life_status();
+		System.out.println("add_life_status : " + add_life_status);
+		
+		
+		if(add_life_status == 2) {
+			jsonObject.put("state", 2);
+		}else if((addStatus >= 10) && (addStatus <= 19)) {			
+			int new_add_money = memVO.getAdd_money();
+			System.out.println("new_add_money : " + new_add_money);
+			
+			StoreService storeService = new StoreService();
+			StoreVO storeVO = storeService.getOneStore(sid);
+			
+			int totalPoint = 0;
+			if(new_add_money >= storeVO.getDiscount_3_money()) {
+				totalPoint = new_add_money + ( storeVO.getDiscount_3_point() - storeVO.getDiscount_3_money());
+			}else if(new_add_money >= storeVO.getDiscount_2_money()) {
+				totalPoint = new_add_money + ( storeVO.getDiscount_2_point() - storeVO.getDiscount_2_money());
+			}else if(new_add_money >= storeVO.getDiscount_1_money()) {
+				totalPoint = new_add_money + ( storeVO.getDiscount_1_point() - storeVO.getDiscount_1_money());
+			}else {
+				totalPoint = new_add_money;
+			}
+			System.out.println("totalPoint : " + totalPoint);
+			
+			if(addStatus == 14) {
+				new DeviceService().updateAddStatus13(did, 13, totalPoint, new_add_money);
+			}else {
+				new DeviceService().updateAddStatus13(did, addStatus, totalPoint, new_add_money);
+			}
+			memVO.setAdd_life_status(1);
+			memService.updateMem(memVO);
+			
+			
+			jsonObject.put("totalMoney", new_add_money);
+			jsonObject.put("totalPoint", totalPoint);
+			jsonObject.put("state", 1);
+			
+			
+			
+			//20210708版本 Start
+			/*
 			int count_100 = deviceVO.getCount_100();
 			int count_500 = deviceVO.getCount_500();
 			int count_1000 = deviceVO.getCount_1000();
@@ -65,11 +107,6 @@ public class CheckMoneyServlet extends HttpServlet {
 			System.out.println("CheckMoneyServlet add_money : " + add_money);
 			int now_money = memVO.getNow_money();
 			System.out.println("CheckMoneyServlet now_money : " + now_money);
-			
-			//???
-//			memVO.setAdd_money(totalMoney);
-//			memVO.setAdd_status(addStatus);
-//			memService.updateMem(memVO);	
 			
 			int new_add_money = totalMoney - now_money + add_money;
 			
@@ -88,6 +125,7 @@ public class CheckMoneyServlet extends HttpServlet {
 			System.out.println(totalMoney);
 			StoreService storeService = new StoreService();
 			StoreVO storeVO = storeService.getOneStore(sid);
+			//20210708版本 End
 			
 			int totalPoint = 0;
 			if(new_add_money >= storeVO.getDiscount_3_money()) {
@@ -101,10 +139,9 @@ public class CheckMoneyServlet extends HttpServlet {
 			}
 			System.out.println("totalPoint : " + totalPoint);
 			
-//			if(addStatus == 14) {
-//				new DeviceService().updateAddStatus13(did, 13, totalPoint, new_add_money, 1);
-//			}
+			
 			new DeviceService().updateAddStatus13(did, 13, totalPoint, new_add_money, 1);
+			
 			
 			jsonObject.put("add_status", deviceVO.getAdd_status());
 			jsonObject.put("count_100", count_100);
@@ -113,9 +150,10 @@ public class CheckMoneyServlet extends HttpServlet {
 			jsonObject.put("totalMoney", new_add_money);
 			jsonObject.put("totalPoint", totalPoint);
 			jsonObject.put("state", 1);
-			
+			*/
+			//20210708版本 End
 		}else {
-			jsonObject.put("state", 2);
+			
 		}
 		
 		out.write(jsonObject.toString());

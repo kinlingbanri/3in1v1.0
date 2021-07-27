@@ -51,19 +51,23 @@
 
 		MachineService machineService = new MachineService();
 		MachineVO machineVO = machineService.getOneMachineNumber(number);
+		int machid = machineVO.getMachid();
 		int serial = machineVO.getSerial();
 		
 		StoreService storeService = new StoreService();
 		StoreVO storeVO = storeService.getOneStore( deviceVO.getSid() );
 		
-		String title = storeVO.getName() + " 洗衣機" + serial + "號";
+		String title = storeVO.getName() + " - " + machineVO.getName();
 		System.out.print("title : " + title);
 		
 
-		
-		int consumptionPoint = storeVO.getSingle_count();						//消費一次費用,從資料庫查詢
+		//20210724
+// 		int consumptionPoint = storeVO.getSingle_count();						//消費一次費用,從資料庫查詢
+		int consumptionPoint = machineVO.getPoint();
+		System.out.print("consumptionPoint : " + consumptionPoint);
 		int freecount = consumptionPoint /10;
 		request.setAttribute("consumptionPoint", consumptionPoint);
+		
 		
 		String serviceType = number.substring(0, 2);
 		System.out.println("serviceType : " + serviceType);
@@ -184,15 +188,15 @@
 			</div>
 			<div id="timerDiv" style="margin: 0 0 12px 0;">
 			
-				<p id="timer" style="color:red; font-weight:bold; font-size:18px; margin:0;">系統將於30秒後自動完成加值</p>
-				<p style="margin: 0 0 16px 0; font-size:16px;">或按確認交易，手動完成消費</p>
+				<p id="timer" style="color:red; font-weight:bold; font-size:18px; margin:0;">系統將於60秒後自動完成服務</p>
+				<p style="margin: 0 0 16px 0; font-size:16px;">或於時間結束後由系統自動完成服務</p>
 			
 <!-- 				<p style="margin: 0 0 0 0; font-size:16px;">請按確認交易，手動完成服務</p> -->
 <!-- 				<p style="margin: 0 0 0 0; font-size:16px;">或於時間結束後由系統自動完成服務</p> -->
 <!-- 				<p id="timer" style="color:red; font-weight:bold; font-size:18px;">30秒</p> -->
 			</div>
 		  <input type="hidden" name="DID" value="<%=DID %>" id="inputDIid">
-		  <input type="hidden" name="MACHID" value="2" id="inputMachid">
+		  <input type="hidden" name="MACHID" value="<%=machid %>" id="inputMachid">
 		  <input type="hidden" name="username" value="<%=username %>" id="inputUsername">
 		  <input type="hidden" name="serial" value="<%= serial %>" id="inputSerial">
 		  <input type="hidden" name="memPoint" value="<%=memPoint %>" id="inputMemPoint">
@@ -200,7 +204,7 @@
 		  <input type="hidden" name="freecount" value="<%= freecount %>" id="inputFreecount">
 		  <input type="hidden" name="number" value="<%=number %>" id="inputNumber">
 			<button type="submit" id="confirmBtn" class="btn btn-success" style="font-weight:bold; margin-right:12px;">確認交易</button>
-			<button type="submit" id="logoutBtn" class="btn btn-warning" style="font-weight:bold; margin-left:12px;">取消交易</button>
+			<button type="submit" id="logoutBtn" class="btn btn-warning" style="font-weight:bold; margin-left:12px;">返回</button>
 		</div>
 		<div style="text-align: center; margin-top:24px;" id="successDiv">
 			<button class="btn btn-success" style="font-weight:bold; margin-left:12px;" id="successBtn">完成交易</button>
@@ -250,23 +254,35 @@
 		});
 		
 		var DID = $("#DID").val();
-		var count = 30;
+		var count = 60;
 		
 		function myTimer(){
 			if(count == 0){
 				clearInterval(myTimerVar);
-				window.location.href = "../logout.jsp";
+				//window.location.href = "../logout.jsp";
+			var did =  $("#inputDIid").val();
+			var machid =  $("#inputMachid").val();
+			var username =  $("#inputUsername").val();
+			var serial =  $("#inputSerial").val();
+			var mempoint =  $("#inputMemPoint").val();
+			var consumptionPoint =  $("#inputConsumptionPoint").val();
+			var freecount =  $("#inputFreecount").val();
+			var number =  $("#inputNumber").val();
+			var storeInfo =  $("#storeInfo").text();
+				consumpTimerVar = setInterval(function(){
+					Consumption(username, did, machid, freecount, mempoint, serial, consumptionPoint, number, storeInfo)
+				}, 1000);
 			}else{
 				count = count - 1;
 				console.log("count : " + count);
-				var countStr = "系統將於" + count + "秒後自動完成加值";
+				var countStr = "系統將於" + count + "秒後自動完成消費";
 				document.getElementById("timer").innerText = countStr;
 			}
 		}
 	
 		function resetTimer(){
-			count = 30;
-			var countStr = "系統將於" + count + "秒後自動完成加值";
+			count = 60;
+			var countStr = "系統將於" + count + "秒後自動完成消費";
 			document.getElementById("timer").innerText = countStr;
 			clearInterval(myTimerVar);
 			myTimerVar= setInterval(function(){ myTimer()}, 1000);
@@ -317,7 +333,8 @@
 							$("#divSuccess").show();
 
 							console.log("consumption End!");
-							setTimeout(function(){ window.location.replace("../logout.jsp"); }, 3000);
+							historyRecord(username, did, machid, freecount, consumptionPoint, number);
+							setTimeout(function(){ window.location.replace("../logout.jsp"); }, 15000);
 							
 					  }else if(state == 1){
 						  consumptioning = 1;
@@ -403,6 +420,9 @@
 
 		$("#confirmBtn").click(function(){
 			clearInterval(myTimerVar);
+
+			document.getElementById("confirmBtn").disabled = true;
+			document.getElementById("logoutBtn").disabled = true;
 			
 			var did =  $("#inputDIid").val();
 			var machid =  $("#inputMachid").val();

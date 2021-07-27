@@ -36,6 +36,10 @@ public class AddRecordService {
 		return dao.getAfter30(memVO);
 	}
 	
+	public List<AddRecordVO> getListByDid(String startDate, String endDate, int did){
+		return dao.getListByDid(startDate, endDate, did);
+	}
+	
 	public TodayTotalVO getTodayTotal(){
 		return dao.getTodayAddValue();
 	}

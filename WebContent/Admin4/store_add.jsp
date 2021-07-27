@@ -229,64 +229,182 @@
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid" id="divStoreAdd">
+                <div class="container-fluid">
+                		<div style="width:96%;">
+                			
+                		</div>
 
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h4 class="m-0 font-weight-bold text-primary" style="float:left;">新增店家</h4>
-                            <button id="btnBack" type="button" class="btn btn-success" style="margin-right:12px;; float:right;">確認新增</button>
+                        <div class="card-header py-3" id="title01">
+                           <h4 id="title" class="m-0 font-weight-bold text-primary" style="float:left;">新增店家</h4>
+								           <button id="btnAddStore" type="button" class="btn btn-success" style="margin-right:12px;; float:right;">確認新增</button>								          
+								           <button id="btnAddvalueNext" type="button" class="btn btn-success" style="margin-right:12px;; float:right; display:none;">確認並進行下一步</button>
+								           <button id="btnComplete" type="button" class="btn btn-success" style="margin-right:12px;; float:right; display:none;">完成</button>
+								           <button id="btnBackAddvalue" type="button" class="btn btn-warning" style="margin-right:12px;; float:right; display:none;">返回加值機配置</button>
+								           
+                        </div>
+
+                        <!-- Store add -->
+                        <div class="container" id="divStoreAdd">
+<!--                         <div class="container" id="divStoreAdd" style="display:none;"> -->
+                            <div class="row">
+                            
+                            
+																<table id="dataTableStoreAdd" class="table table-bordered" style="font-size:14px;" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr style="text-align:center;">
+                                        		<th>店名</th>
+                                            <th>店家狀態</th>
+                                        </tr>
+                                    </thead>
+<!--                                     <tfoot> -->
+<!--                                         		<th>優惠方案一<br>儲值金額</th> -->
+<!--                                             <th>優惠方案一<br>兌換點數</th> -->
+<!--                                     </tfoot> -->
+                                    <tbody>
+                                        <tr  style="text-align:center;">
+                                        		<th><input type="text" class="form-control configInput" id="c-1" value="請輸入店名"></th>
+                                            <th><input id="cbStoreState" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="啟用" data-off="停用"  style="margin-bottom:6px; width:80px;" checked></th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            
+                            
+<!-- 														    <div class="col-m3 configBlock" style="padding-bottom: 12px;"> -->
+<!-- 														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">店名</h4> -->
+<!--             												<input type="text" class="form-control configInput" id="inputStoreName"> -->
+<!-- 														    </div> -->
+<!-- 														    <div class="col-m3 configBlock" style="padding-bottom: 12px; width:194px;"> -->
+<!--             												<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">店家狀態</h4> -->
+<!-- 																		<input id="cbStoreState" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="啟用" data-off="停用"  style="margin-bottom:6px; width:80px;" checked> -->
+<!-- 																		<style>.toggle{margin-bottom:6px; width:80px;}</style> -->
+<!-- 														    </div> -->
+
+														</div>
                         </div>
                         
-                         <!-- Store Config -->
-                        <div class="container">
-                            <div class="row">
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">店名</h4>
-            												<input type="text" class="form-control configInput" id="inputStoreName">
-														    </div>
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">一次性消費點數</h4>
-            												<input type="text" class="form-control configInput" id="inputSinglePoint">
-														    </div>
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">連續性消費點數</h4>
-            												<input type="text" class="form-control configInput" id="inputMultiPoint">
-														    </div>
-														</div>
 
+                        
+                        <!-- Store addvalue setting -->
+<!--                         <div class="container" id="divAddvalueSetting"> -->
+                        <div class="container" id="divAddvalueSetting" style="display:none;">
                             <div class="row">
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">優惠方案一</h4>
-            												<h6>預設定金額</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount1Dallas">
-            												<h6 style="margin: 0.5rem;">預設定點數</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount1Point">
-														    </div>
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">優惠方案二</h4>
-            												<h6>預設定金額</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount2Dallas">
-            												<h6 style="margin: 0.5rem;">預設定點數</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount2Point">
-														    </div>
-														    <div class="col-md configBlock" style="padding-bottom: 12px;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">優惠方案三</h4>
-            												<h6>預設定金額</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount3Dallas">
-            												<h6 style="margin: 0.5rem;">預設定點數</h6>            												
-            												<input type="text" class="form-control configInput" id="inputDiscount3Point">
-														    </div>
-														</div>
-														
-														
-														<div class="row" style="width: 33.6%; margin: 6px -.75rem 12px -.75rem;">
-														    <div class="col-md4 configBlock" style="margin: 0 0 0 0.4rem; width: 100%;">
-														      	<h4 style="font-weight:900; margin-top: 6px; color:#FFCC22;">店家狀態</h4>
-																		<input id="cbStoreState" type="checkbox" data-toggle="toggle" data-onstyle="success" data-on="啟用" data-off="停用"  style="margin-bottom:6px; width:80px;" checked>
-																		<style>.toggle{margin-bottom:6px; width:80px;}</style>
-														    </div>
+                            		 <div class="btn-group" style="float:left; margin-top: 12px;">
+																	  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom:12px;">
+																	  		按此新增加值機
+																	  </button>
+																	  <div class="dropdown-menu">
+																		    <a class="dropdown-item" href="#">加值機3號</a>
+																		    <a class="dropdown-item" href="#">加值機4號</a>
+																		    <a class="dropdown-item" href="#">加值機5號</a>
+																	  </div>
+																</div>
+                            
+																<table id="dataTableAddvalue" class="table table-bordered" style="font-size:14px;" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr style="text-align:center;">
+                                        		<th>優惠方案一<br>儲值金額</th>
+                                            <th>優惠方案一<br>兌換點數</th>
+                                            <th>優惠方案二<br>儲值金額</th>
+                                            <th>優惠方案二<br>兌換點數</th>
+                                            <th>優惠方案三<br>儲值金額</th>
+                                            <th>優惠方案三<br>兌換點數</th>
+                                        </tr>
+                                    </thead>
+<!--                                     <tfoot> -->
+<!--                                         		<th>優惠方案一<br>儲值金額</th> -->
+<!--                                             <th>優惠方案一<br>兌換點數</th> -->
+<!--                                             <th>優惠方案二<br>儲值金額</th> -->
+<!--                                             <th>優惠方案二<br>兌換點數</th> -->
+<!--                                             <th>優惠方案三<br>儲值金額</th> -->
+<!--                                             <th>優惠方案三<br>兌換點數</th> -->
+<!--                                     </tfoot> -->
+                                    <tbody>
+                                        <tr  style="text-align:center;">
+                                        		<th><input type="text" class="form-control configInput" id="c-1" value="100"></th>
+                                            <th><input type="text" class="form-control configInput" id="c-1" value="120"></th>
+                                            <th><input type="text" class="form-control configInput" id="c-1" value="500"></th>
+                                            <th><input type="text" class="form-control configInput" id="c-1" value="650"></th>
+                                            <th><input type="text" class="form-control configInput" id="c-1" value="1000"></th>
+                                            <th><input type="text" class="form-control configInput" id="c-1" value="1400"></th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            
+														    
 														</div>
                         </div>
+
+
+                        <!-- Store constumtion setting -->
+<!--                         <div class="container" id="divConsumptionSetting"> -->
+                        <div class="container" id="divConsumptionSetting" style="display:none;">
+																<div class="btn-group" style="float:left; margin-top: 12px;">
+																	  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-bottom:12px;">
+																	  		按此新增消費機
+																	  </button>
+																	  <div class="dropdown-menu">
+																		    <a class="dropdown-item" href="#">洗衣機3號</a>
+																		    <a class="dropdown-item" href="#">洗衣機4號</a>
+																		    <a class="dropdown-item" href="#">洗衣機5號</a>
+																		    <a class="dropdown-item" href="#">烘衣機4號</a>
+																		    <a class="dropdown-item" href="#">烘衣機5號</a>
+																		    <a class="dropdown-item" href="#">烘衣機6號</a>
+																	  </div>
+																</div>
+                                <table id="dataTableConsumption" class="table table-bordered" style="font-size:14px;" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr style="text-align:center;">
+                                        		<th>#</th>
+                                            <th>名稱</th>
+                                            <th>免費服務次數</th>
+<!--                                             <th>設備ID</th> -->
+<!--                                             <th>狀態</th> -->
+                                        </tr>
+                                    </thead>
+<!--                                     <tfoot> -->
+<!-- 																						<th>#</th> -->
+<!-- 																						<th>名稱</th> -->
+<!--                                            	<th>免費服務次數</th> -->
+<!-- 																						<th>設備ID</th> -->
+<!-- 																						<th>狀態</th> -->
+<!--                                     </tfoot> -->
+                                    <tbody>
+                                        <tr  style="text-align:center;">
+                                        		<th>1</th>
+                                            <th>洗衣機1號</th>
+                                            <th><input type="text" class="form-control configInput" id="c-1" value="10"></th>
+<!--                                             <th>1</th> -->
+<!--                                             <th>正常</th> -->
+                                        </tr>
+                                        <tr style="text-align:center;">
+                                        		<th style="margin:0 auto;">2</th>
+                                            <th>洗衣機2號</th>
+                                            <th><input type="text" class="form-control configInput" id="c-2" value="10"></th>
+<!--                                             <th>3</th> -->
+<!--                                             <th>正常</th> -->
+                                        </tr>
+                                        <tr  style="text-align:center;">
+                                        		<th>3</th>
+                                            <th>烘衣機1號</th>
+                                            <th><input type="text" class="form-control configInput" id="c-3" value="1"></th>
+<!--                                             <th>8</th> -->
+<!--                                             <th>正常</th> -->
+                                        </tr>
+                                        <tr style="text-align:center;">
+                                        		<th>4</th>
+                                            <th>烘衣機2號</th>
+                                            <th><input type="text" class="form-control configInput" id="c-4" value="1"></th>
+<!--                                             <th>10</th> -->
+<!--                                             <th>故障</th> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                        </div>
+
+
+
+                        
                     </div>
                 </div>
                 <!-- /.container-fluid -->
@@ -352,7 +470,7 @@
 
 		<script>
 
-		$(".toggle").width('80px');
+			$(".toggle").width('80px');
 			
 			//新增datatable row
 			function addDatatble(){
@@ -402,9 +520,39 @@
 				document.getElementById("divStoreConfig").style.display = "block";
 	    });
 
-		  $("#btnBack").click(function(){
-			  document.getElementById("divStoreList").style.display = "block";
-				document.getElementById("divStoreConfig").style.display = "none";
+		  $("#btnAddStore").click(function(){
+				var state = 1;
+
+				if(state == 1){
+					$("#title").text("新增店家 - 加值機配置");
+					$("#btnAddStore").hide();
+					$("#btnAddvalueNext").show();
+					$("#divStoreAdd").hide();
+					$("#divAddvalueSetting").show();
+				}else{
+					alert("Error!");
+				}
+			});
+
+		  $("#btnAddvalueNext").click(function(){
+			  $("#title").text("新增店家 - 消費機配置");
+				$("#btnAddvalueNext").hide();
+				$("#btnBackAddvalue").show();
+				$("#btnComplete").show();
+				$("#divAddvalueSetting").hide();
+				$("#divConsumptionSetting").show();
+			});
+
+		  $("#btnBackAddvalue").click(function(){
+			  $("#btnAddvalueNext").show();
+				$("#btnBackAddvalue").hide();
+				$("#btnComplete").hide();
+				$("#divAddvalueSetting").show();
+				$("#divConsumptionSetting").hide();
+			});
+
+		  $("#btnComplete").click(function(){
+			  alert("btnComplete!");
 			});
 
 		</script>

@@ -12,6 +12,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.device.model.DeviceVO;
+import com.machine.model.MachineVO;
+
 public class StoreDAO implements StoreDAO_interface{
 	
 	// 一個應用程式中,針對一個資料庫 ,共用一個DataSource即可
@@ -41,6 +44,30 @@ public class StoreDAO implements StoreDAO_interface{
 								+ "discount_3_point=? where sid = ?";
 	private static final String DELETE_STMT = 
 			"DELETE FROM store where sid = ?";
+	
+	private static final String GET_ADD_Statistics_STMT = 
+			"SELECT storeid, SUM(POINT) add_point, SUM(money) add_money FROM addrecord WHERE STR_TO_DATE(storedatetime, '%Y-%m-%d') >= ?"
+			+ " AND STR_TO_DATE(storedatetime, '%Y-%m-%d') <= ? GROUP BY storeid;";
+
+	private static final String GET_HISTORY_Statistics_STMT = 
+			"SELECT sid, SUM(POINT) point FROM history WHERE STR_TO_DATE(ttime, '%Y-%m-%d') >= ? "
+			+ "AND STR_TO_DATE(ttime, '%Y-%m-%d') <= ? GROUP BY sid;";
+	
+	
+	private static final String GET_DEVICE_ALL_BY_SID_STMT = 
+			"SELECT did, number, location FROM device where sid = ?";
+	private static final String GET_MACHINE_ALL_BY_SID_STMT = 
+			"SELECT machid, number, name FROM machine WHERE sid = ?";
+	
+	private static final String GET_ADD_Statistics_By_DID_STMT = 
+			"SELECT SUM(POINT) add_point, SUM(money) add_money FROM addrecord WHERE STR_TO_DATE(storedatetime, '%Y-%m-%d') >= ?"
+			+ " AND STR_TO_DATE(storedatetime, '%Y-%m-%d') <= ? AND deviceid = ?;";
+	private static final String GET_HISTORY_Statistics_BY_MAID_STMT = 
+			"SELECT SUM(POINT) point FROM history WHERE STR_TO_DATE(ttime, '%Y-%m-%d') >= ?"
+			+ "AND STR_TO_DATE(ttime, '%Y-%m-%d') <= ? AND maid = ? AND sid = ?;";
+	
+	
+	
 
 	@Override
 	public void insert(StoreVO storeVO) {
@@ -266,6 +293,222 @@ public class StoreDAO implements StoreDAO_interface{
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<StatisticsAllVO> getAllStatistics(String startDate, String endDate) {
+		List<StatisticsAllVO> list = new ArrayList<StatisticsAllVO>();
+		StatisticsAllVO statisticsAllVO = null;
+		
+		List<StatisticsAllVO> add_list = new ArrayList<StatisticsAllVO>();		
+		StatisticsAllVO addVO = null;
+		
+		List<StatisticsAllVO> consumption_list = new ArrayList<StatisticsAllVO>();		
+		StatisticsAllVO consumptionVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ALL_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// memVO 也稱為 Domain objects
+				statisticsAllVO = new StatisticsAllVO();
+				statisticsAllVO.setSid(rs.getInt("sid"));
+				statisticsAllVO.setName(rs.getString("name"));
+				list.add(statisticsAllVO); // Store the row in the list
+			}
+			
+			pstmt = con.prepareStatement(GET_ADD_Statistics_STMT);
+			pstmt.setString(1, startDate);
+			pstmt.setString(2, endDate);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				addVO = new StatisticsAllVO();
+				addVO.setSid(rs.getInt("storeid"));
+				addVO.setAdd_money(rs.getInt("add_money"));
+				addVO.setAdd_point(rs.getInt("add_point"));
+				add_list.add(addVO); // Store the row in the list
+			}
+			
+			for (StatisticsAllVO vo1 : add_list) {				
+				for (StatisticsAllVO vo2 : list) {
+					if(vo1.getSid() == vo2.getSid()) {
+						vo2.setAdd_money(vo1.getAdd_money());
+						vo2.setAdd_point(vo1.getAdd_point());
+					}
+				}
+			}
+			
+			pstmt = con.prepareStatement(GET_HISTORY_Statistics_STMT);
+			pstmt.setString(1, startDate);
+			pstmt.setString(2, endDate);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				consumptionVO = new StatisticsAllVO();
+				consumptionVO.setSid(rs.getInt("sid"));
+				consumptionVO.setConsumption_point(rs.getInt("point"));
+				consumption_list.add(consumptionVO); // Store the row in the list
+			}
+			
+			for (StatisticsAllVO vo1 : consumption_list) {				
+				for (StatisticsAllVO vo2 : list) {
+					if(vo1.getSid() == vo2.getSid()) {
+						vo2.setConsumption_point(vo1.getConsumption_point());
+					}
+				}
+			}
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<StatisticsAllVO> getAllStatisticsBySid(int sid, String startDate, String endDate) {
+		List<StatisticsAllVO> list = new ArrayList<StatisticsAllVO>();
+		StatisticsAllVO statisticsAllVO = null;
+		
+		List<StatisticsAllVO> add_list = new ArrayList<StatisticsAllVO>();		
+		StatisticsAllVO addVO = null;
+		
+		List<StatisticsAllVO> consumption_list = new ArrayList<StatisticsAllVO>();		
+		StatisticsAllVO consumptionVO = null;
+		
+		List<DeviceVO> deviceVOs = new ArrayList<DeviceVO>();
+		DeviceVO deviceVO = null;
+		
+		List<MachineVO> machineVOs = new ArrayList<MachineVO>();
+		MachineVO machineVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_DEVICE_ALL_BY_SID_STMT);
+			pstmt.setInt(1, sid);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// memVO 也稱為 Domain objects
+				deviceVO = new DeviceVO();
+				deviceVO.setDid(rs.getInt("did"));
+				deviceVO.setNumber(rs.getString("number"));
+				deviceVO.setLocation(rs.getString("location"));
+				deviceVOs.add(deviceVO); // Store the row in the list
+			}
+			
+			pstmt = con.prepareStatement(GET_ADD_Statistics_By_DID_STMT);			
+			for(DeviceVO device : deviceVOs) {
+				
+				pstmt.setString(1, startDate);
+				pstmt.setString(2, endDate);
+				pstmt.setInt(3, device.getDid());
+				rs = pstmt.executeQuery();
+				
+				while (rs.next()) {
+					statisticsAllVO = new StatisticsAllVO();
+					statisticsAllVO.setName(device.getLocation());
+					statisticsAllVO.setNumber(device.getNumber());
+					statisticsAllVO.setAdd_money(rs.getInt("add_money"));
+					statisticsAllVO.setAdd_point(rs.getInt("add_point"));
+					list.add(statisticsAllVO);					
+				}
+		    }
+			
+			pstmt = con.prepareStatement(GET_MACHINE_ALL_BY_SID_STMT);
+			pstmt.setInt(1, sid);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// memVO 也稱為 Domain objects
+				machineVO = new MachineVO();
+				machineVO.setMachid(rs.getInt("machid"));
+				machineVO.setNumber(rs.getString("number"));
+				machineVO.setName(rs.getString("name"));
+				machineVOs.add(machineVO); // Store the row in the list
+			}
+
+			pstmt = con.prepareStatement(GET_HISTORY_Statistics_BY_MAID_STMT);	
+			for(MachineVO machine : machineVOs) {
+				
+				pstmt.setString(1, startDate);
+				pstmt.setString(2, endDate);
+				pstmt.setInt(3, machine.getMachid());
+				pstmt.setInt(4, sid);
+				rs = pstmt.executeQuery();
+				
+				while (rs.next()) {
+					statisticsAllVO = new StatisticsAllVO();
+					statisticsAllVO.setName(machine.getName());
+					statisticsAllVO.setNumber(machine.getNumber());
+					statisticsAllVO.setConsumption_point(rs.getInt("point"));
+					list.add(statisticsAllVO);					
+				}
+		    }
+			
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {

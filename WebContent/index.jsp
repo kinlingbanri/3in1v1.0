@@ -231,7 +231,7 @@ a {
 	touch-action: pan-y;
 }
 
-/* Center the loader */
+/* Center the loader start */
 #loader {
 	position: absolute;
 	left: 50%;
@@ -255,6 +255,7 @@ a {
 	0% 	{ transform: rotate(0deg); }
  100% { transform:rotate(360deg); }
 }
+/* Center the loader end */
 </style>
 
 
@@ -1023,6 +1024,11 @@ a {
 			});
 		}
 	});
+
+// 	window.onbeforeunload = function(e) {
+// 		console.log('Please press the Logout button to logout.');
+// 	    return 'Please press the Logout button to logout.';
+// 	};
 
 	</script>
 </body>

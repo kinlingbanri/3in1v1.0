@@ -42,6 +42,7 @@ public class AddRecordServlet extends HttpServlet {
 		System.out.println("AddRecordServlet!");
 		
 		req.setCharacterEncoding("UTF-8");
+		res.setCharacterEncoding("UTF-8");
 		res.setContentType("application/json");
 		
 		PrintWriter out = res.getWriter();
@@ -51,10 +52,11 @@ public class AddRecordServlet extends HttpServlet {
 		String did = req.getParameter("did");
 		String sidStr = req.getParameter("sid");
 		int sid = Integer.parseInt(sidStr);
+		String kind = req.getParameter("kind");
 		System.out.println("username : " + username);
 		System.out.println("AddRecordServlet number : " + did);
 		System.out.println("AddRecordServlet store id : " + sid);
-		
+		System.out.println("AddRecordServlet store kind : " + kind);
 		
 		DeviceVO deviceVO = new DeviceService().getCheckMoney(did);
 		int count_100 = deviceVO.getCount_100();
@@ -88,46 +90,50 @@ public class AddRecordServlet extends HttpServlet {
 
 		System.out.println("totalPoint : " + totalPoint);
 		
-		Date date = new Date();	//Get now
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Timestamp ts = new Timestamp(date.getTime());
-		System.out.println("date : " + formatter.format(ts));
 		
-		AddRecordVO addRecordVO = new AddRecordVO();
-		addRecordVO.setStoredatetime(ts);
-		addRecordVO.setPaper100(count_100);
-		addRecordVO.setPaper500(count_500);
-		addRecordVO.setPaper1000(count_1000);
-		addRecordVO.setPoint(totalMoney);
-		addRecordVO.setPoint(totalPoint);
-		addRecordVO.setUsername(username);
-		addRecordVO.setDeviceid(deviceVO.getDid());
-		addRecordVO.setDeviceNumber(deviceVO.getNumber());
-		addRecordVO.setStoreid(sid);
-		addRecordVO.setStorename(storeVO.getName());
-		new AddRecordService().insertRecord(addRecordVO);
-		
-		//完成交易,更新Device狀態
-		//19 : 完成交易
-		//totalPoint : 更新device add_point的數值 
-		new DeviceService().updateAddStatus13(did, 19, totalPoint, totalMoney, 1);
-		
+		if(kind.equals("1")) {
+			Date date = new Date();	//Get now
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Timestamp ts = new Timestamp(date.getTime());
+			System.out.println("date : " + formatter.format(ts));
+			
+			AddRecordVO addRecordVO = new AddRecordVO();
+			addRecordVO.setStoredatetime(ts);
+			addRecordVO.setPaper100(count_100);
+			addRecordVO.setPaper500(count_500);
+			addRecordVO.setPaper1000(count_1000);
+			addRecordVO.setMoney(totalMoney);
+			addRecordVO.setPoint(totalPoint);
+			addRecordVO.setUsername(username);
+			addRecordVO.setDeviceid(deviceVO.getDid());
+			addRecordVO.setDeviceNumber(deviceVO.getNumber());
+			addRecordVO.setStoreid(sid);
+			addRecordVO.setStorename(storeVO.getName());
+			new AddRecordService().insertRecord(addRecordVO);
+			
+			//完成交易,更新Device狀態
+			//19 : 完成交易
+			//totalPoint : 更新device add_point的數值 
+			new DeviceService().updateAddStatus13(did, 19, totalPoint, 0);
 
-		int nowPoint = memVO.getPoint() + totalPoint;
-		memVO.setPoint(nowPoint);
-		memVO.setAdd_money(0);
-		memVO.setAdd_status(19);
-		
-		System.out.println(memVO.getPoint());
-		System.out.println(memVO.getAdd_money());
-		System.out.println(memVO.getAdd_status());
-		
-		
-		memService.updateMem(memVO);
-
+			int nowPoint = memVO.getPoint() + totalPoint;
+			memVO.setPoint(nowPoint);
+			memVO.setAdd_money(0);
+			memVO.setAdd_status(19);
+			
+			System.out.println(memVO.getPoint());
+			System.out.println(memVO.getAdd_money());
+			System.out.println(memVO.getAdd_status());
+			
+			memService.updateMem(memVO);	
+			jsonObject.put("nowPoint", nowPoint);
+			
+		}else {
+			new DeviceService().updateAddStatus13(did, 19, totalPoint, 0);
+		}
 		
 		jsonObject.put("state", "19");
-		jsonObject.put("nowPoint", nowPoint);
+		
 		out.write(jsonObject.toString());
 		out.flush();
 		out.close();

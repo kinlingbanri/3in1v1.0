@@ -28,4 +28,12 @@ public class StoreService{
 	public List<StoreVO>getAll(){
 		return dao.getAll();
 	}
+	
+	public List<StatisticsAllVO> getAllStatistics(String startDate, String endDate){
+		return dao.getAllStatistics(startDate, endDate);
+	}
+	
+	public List<StatisticsAllVO> getAllStatisticsBySId(int sid, String startDate, String endDate){
+		return dao.getAllStatisticsBySid(sid, startDate, endDate);
+	}
 }

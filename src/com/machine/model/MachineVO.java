@@ -28,6 +28,18 @@ public class MachineVO {
 	
 	@Column(name = "serial")
 	private int serial;
+	
+	@Column(name = "single_point")
+	private int single_point;
+	
+	@Column(name = "multi_point")
+	private int multi_point;
+	
+	@Column(name = "point")
+	private int point;
+	
+	@Column(name = "did")
+	private int did;
 
 	public int getMachid() {
 		return machid;
@@ -75,6 +87,38 @@ public class MachineVO {
 
 	public void setSerial(int serial) {
 		this.serial = serial;
+	}
+
+	public int getSingle_point() {
+		return single_point;
+	}
+
+	public void setSingle_point(int single_point) {
+		this.single_point = single_point;
+	}
+
+	public int getMulti_point() {
+		return multi_point;
+	}
+
+	public void setMulti_point(int multi_point) {
+		this.multi_point = multi_point;
+	}
+
+	public int getPoint() {
+		return point;
+	}
+
+	public void setPoint(int point) {
+		this.point = point;
+	}
+
+	public int getDid() {
+		return did;
+	}
+
+	public void setDid(int did) {
+		this.did = did;
 	}
 	
 }

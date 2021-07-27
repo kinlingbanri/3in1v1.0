@@ -16,6 +16,10 @@ public class DeviceService {
 		dao.insert(deviceVO);
 	}
 	
+	public long insertGetDid(DeviceVO deviceVO) {
+		return dao.insertGetDid(deviceVO);
+	}
+	
 	public void updateDevice(DeviceVO deviceVO) {
 		dao.update(deviceVO);
 	}
@@ -32,12 +36,20 @@ public class DeviceService {
 		return dao.findByPrimaryId(number);
 	}
 	
+	public DeviceVO getOnByDid(int did) {
+		return dao.getOneByDid(did);
+	}
+	
 	public DeviceVO getCheckMoney(String number) {
 		return dao.getCheckMoney(number);
 	}
 	
 	public List<DeviceVO> getAll(){
 		return dao.getAll();
+	}
+	
+	public List<DeviceVO> getAllBySid(int sid){
+		return dao.getAllBySid(sid);
 	}
 	
 	public DeviceVO getAddStatus(String number) {
@@ -56,7 +68,7 @@ public class DeviceService {
 		dao.updateAddStatus11(number, add_status, point);
 	}
 	
-	public void updateAddStatus13(String number, int add_status, int add_point, int add_money, int add_life_status) {
-		dao.updateAddStatus13(number, add_status, add_point, add_money, add_life_status);
+	public void updateAddStatus13(String number, int add_status, int add_point, int add_money) {
+		dao.updateAddStatus13(number, add_status, add_point, add_money);
 	}
 }

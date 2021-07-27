@@ -34,6 +34,10 @@ public class HistoryService {
 		return dao.getAllByDid(did, index, total);
 	}
 	
+	public List<HistoryVO> getListByMaid(String startDate, String endDate, int maid){
+		return dao.getListByMaid(startDate, endDate, maid);
+	}
+	
 	public int getCount(int did) {
 		return dao.getCount(did);
 	}

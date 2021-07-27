@@ -1,3 +1,5 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.mem.model.MemService"%>
 <%@page import="com.store.model.StoreVO"%>
 <%@page import="com.store.model.StoreService"%>
@@ -25,12 +27,19 @@
 	
 	MemVO memVO = (MemVO) session.getAttribute("memVO");
 
-	
 	if(memVO == null){
 		System.out.println("Session memVO Null ");
-		RequestDispatcher rd = request.getRequestDispatcher("../logout.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("../logout2.jsp");
 		rd.forward(request,response);
-	}else{		
+	}
+	
+	int add_life_status = memVO.getAdd_life_status();
+	System.out.println("AddValue jsp : " + add_life_status);
+	
+	if(add_life_status == 2 ){
+		RequestDispatcher rd = request.getRequestDispatcher("../logout2.jsp");
+		rd.forward(request,response);
+	}	else{		
 		System.out.println("Session username : " + memVO.getUsername());
 		String username = memVO.getUsername();
 		int point = memVO.getPoint();
@@ -44,14 +53,27 @@
 		// Get Device Object
 		DeviceService deviceService = new DeviceService();
 		DeviceVO deviceVO = deviceService.getOneDevice(did);
-		deviceService.updateAddStatus11(did, 11, point);
-		String localName = deviceVO.getLocation();
 		
 		int sid = deviceVO.getSid();
-		System.out.println("AddValue.jspSession sid : " + sid);
-		
 		StoreService storeService = new StoreService();
 		StoreVO storeVO = storeService.getOneStore(sid);
+		
+		int totalPoint = 0;
+		if(add_money >= storeVO.getDiscount_3_money()) {
+			totalPoint = add_money + ( storeVO.getDiscount_3_point() - storeVO.getDiscount_3_money());
+		}else if(add_money >= storeVO.getDiscount_2_money()) {
+			totalPoint = add_money + ( storeVO.getDiscount_2_point() - storeVO.getDiscount_2_money());
+		}else if(add_money >= storeVO.getDiscount_1_money()) {
+			totalPoint = add_money + ( storeVO.getDiscount_1_point() - storeVO.getDiscount_1_money());
+		}else {
+			totalPoint = add_money;
+		}
+		System.out.println("AddValue.jsp totalPoint " + totalPoint);
+		
+		deviceService.updateAddStatus11(did, 11, point);
+		deviceService.updateAddStatus13(did, 11, totalPoint, add_money);
+		
+		String localName = deviceVO.getLocation();
 		
 		String title = storeVO.getName() + deviceVO.getLocation();
 		
@@ -93,6 +115,8 @@
   <title>加值系統</title>
 
 	<link rel="shortcut icon" href="#" />
+
+	
 	<link rel="stylesheet" href="../css/bootstrap.css">
 	<style>
 		.element::-webkit-scrollbar { width: 0 !important }
@@ -101,6 +125,22 @@
 	</style>
 	
 	<script src="../js/jquery-3.3.1.js"></script>
+	
+		<script>
+			$( document ).ready(function() {
+			var add_lie_status = <%= add_life_status%>;
+			console.log("Into AddValue.jsp");
+			console.log("add_life_status : " + add_lie_status);
+			if(add_lie_status == 2){
+				var url = "../../index.jsp?DID=<%=did%>&MACHID=<%=machid%>";
+				console.log(" url : " + url);
+				window.location.replace(url);
+			}
+
+		});
+	</script>
+	
+	
 	<script src="../js/bootstrap-4.0.0/bootstrap.js"></script>
 	<script src="../js/nicescroll.js"></script>
 	<script src="../js/sweetalert2.js"></script>
@@ -175,7 +215,7 @@
 		<!--  -->
 		<div style="margin: 7% 0 0 0; text-align:center; width:320px; height:124px; margin:0px auto;" id="divNowPrice">
 			<div style="float:left; position:relative; margin:24px;">
-				<img style="z-index: 5; position:relative; height:124px; width:105px;" src="../images/price-444.png">
+				<img style="z-index: 5; position:relative; height:124px; width:105px;" src="../images/price-555.png">
 				<div style="z-index: 10; position:absolute; top:24px; width: 100%;">
 						<h4 style="color:#F6C936;font-weight: 900;" id="totalMoney">0</h4>
 				</div>
@@ -201,6 +241,7 @@
 		<input type="hidden" name="count_500" value="" id="inputCount_500">
 		<input type="hidden" name="count_1000" value="" id="inputCount_1000">
 		<input type="hidden" name="totalPoint" value="" id="inputTotalPoint">
+		<input type="hidden" name="kind" value="" id="inputKind">
 		
 		<div style="margin: 7% 0 0 0; text-align:center; width:100%;">
 		
@@ -213,7 +254,7 @@
 				<p id="timer" style="color:red; font-weight:bold; font-size:18px; margin:0;">系統將於30秒後自動完成加值</p>
 				<p style="margin: 0 0 16px 0; font-size:16px;">或請按完成，手動完成加值</p>
 <!-- 				<p id="timer" style="color:red; font-weight:bold; font-size:18px;">30秒</p> -->
-				<button class="btn btn-outline-success" style="font-weight:bold;" id="btnAdd" disabled>確認儲值</button>
+				<button class="btn btn-outline-success" style="font-weight:bold;" id="btnAdd" disabled>儲值確認</button>
 				<button class="btn btn-warning" style="font-weight: bold; margin-left: 12px;" id="logoutBtn">取消交易</button>
 			</div>
 
@@ -240,18 +281,35 @@
 		  cursorwidth: "10px"
 		});
 
+
+		
+		
+
+		
+
 		var count = 30;
-		var myTimerVar= setInterval(function(){ myTimer()}, 1000);
-		console.log("Into AddValue.jsp");
+		var myTimerVar;
+		
+		window.onload = function() {
+			
+			myTimerVar = setInterval(function(){ myTimer()}, 1000);
+		};
+		
+		
 		
 		function myTimer(){
 			if(count == 0){
 				clearInterval(myTimerVar);
 				var totalPoint = $("#inputTotalPoint").val();
 				if(totalPoint > 0){
+					$("#inputKind").val(1);
 					addValue();
 				}else{
-					window.location.replace("../logout.jsp");
+
+
+					$("#inputKind").val(0);
+					addValue();
+					window.location.href = "../logout.jsp";
 					//window.location.href = "../logout.jsp";
 				}
 				
@@ -297,7 +355,8 @@
 				resetTimer();
 			}
 		}
-		
+
+
 		function checkMoney(){
 			var did = $("#inputDid").val();
 			var sid = $("#inputSid").val();
@@ -314,9 +373,12 @@
 					username:username
 				},
 				success : function(jsonObject) { //當請求成功後此事件會被呼叫
+					console.log("jsonObject.state : " + jsonObject.state);
 
-					if(jsonObject.state == 2){
-
+					if(jsonObject.state == 2){						
+						var url = "../index.jsp?DID=<%=did%>&MACHID=<%=machid%>";
+						console.log(" url : " + url);
+						window.location.replace(url);
 					}else if(jsonObject.state == 1){
 						moneyToPoint(jsonObject.totalMoney, jsonObject.totalPoint );
 					}
@@ -328,11 +390,15 @@
 			});
 		}
 
+		
 		function addValue(){
 			console.log("Add Value Function!");
 			var did = $("#inputDid").val();
 			var sid = $("#inputSid").val();
 			var username = $("#inputUsername").val();
+			var username = $("#inputUsername").val();
+			var kind = $("#inputKind").val();
+			console.log("check Money kind : " + kind);
 			console.log("did : " + did);
 			console.log("sid : " + sid);
 			
@@ -343,11 +409,14 @@
 				data : { //要傳送到頁面的參數
 					did : did,
 					sid : sid,
-					username : username
+					username : username,
+					kind:kind
 				},
 				success : function(jsonObject) { //當請求成功後此事件會被呼叫
 					console.log("jsonObject.state : " + jsonObject.state);
-					if(jsonObject.state == 19){
+					if( kind == 0 ){
+
+					}else if(jsonObject.state == 19){
 						clearInterval(myTimerVar);
 						//show add success, and jump to login page
 						$("#divPrice").hide();
@@ -356,7 +425,7 @@
 						$("#divSuccess").show();
 						$("#successNowPoint").text( "加值後您現在的點數為 " + jsonObject.nowPoint + " 點");
 						$("#successNowPoint").show();
-						setTimeout(function(){ window.location.replace("../logout.jsp"); }, 3000);
+						setTimeout(function(){ window.location.replace("../logout.jsp"); }, 15000);
 						//setTimeout(function(){ window.location.href = "../logout.jsp"; }, 3000);
 					}
 				},
@@ -367,16 +436,20 @@
 		}
 		
 		$("#btnAdd").click(function(){
+			$("#inputKind").val(1);
 			checkMoney();
 			var totalPoint = $("#inputTotalPoint").val();
 			console.log("btnAdd totalPoint :" + totalPoint);
 			if(totalPoint > 0){
+				$("#inputKind").val(1);
 				addValue();
 			}			
 		});
 
 		document.getElementById('logoutBtn').onclick = function() {
 			clearInterval(myTimerVar);
+			$("#inputKind").val(0);
+			addValue();
 			window.location.href = "../logout.jsp";
 		}
 

@@ -28,10 +28,10 @@ public class MemDAO implements MemDAO_interface {
 	
 	private static final String GET_ALL_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode, "
-			+ "verificationdate, phone, add_money, add_status FROM mem order by username";
+			+ "verificationdate, phone, add_money, add_status, add_life_status FROM mem order by username";
 	private static final String GET_ONE_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," 
-			+"verificationdate, phone, now_money, add_money, add_status FROM mem where username = ?";
+			+"verificationdate, phone, now_money, add_money, add_status, add_life_status FROM mem where username = ?";
 	private static final String GET_ONEEMAIL_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," + 
 			"verificationdate, phone, add_money, add_status FROM mem where email = ?";
@@ -43,7 +43,7 @@ public class MemDAO implements MemDAO_interface {
 			"verificationdate, phone, add_money, add_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE = 
 			"UPDATE mem set email=?, password=?, point=?, black=?, authority=?, verification=?, " + 
-			"verificationcode=?, verificationdate=?, phone=?, add_money=?, add_status=? where username = ?";
+			"verificationcode=?, verificationdate=?, phone=?, add_money=?, add_status=?, add_life_status=? where username = ?";
 	private static final String UPDATE_CUECK_MONEY = 
 			"UPDATE mem set now_money=?, add_money=?, add_status=? where username = ?";
 	private static final String UPDATE_NOW_MONEY = 
@@ -77,8 +77,7 @@ public class MemDAO implements MemDAO_interface {
 
 			// Handle any SQL errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -119,7 +118,8 @@ public class MemDAO implements MemDAO_interface {
 			pstmt.setString(9, memVO.getPhone());
 			pstmt.setInt(10, memVO.getAdd_money());
 			pstmt.setInt(11, memVO.getAdd_status());
-			pstmt.setString(12, memVO.getUsername());		
+			pstmt.setInt(12, memVO.getAdd_life_status());
+			pstmt.setString(13, memVO.getUsername());		
 
 			pstmt.executeUpdate();
 
@@ -161,8 +161,7 @@ public class MemDAO implements MemDAO_interface {
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
@@ -213,6 +212,7 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setNow_money(rs.getInt("now_money"));
 				memVO.setAdd_money(rs.getInt("add_money"));
 				memVO.setAdd_status(rs.getInt("add_status"));
+				memVO.setAdd_life_status(rs.getInt("add_life_status"));
 			}
 
 			// Handle any driver errors
@@ -338,13 +338,13 @@ public class MemDAO implements MemDAO_interface {
 				memVO.setPhone(rs.getString("phone"));
 				memVO.setAdd_money(rs.getInt("add_money"));
 				memVO.setAdd_status(rs.getInt("add_status"));
+				memVO.setAdd_life_status(rs.getInt("add_life_status"));
 				list.add(memVO); // Store the row in the list
 			}
 
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {

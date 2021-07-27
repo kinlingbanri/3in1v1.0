@@ -58,6 +58,9 @@ public class MemVO implements java.io.Serializable {
 	@Column(name = "add_status")
 	private Integer add_status;
 	
+	@Column(name = "add_life_status")
+	private Integer add_life_status;
+	
 	public MemVO() {
 		super();
 	}
@@ -166,6 +169,14 @@ public class MemVO implements java.io.Serializable {
 
 	public void setAdd_status(Integer add_status) {
 		this.add_status = add_status;
+	}
+
+	public Integer getAdd_life_status() {
+		return add_life_status;
+	}
+
+	public void setAdd_life_status(Integer add_life_status) {
+		this.add_life_status = add_life_status;
 	}
 	
 }

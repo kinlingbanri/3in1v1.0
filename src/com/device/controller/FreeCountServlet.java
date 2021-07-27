@@ -84,7 +84,7 @@ public class FreeCountServlet extends HttpServlet {
 				StoreVO storeVO = storeService.getOneStore(sid);
 				String storename = storeVO.getName();
 				System.out.println("AddRecordServlet store name : " + storename);
-				
+				/*
 				HistoryVO historyVO = new HistoryVO();
 				Date date = new Date();	//Get now
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -102,7 +102,7 @@ public class FreeCountServlet extends HttpServlet {
 				new HistoryService().insertHistory(historyVO);
 				
 				System.out.println("insertHistory!!!");
-				
+				*/
 				jsonObject.put("state", 3);
 				jsonObject.put("balance", balance);
 			}

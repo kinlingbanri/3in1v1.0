@@ -29,6 +29,14 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 	private static final String GET_MEMBERID_STMT = 
 			"SELECT hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, point, exchangecount,"
 					+ "papercount, sid, storename FROM history where mid = ?";
+	private static final String GET_LIST_BY_MAID_STMT = 
+			"SELECT hid, ttime, event, did, maid, mid, point, sid " + 
+			"FROM history " + 
+			"WHERE STR_TO_DATE(ttime, '%Y-%m-%d') >= ? AND " + 
+			"		  STR_TO_DATE(ttime, '%Y-%m-%d') <= ? AND " +
+			"		  POINT > 0 AND MAID = ?  " +
+			"ORDER BY ttime DESC";
+
 	private static final String GET_ONE_STMT = 
 			"select hid, ttime, event, ip, uid, did, maid, mid, refundcount, freecount, exchangecount,"
 					+ "papercount, point, sid, storename from history where hid = ?";
@@ -139,17 +147,34 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 //			System.out.print(history.getSid() + ",");
 //			System.out.println(history.getStorename());
 //		}
+
 		
-		
-		// Query 30
-		List<HistoryVO> list = dao.getByMemberId("陳啟展");
+		// Query By DID
+		String startDate = "2021-06-01";
+		String endDate = "2021-07-01";
+		List<HistoryVO> list = dao.getListByMaid(startDate, endDate, 2);
 		for (HistoryVO history : list) {
+			System.out.print(history.getHid() + ",");
 			System.out.print(history.getTtime() + ",");
+			System.out.print(history.getEvent() + ",");
+			System.out.print(history.getDid() + ",");
+			System.out.print(history.getMaid() + ",");
 			System.out.print(history.getMid() + ",");
 			System.out.print(history.getPoint() + ",");
-			System.out.print(history.getLocation() + ",");
-			System.out.println(history.getStorename());
+			System.out.print(history.getSid() + ",");
+			System.out.println();
 		}
+		
+		
+//		// Query 30
+//		List<HistoryVO> list = dao.getByMemberId("陳啟展");
+//		for (HistoryVO history : list) {
+//			System.out.print(history.getTtime() + ",");
+//			System.out.print(history.getMid() + ",");
+//			System.out.print(history.getPoint() + ",");
+//			System.out.print(history.getLocation() + ",");
+//			System.out.println(history.getStorename());
+//		}
 		
 		// Query All
 //		List<HistoryVO> list = dao.getAll();
@@ -727,6 +752,69 @@ public class HistoryJDBCDAO implements HistoryDAO_interface{
 			}
 		}
 		return count;
+	}
+
+	@Override
+	public List<HistoryVO> getListByMaid(String startDate, String endDate, int maid) {
+		List<HistoryVO> list = new ArrayList<HistoryVO>();
+		HistoryVO historyVO = null;		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_LIST_BY_MAID_STMT);
+			pstmt.setString(1, startDate);
+			pstmt.setString(2, endDate);
+			pstmt.setInt(3, maid);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				// historyVO 也稱為 Domain objects
+				historyVO = new HistoryVO();
+				historyVO.setHid(rs.getInt("hid"));
+				historyVO.setTtime(rs.getTimestamp("ttime"));
+				historyVO.setDid(rs.getInt("did"));
+				historyVO.setMaid(rs.getInt("maid"));
+				historyVO.setMid(rs.getString("mid"));
+				historyVO.setPoint(rs.getInt("point"));
+				historyVO.setSid(rs.getInt("sid"));
+				list.add(historyVO);
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
 	}
 
 }

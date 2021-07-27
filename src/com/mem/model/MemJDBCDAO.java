@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MemJDBCDAO implements MemDAO_interface {
@@ -16,10 +18,10 @@ public class MemJDBCDAO implements MemDAO_interface {
 	
 	private static final String GET_ALL_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode, "
-			+ "verificationdate, phone, add_money, add_status FROM mem order by username";
+			+ "verificationdate, phone, add_money, add_status, add_life_status FROM mem order by username";
 	private static final String GET_ONE_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," 
-			+"verificationdate, phone, add_money, add_status FROM mem where username = ?";
+			+"verificationdate, phone, add_money, add_status, add_life_status FROM mem where username = ?";
 	private static final String GET_ONEEMAIL_STMT = 
 			"SELECT username, email, password, point, black, authority, verification, verificationcode," + 
 			"verificationdate, phone, add_money, add_status FROM mem where email = ?";
@@ -31,7 +33,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 			"verificationdate, phone, add_money, add_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE = 
 			"UPDATE mem set email=?, password=?, point=?, black=?, authority=?, verification=?, " + 
-			"verificationcode=?, verificationdate=?, phone=?, add_money=?, add_status=? where username = ?";
+			"verificationcode=?, verificationdate=?, phone=?, add_money=?, add_status=?, add_life_status=? where username = ?";
 	private static final String DELETE = 
 			"DELETE FROM mem where username = ?";
 
@@ -109,7 +111,8 @@ public class MemJDBCDAO implements MemDAO_interface {
 			pstmt.setString(9, memVO.getPhone());
 			pstmt.setInt(10, memVO.getAdd_money());
 			pstmt.setInt(11, memVO.getAdd_status());
-			pstmt.setString(12, memVO.getUsername());			
+			pstmt.setInt(12, memVO.getAdd_life_status());
+			pstmt.setString(13, memVO.getUsername());			
 
 			pstmt.executeUpdate();
 
@@ -206,6 +209,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 				memVO.setPhone(rs.getString("phone"));
 				memVO.setAdd_money(rs.getInt("add_money"));
 				memVO.setAdd_status(rs.getInt("add_status"));
+				memVO.setAdd_life_status(rs.getInt("add_life_status"));
 			}
 
 			// Handle any driver errors
@@ -342,6 +346,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 				memVO.setPhone(rs.getString("phone"));
 				memVO.setAdd_money(rs.getInt("add_money"));
 				memVO.setAdd_status(rs.getInt("add_status"));
+				memVO.setAdd_life_status(rs.getInt("add_life_status"));
 				list.add(memVO); // Store the row in the list
 			}
 
@@ -413,7 +418,7 @@ public class MemJDBCDAO implements MemDAO_interface {
 //		memVO.setBlack(0);
 //		memVO.setAuthority(0);
 //		memVO.setVerification(0);
-//		memVO.setVerificationcode(3418);
+//		memVO.setVerificationcode("3418");
 //		
 //		Date date = new Date();       
 //		Timestamp nousedate = new Timestamp(date.getTime());
@@ -423,27 +428,29 @@ public class MemJDBCDAO implements MemDAO_interface {
 //		memVO.setBlack(0);
 //		memVO.setAdd_money(0);
 //		memVO.setAdd_status(0);
+//		memVO.setAdd_life_status(1);
 //		dao.update(memVO);
 		
 //		// Delete
 //		dao.delete("金城六");
 		
 		
-//		// Query One
-//		MemVO memVO = dao.findByPrimaryKey("Van007");
-//		System.out.print(memVO.getUsername() + ",");
-//		System.out.print(memVO.getEmail() + ",");
-//		System.out.print(memVO.getPassword() + ",");
-//		System.out.print(memVO.getPoint());
-//		System.out.print(memVO.getBlack() + ",");
-//		System.out.print(memVO.getAuthority() + ",");
-//		System.out.print(memVO.getVerification() + ",");
-//		System.out.print(memVO.getVerificationcode() + ",");
-//		System.out.print(memVO.getVerificationdate() + ",");
-//		System.out.print(memVO.getPhone() + ",");
-//		System.out.print(memVO.getAdd_money() + ",");
-//		System.out.print(memVO.getAdd_status());
-//		System.out.println();
+		// Query One
+		MemVO memVO = dao.findByPrimaryKey("Van007");
+		System.out.print(memVO.getUsername() + ",");
+		System.out.print(memVO.getEmail() + ",");
+		System.out.print(memVO.getPassword() + ",");
+		System.out.print(memVO.getPoint());
+		System.out.print(memVO.getBlack() + ",");
+		System.out.print(memVO.getAuthority() + ",");
+		System.out.print(memVO.getVerification() + ",");
+		System.out.print(memVO.getVerificationcode() + ",");
+		System.out.print(memVO.getVerificationdate() + ",");
+		System.out.print(memVO.getPhone() + ",");
+		System.out.print(memVO.getAdd_money() + ",");
+		System.out.print(memVO.getAdd_status() + ",");
+		System.out.print(memVO.getAdd_life_status());
+		System.out.println();
 		
 		
 		// Query Email All
@@ -483,22 +490,23 @@ public class MemJDBCDAO implements MemDAO_interface {
 //		}
 		
 		// Query All
-		List<MemVO> list = dao.getAll();
-		for (MemVO mem : list) {
-			System.out.print(mem.getUsername() + ",");
-			System.out.print(mem.getEmail() + ",");
-			System.out.print(mem.getPassword() + ",");
-			System.out.print(mem.getPoint() + ",");
-			System.out.print(mem.getBlack() + ",");
-			System.out.print(mem.getAuthority() + ",");
-			System.out.print(mem.getVerification() + ",");
-			System.out.print(mem.getVerificationcode() + ",");
-			System.out.print(mem.getVerificationdate() + ",");
-			System.out.print(mem.getPhone() + ",");
-			System.out.print(mem.getAdd_money() + ",");
-			System.out.print(mem.getAdd_status());
-			System.out.println();
-		}
+//		List<MemVO> list = dao.getAll();
+//		for (MemVO mem : list) {
+//			System.out.print(mem.getUsername() + ",");
+//			System.out.print(mem.getEmail() + ",");
+//			System.out.print(mem.getPassword() + ",");
+//			System.out.print(mem.getPoint() + ",");
+//			System.out.print(mem.getBlack() + ",");
+//			System.out.print(mem.getAuthority() + ",");
+//			System.out.print(mem.getVerification() + ",");
+//			System.out.print(mem.getVerificationcode() + ",");
+//			System.out.print(mem.getVerificationdate() + ",");
+//			System.out.print(mem.getPhone() + ",");
+//			System.out.print(mem.getAdd_money() + ",");
+//			System.out.print(mem.getAdd_status() + ",");
+//			System.out.print(mem.getAdd_life_status());
+//			System.out.println();
+//		}
 		
 	}
 

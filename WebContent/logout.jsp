@@ -9,8 +9,8 @@
 	if(objectDID != null){
 		String DID = objectDID.toString();
 		String MACHID = objectMACHID.toString();
-		System.out.println("Logout.jsp session DID : " +DID );
-		System.out.println("Logout.jsp session MACHID : " +MACHID );
+		System.out.println("Logout1.jsp session DID : " +DID );
+		System.out.println("Logout1.jsp session MACHID : " +MACHID );
 
 		//清除session資料
 		session.invalidate();
