@@ -64,6 +64,10 @@ public class DeviceService {
 		dao.updateConsumption(number, status, serial, freecount);
 	}
 	
+	public void updateConsumptionVO(DeviceVO deviceVO) {
+		dao.updateConsumptionVO(deviceVO);
+	}
+	
 	public void updateAddStatus11(String number, int add_status, int point) {
 		dao.updateAddStatus11(number, add_status, point);
 	}

@@ -51,6 +51,9 @@ public class StoreVO {
 	
 	@Column(name = "discount_3_point")
 	private int discount_3_point;
+
+	@Column(name = "machine_count")
+	private int machine_count;
 	
 	public int getSid() {
 		return sid;
@@ -154,6 +157,14 @@ public class StoreVO {
 
 	public void setDiscount_3_point(int discount_3_point) {
 		this.discount_3_point = discount_3_point;
+	}
+	
+	public int getMachine_count() {
+		return machine_count;
+	}
+	
+	public void setMachine_count(int machine_count) {
+		this.machine_count = machine_count;
 	}
 	
 }

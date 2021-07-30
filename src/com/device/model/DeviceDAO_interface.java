@@ -17,6 +17,7 @@ public interface DeviceDAO_interface {
 	public DeviceVO getAddStatus(String number);
 	public void updateStatus(String number, int status);
 	public void updateConsumption(String number, int status, int serial, int freecount);
+	public void updateConsumptionVO(DeviceVO deviceVO);
 	public void updateAddStatus11(String number, int add_status, int point);
 	public void updateAddStatus13(String number, int add_status, int add_point, int add_money);
 	public int checkAutoIncrement();

@@ -363,9 +363,9 @@ String title = storeVO.getName() + " - " + machineVO.getName();
 			</div>
 
 			<div id="timerDiv" style="margin: 0 0 12px 0;">
-				<p style="margin: 0 0 0 0; font-size: 16px;">系統將於60秒後自動完成服務</p>
+				<p style="margin: 0 0 0 0; font-size: 16px;">系統將於30秒後自動完成服務</p>
 				<p style="margin: 0 0 0 0; font-size: 16px;">或於時間結束後由系統自動完成服務</p>
-				<p id="timer" style="color: red; font-weight: bold; font-size: 18px;">60秒</p>
+				<p id="timer" style="color: red; font-weight: bold; font-size: 18px;">30秒</p>
 			</div>
 
 
@@ -403,7 +403,7 @@ String title = storeVO.getName() + " - " + machineVO.getName();
 
 	<script>
 		//初始化各元素
-		var count = 60;
+		var count = 30;
 		var myTimerVar= setInterval(function(){ myTimer()}, 1000);
 		
 		//隠藏右側scrollbar
@@ -508,109 +508,12 @@ String title = storeVO.getName() + " - " + machineVO.getName();
 	 			var balance = memPoint - point;
 	 			console.log("balance:" +balance);
 
-// 	 			if (balance < 0) {
-// 	 				$("#lack").show();
-// 	 				$("#confirmBtn").attr("disabled", true);
-// 	 			} else {
-// 	 				$("#lack").hide();
-// 	 				$("#confirmBtn").attr("disabled", false);
-// 	 			}
-
 	 			resetTimer();
 
 			}
 
 		});
 
-
-
-
-		
-
-// 		$("#btnMinus").click(function(){
-// 			var point =  parseInt( $("#inputUsePoint").val(), 10);
-// 			console.log(point);
-// 			if(point >= 10){				
-// 				point = point - 10;
-				
-// 				$("#inputUsePoint").val( point );				
-// 				var pointStr = point + "點";
-// 				var count = point / 10;
-// 				console.log("count:" +count);
-// 				$("#inputFreecount").val(count);
-// 				$("#inputConsumptionPoint").val(point);
-// 				$("#consumptionPoint").text(pointStr);
-<%-- 				var minuteStr = (count * <%=useMinute%>) + "分鐘"; --%>
-// 				$("#minute").text(minuteStr);
-<%-- 				console.log("useMinute:" + <%=useMinute%>); --%>
-// 				console.log("minuteStr:" + minuteStr);
-
-// 				var memPointStr = $("#memPoint").text();
-// 				var memPoint = memPointStr.substring(0, memPointStr.length - 1);
-
-// 				var balance = memPoint - point;
-// 				console.log("balance:" +balance);
-
-// 				if (balance < 0) {
-// 					$("#lack").show();
-// 					$("#confirmBtn").attr("disabled", true);
-// 				} else {
-// 					$("#lack").hide();
-// 					$("#confirmBtn").attr("disabled", false);
-// 				}
-
-// 				resetTimer();
-// 			}else{
-
-// 			}
-			
-			
-// 		});
-
-// 		$("#btnPlus").click(function(){
-// 			var point =  parseInt( $("#inputUsePoint").val(), 10);
-// 			console.log(point);
-// 			point = point + 10;
-// 			console.log("ADD:" + point);
-			
-// 			$("#inputUsePoint").val( point );
-// 			var pointStr = point + "點";
-// 			var count = point / 10;
-// 			console.log("count:" + count);
-// 			$("#inputFreecount").val(count);
-// 			$("#inputConsumptionPoint").val(point);
-// 			$("#consumptionPoint").text(pointStr);
-<%-- 			var minuteStr = (count * <%=useMinute%>) + "分鐘"; --%>
-// 			$("#minute").text(minuteStr);
-<%-- 			console.log("useMinute:" + <%=useMinute%>); --%>
-// 			console.log("minuteStr:" + minuteStr);
-
-// 			var memPointStr = $("#memPoint").text();
-// 			var memPoint = memPointStr.substring(0, memPointStr.length - 1);
-
-// 			var balance = memPoint - point;
-// 			console.log("balance:" +balance);
-
-// 			if (balance < 0) {
-// 				$("#lack").show();
-// 				$("#confirmBtn").attr("disabled", true);
-// 			} else {
-// 				$("#lack").hide();
-// 				$("#confirmBtn").attr("disabled", false);
-// 			}
-
-// 			resetTimer();
-// 		});
-
-
-		
-
-
-
-
-
-		
-		
 
 		function myTimer() {
 			if (count == 0) {
@@ -638,7 +541,7 @@ String title = storeVO.getName() + " - " + machineVO.getName();
 		}
 
 		function resetTimer() {
-			count = 60;
+			count = 30;
 			var countStr = count + "秒";
 			document.getElementById("timer").innerText = countStr;
 			clearInterval(myTimerVar);
@@ -699,32 +602,6 @@ String title = storeVO.getName() + " - " + machineVO.getName();
 				  }
 
 
-
-
-					
-// 					var state = jsonObject.state;
-// 					var balance = jsonObject.balance;
-// 					if (state == 1) {
-// 						$("#divInfo").hide();
-// 						$("#pointMinute").hide();
-// 						$("#selectBtn").hide();
-// 						$("#needPoint").hide();
-// 						$("#lack").hide();
-// 						$("#divUsePoint").hide();
-// 						$("#divInfo").hide();
-// 						$("#timerDiv").hide();
-// 						$("#confirmBtn").hide();
-// 						$("#logoutBtn").hide();
-// 						$("#divSuccess").show();
-
-// 						$("#nowConsumption").text(
-// 								'本次消費 ' + $("#inputConsumptionPoint").val()	+ '點');
-
-// 						$("#balance").text('您的餘額為 ' + balance + '點');
-
-// 						count = 3;
-// 						myTimerVar= setInterval(function(){ myTimer()}, 1000);
-// 					}
 				},
 				error : function(e) {
 					console.log("e: " + e);
@@ -867,123 +744,9 @@ String title = storeVO.getName() + " - " + machineVO.getName();
 				Consumption(username, did, machid, freecount, mempoint, serial, consumptionPoint, number, storeInfo)
 			}, 1000);
 
-// 					var tempState = 0;
-// 					delay('a', 0).then(function(v) {
-// 						console.log(v[0], v[1]); // 顯示 a 0
-// 						var status = CheckStatus(did);
-// 						if (status == 1) {
-// 							$("#successDiv").show();
-// 						}
-// 						console.log("status  1: " + status);
-// 						return delay('b', 100); // 延遲一秒之後，告訴後面的函示顯示 b 1000
-// 					}).then(
-// 							function(v) {
-// 								console.log(v[0], v[1]); // 顯示 b 1000
-// 								var status = CheckStatus(did);
-// 								if (status == 1) {
-// 									tempState = 1;
-// 									$("#successDiv").show();
-// 								}
-// 								historyRecord(username, did, machid, freecount,
-// 										consumptionPoint, number);
 
-// 								console.log("tempState 2: " + tempState);
-// 								return delay('c', 1000); // 延遲兩秒之後，告訴後面的函示顯示 c 1000
-// 							}).then(function(v) {
-// 						console.log(v[0], v[1]); // 顯示 c 1000
-// 						var status = CheckStatus(did);
-// 						if (status == 1) {
-// 							$("#successDiv").show();
-// 						}
-// 						console.log("status3 : " + status);
-// 						return delay('d', 1000);
-// 					}).then(function(v) {
-// 						console.log(v[0], v[1]);
-// 						var status = CheckStatus(did);
-// 						if (status == 1) {
-// 							$("#successDiv").show();
-// 						}
-// 						console.log("status 4: " + status);
-// 						return delay('e', 1000);
-// 					}).then(function(v) {
-// 						console.log(v[0], v[1]);
-// 						var status = CheckStatus(did);
-// 						if (status == 1) {
-// 							$("#successDiv").show();
-// 						}
-// 						console.log("status 5: " + status);
-// 						return delay('f', 1000);
-// 					}).then(function(v) {
-// 						console.log(v[0], v[1]);
-// 						var status = CheckStatus(did);
-// 						if (status == 1) {
-// 							$("#successDiv").show();
-// 						}
-// 						console.log("status : " + status);
-// 						console.log("tempState : " + tempState);
-// 						return delay('g', 1000);
-// 					}).then(function(v) {
-// 						console.log(v[0], v[1]);
-// 						var status = CheckStatus(did);
-// 						if (status == 1) {
-// 							$("#successDiv").show();
-// 						}
-// 						console.log("status : " + status);
-// 						return delay('h', 1000);
-// 					}).then(function(v) {
-// 						console.log(v[0], v[1]);
-// 						var status = CheckStatus(did);
-// 						if (status == 1) {
-// 							$("#successDiv").show();
-// 						}
-// 						console.log("status : " + status);
-// 						return delay('i', 1000);
-// 					}).then(function(v) {
-// 						console.log(v[0], v[1]);
-// 						var status = CheckStatus(did);
-// 						if (status == 1) {
-// 							$("#successDiv").show();
-// 						}
-// 						console.log("status : " + status);
-// 						return delay('i', 1000);
-// 					}).then(function(v) {
-// 						console.log(v[0], v[1]);
-// 						var status = CheckStatus(did);
-// 						if (status == 1) {
-// 							$("#successDiv").show();
-// 						}
-// 						console.log("status : " + status);
-// 						return delay('i', 1000);
-// 					}).then(function(v) {
-// 						console.log(v[0], v[1]);
-// 						var status = CheckStatus(did);
-// 						console.log("status : " + status);
-// 						console.log("tempState : " + tempState);
-// 						if (status == 1) {
-// 							$("#successDiv").show();
-// 						}
-// 						console.log("status : " + status);
-// 						if ((status == 0) && (historyRecordState == 1)) {
-// 							window.location.href = "../logout.jsp";
-// 						}
-// 						return delay('i', 1000);
-// 					});
+		});
 
-
-
-				});
-
-// 		var delay = function(r, s) {
-// 			return new Promise(function(resolve, reject) {
-// 				setTimeout(function() {
-// 					resolve([ r, s ]);
-// 				}, s);
-// 			});
-// 		};
-
-		// 		document.getElementById('menuLogoutBtn').onclick = function(){
-		// 			window.location.href = "../logout.jsp";
-		// 		}
 	</script>
 </body>
 </html>

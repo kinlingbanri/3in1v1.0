@@ -188,7 +188,7 @@
 			</div>
 			<div id="timerDiv" style="margin: 0 0 12px 0;">
 			
-				<p id="timer" style="color:red; font-weight:bold; font-size:18px; margin:0;">系統將於60秒後自動完成服務</p>
+				<p id="timer" style="color:red; font-weight:bold; font-size:18px; margin:0;">系統將於30秒後自動完成服務</p>
 				<p style="margin: 0 0 16px 0; font-size:16px;">或於時間結束後由系統自動完成服務</p>
 			
 <!-- 				<p style="margin: 0 0 0 0; font-size:16px;">請按確認交易，手動完成服務</p> -->
@@ -254,7 +254,7 @@
 		});
 		
 		var DID = $("#DID").val();
-		var count = 60;
+		var count = 30;
 		
 		function myTimer(){
 			if(count == 0){
@@ -281,7 +281,7 @@
 		}
 	
 		function resetTimer(){
-			count = 60;
+			count = 30;
 			var countStr = "系統將於" + count + "秒後自動完成消費";
 			document.getElementById("timer").innerText = countStr;
 			clearInterval(myTimerVar);
@@ -334,7 +334,7 @@
 
 							console.log("consumption End!");
 							historyRecord(username, did, machid, freecount, consumptionPoint, number);
-							setTimeout(function(){ window.location.replace("../logout.jsp"); }, 15000);
+							setTimeout(function(){ window.location.replace("../logout.jsp"); }, 10000);
 							
 					  }else if(state == 1){
 						  consumptioning = 1;
@@ -442,105 +442,8 @@
 				Consumption(username, did, machid, freecount, mempoint, serial, consumptionPoint, number, storeInfo)
 			}, 1000);
 
-			
-
-
-			
-
-/*
-			delay('a',0).then(function(v){
-				   var status = CheckStatus(did);
-				   console.log("status : " + status);
-				  return delay('b',100);   // 延遲一秒之後，告訴後面的函示顯示 b 1000
-				}).then(function(v){
-				  var status = CheckStatus(did);
-				  historyRecord(username, did, machid, freecount, consumptionPoint, number);
-				  console.log("status : " + status);
-				  return delay('c',1000);   // 延遲兩秒之後，告訴後面的函示顯示 c 1000
-				}).then(function(v){
-					  var status = CheckStatus(did);
-					  if(status == 1){		$("#successDiv").show();  }
-					  console.log("status : " + status);
-					  return delay('d',1000);
-				}).then(function(v){
-					  console.log(v[0],v[1]);
-					  var status = CheckStatus(did);
-					  if(status == 1){
-						  $("#successDiv").show();
-						}
-					  console.log("status : " + status);
-					  return delay('e',1000);
-				}).then(function(v){
-					  console.log(v[0],v[1]);
-					  var status = CheckStatus(did);
-					  if(status == 1){
-						  $("#successDiv").show();
-						}
-					  console.log("status : " + status);
-					  return delay('f',1000);
-				}).then(function(v){
-					  console.log(v[0],v[1]);
-					  var status = CheckStatus(did);
-					  if(status == 1){
-						  $("#successDiv").show();
-						}
-					  console.log("status : " + status);
-					  return delay('g',1000);
-				}).then(function(v){
-					  console.log(v[0],v[1]);
-					  var status = CheckStatus(did);
-					  if(status == 1){
-						  $("#successDiv").show();
-						}
-					  console.log("status : " + status);
-					  return delay('h',1000);
-				}).then(function(v){
-					  console.log(v[0],v[1]);
-					  var status = CheckStatus(did);
-					  if(status == 1){
-						  $("#successDiv").show();
-						}
-					  console.log("status : " + status);
-					  return delay('i',1000);
-				}).then(function(v){
-					  console.log(v[0],v[1]);
-					  var status = CheckStatus(did);
-					  if(status == 1){
-						  $("#successDiv").show();
-						}
-					  console.log("status : " + status);
-					  return delay('i',1000);
-				}).then(function(v){
-					  console.log(v[0],v[1]);
-					  var status = CheckStatus(did);
-					  if(status == 1){
-						  $("#successDiv").show();
-						}
-					  console.log("status : " + status);
-					  if(status == 1){
-						  //historyRecord(username, did, machid, freecount, consumptionPoint, number);
-						}
-					  return delay('i',1000);
-				}).then(function(v){
-					  console.log(v[0],v[1]);
-					  var status = CheckStatus(did);
-					  if(status == 1){
-						  $("#successDiv").show();
-						}
-					  console.log("status : " + status);
-					  //window.location.href = "../logout.jsp";
-					  return delay('i',1000);
-				});
-		 	*/	
  		});
 
-// 		var delay = function(r,s){
-// 			return new Promise(function(resolve,reject){
-// 				setTimeout(function(){
-// 					resolve([r,s]);
-// 				},s); 
-// 			});
-// 		};
  
   </script>
 </body>

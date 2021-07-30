@@ -32,16 +32,17 @@ public class StoreDAO implements StoreDAO_interface{
 			"SELECT sid, name, city, district, pause, single_count, multi_count, discount_1_money, discount_1_point,"
 					+ "discount_2_money, discount_2_point, discount_3_money, discount_3_point FROM store";
 	private static final String GET_ONE_STMT = 
-			"SELECT sid, name, city, district, pause, single_count, multi_count, discount_1_money, discount_1_point," + 
-			"					+ discount_2_money, discount_2_point, discount_3_money, discount_3_point FROM store where sid = ?";
+			"SELECT sid, name, city, district, pause, single_count, multi_count, discount_1_money, discount_1_point, " + 
+					"discount_2_money, discount_2_point, discount_3_money, discount_3_point, machine_count " + 
+					"FROM store where sid = ?";
 	private static final String INSERT_STMT = 
 			"INSERT INTO store (name, city, district, pause, single_count, multi_count, discount_1_money, discount_1_point," + 
-								"discount_2_money, discount_2_point, discount_3_money, discount_3_point) "
-								+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+								"discount_2_money, discount_2_point, discount_3_money, discount_3_point, machine_count) "
+								+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_STMT = 
 			"UPDATE store set name=?, city=?, district=?, pause=?, single_count=?, multi_count=?, discount_1_money=?, "
 								+ "discount_1_point=?, discount_2_money=?, discount_2_point=?, discount_3_money=?, "
-								+ "discount_3_point=? where sid = ?";
+								+ "discount_3_point=?, machine_count=? where sid = ?";
 	private static final String DELETE_STMT = 
 			"DELETE FROM store where sid = ?";
 	
@@ -89,6 +90,7 @@ public class StoreDAO implements StoreDAO_interface{
 			pstmt.setInt(10, storeVO.getDiscount_2_point());
 			pstmt.setInt(11, storeVO.getDiscount_3_money());
 			pstmt.setInt(12, storeVO.getDiscount_3_point());
+			pstmt.setInt(13, 0);
 			pstmt.executeUpdate();
 
 			// Handle any SQL errors
@@ -135,7 +137,8 @@ public class StoreDAO implements StoreDAO_interface{
 			pstmt.setInt(10, storeVO.getDiscount_2_point());
 			pstmt.setInt(11, storeVO.getDiscount_3_money());
 			pstmt.setInt(12, storeVO.getDiscount_3_point());
-			pstmt.setInt(13, storeVO.getSid());
+			pstmt.setInt(13, storeVO.getMachine_count());
+			pstmt.setInt(14, storeVO.getSid());
 			pstmt.executeUpdate();
 
 			// Handle any driver errors
@@ -224,6 +227,7 @@ public class StoreDAO implements StoreDAO_interface{
 				storeVO.setDiscount_2_point(rs.getInt("discount_2_point"));
 				storeVO.setDiscount_3_money(rs.getInt("discount_3_money"));
 				storeVO.setDiscount_3_point(rs.getInt("discount_3_point"));
+				storeVO.setMachine_count(rs.getInt("machine_count"));
 			}
 
 			// Handle any driver errors

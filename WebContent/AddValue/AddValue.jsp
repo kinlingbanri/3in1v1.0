@@ -263,7 +263,7 @@
 				<p style="font-size:20px; font-weight: 700; color: orange; margin: 0 0 0 0;" id="successDallas">本次加值0元</p>
 				<p style="font-size:20px; font-weight: 700; color: orange; margin: 0 0 0 0;" id="successPoint">儲值點數0點</p>
 				<p style="font-size:20px; font-weight: 700; color: orange; margin: 0 0 0 0; dispaly:none;" id="successNowPoint">加值後您現在的點數為0點</p>
-				<p style="font-size:24px; font-weight: 700; color: red; margin: 48px 0 0 0;" id="successInfo">3秒後自動跳回至登入畫面</p>
+				<p style="font-size:24px; font-weight: 700; color: red; margin: 48px 0 0 0;" id="successInfo">10秒後自動跳回至登入畫面</p>
 			</div>
 			
 		</div>
@@ -280,22 +280,13 @@
 		  autohidemode: "hidden",
 		  cursorwidth: "10px"
 		});
-
-
 		
-		
-
-		
-
 		var count = 30;
 		var myTimerVar;
 		
-		window.onload = function() {
-			
+		window.onload = function() {			
 			myTimerVar = setInterval(function(){ myTimer()}, 1000);
 		};
-		
-		
 		
 		function myTimer(){
 			if(count == 0){
@@ -305,12 +296,8 @@
 					$("#inputKind").val(1);
 					addValue();
 				}else{
-
-
 					$("#inputKind").val(0);
-					addValue();
-					window.location.href = "../logout.jsp";
-					//window.location.href = "../logout.jsp";
+					addValueEmpty();
 				}
 				
 			}else{
@@ -425,7 +412,7 @@
 						$("#divSuccess").show();
 						$("#successNowPoint").text( "加值後您現在的點數為 " + jsonObject.nowPoint + " 點");
 						$("#successNowPoint").show();
-						setTimeout(function(){ window.location.replace("../logout.jsp"); }, 15000);
+						setTimeout(function(){ window.location.replace("../logout.jsp"); }, 10000);
 						//setTimeout(function(){ window.location.href = "../logout.jsp"; }, 3000);
 					}
 				},
@@ -434,6 +421,41 @@
 				}
 			});
 		}
+
+
+		function addValueEmpty(){
+			console.log("Add Value Function!");
+			var did = $("#inputDid").val();
+			var sid = $("#inputSid").val();
+			var username = $("#inputUsername").val();
+			var username = $("#inputUsername").val();
+			var kind = $("#inputKind").val();
+			console.log("check Money kind : " + kind);
+			console.log("did : " + did);
+			console.log("sid : " + sid);
+			
+			$.ajax({
+				type : 'POST', //GET or POST
+				url : "../AddRecordServlet", //請求的頁面
+				cache : false, //防止抓到快取的回應
+				data : { //要傳送到頁面的參數
+					did : did,
+					sid : sid,
+					username : username,
+					kind:kind
+				},
+				success : function(jsonObject) { //當請求成功後此事件會被呼叫
+					console.log("jsonObject.state : " + jsonObject.state);
+					if(jsonObject.state == 19){
+						window.location.replace("../logout.jsp"); 
+					}
+				},
+				error : function(e) {
+					console.log("e: " + e);
+				}
+			});
+		}
+		
 		
 		$("#btnAdd").click(function(){
 			$("#inputKind").val(1);
@@ -449,8 +471,7 @@
 		document.getElementById('logoutBtn').onclick = function() {
 			clearInterval(myTimerVar);
 			$("#inputKind").val(0);
-			addValue();
-			window.location.href = "../logout.jsp";
+			addValueEmpty();
 		}
 
   </script>

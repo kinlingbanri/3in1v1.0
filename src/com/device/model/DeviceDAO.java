@@ -62,8 +62,17 @@ public class DeviceDAO implements DeviceDAO_interface{
 			"UPDATE device set status=? where number = ?";
 	private static final String UPDATE_CONSUMPTION_STMT = 
 			"UPDATE device set status=?, machid=?, freecount=? where number = ?";
-//	private static final String UPDATE_ADD_STATUS_11_STMT = 
-//	"UPDATE device set add_status=?, point=? where number = ?";
+	private static final String UPDATE_CONSUMPTION_VO_STMT = 
+			"UPDATE device set status=?, machid=?, freecount=?,"
+							+ "  mach_00=?, mach_01=?, mach_02=?, mach_03=?, mach_04=?, "
+							+ "  mach_05=?, mach_06=?, mach_07=?, mach_08=?, mach_09=?, "
+							+ "  mach_10=?, mach_11=?, mach_12=?, mach_13=?, mach_14=?, "
+							+ "  mach_15=?, mach_16=?, mach_17=?, mach_18=?, mach_19=?, "
+							+ "  mach_20=?, mach_21=?, mach_22=?, mach_23=?, mach_24=?, "
+							+ "  mach_25=?, mach_26=?, mach_27=?, mach_28=?, mach_29=? "
+							+ " where number = ?";
+	
+	
 	private static final String UPDATE_ADD_STATUS_11_STMT = 
 			"UPDATE device set add_status=?, point=?, 100_count=?, 500_count=?, 1000_count=?, add_point=? where number = ?";
 	private static final String UPDATE_ADD_STATUS_13_STMT = 
@@ -905,5 +914,73 @@ public class DeviceDAO implements DeviceDAO_interface{
 			}
 		}
 		return deviceVO;
+	}
+
+	@Override
+	public void updateConsumptionVO(DeviceVO deviceVO) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE_CONSUMPTION_VO_STMT);
+			
+			pstmt.setInt(1, 		deviceVO.getStatus());
+			pstmt.setInt(2, 		deviceVO.getMachid());
+			pstmt.setInt(3, 		deviceVO.getFreecount());			
+			pstmt.setInt(4, 		deviceVO.getMach_00());
+			pstmt.setInt(5, 		deviceVO.getMach_01());
+			pstmt.setInt(6, 		deviceVO.getMach_02());
+			pstmt.setInt(7, 		deviceVO.getMach_03());
+			pstmt.setInt(8, 		deviceVO.getMach_04());
+			pstmt.setInt(9, 		deviceVO.getMach_05());
+			pstmt.setInt(10,		deviceVO.getMach_06());
+			pstmt.setInt(11,		deviceVO.getMach_07());
+			pstmt.setInt(12,		deviceVO.getMach_08());
+			pstmt.setInt(13,		deviceVO.getMach_09());			
+			pstmt.setInt(14,		deviceVO.getMach_10());
+			pstmt.setInt(15, 	deviceVO.getMach_11());
+			pstmt.setInt(16, 	deviceVO.getMach_12());
+			pstmt.setInt(17, 	deviceVO.getMach_13());
+			pstmt.setInt(18, 	deviceVO.getMach_14());
+			pstmt.setInt(19, 	deviceVO.getMach_15());
+			pstmt.setInt(20,		deviceVO.getMach_16());
+			pstmt.setInt(21,		deviceVO.getMach_17());
+			pstmt.setInt(22,		deviceVO.getMach_18());
+			pstmt.setInt(23,		deviceVO.getMach_19());
+			pstmt.setInt(24,		deviceVO.getMach_20());
+			pstmt.setInt(25, 	deviceVO.getMach_21());
+			pstmt.setInt(26, 	deviceVO.getMach_22());
+			pstmt.setInt(27, 	deviceVO.getMach_23());
+			pstmt.setInt(28, 	deviceVO.getMach_24());
+			pstmt.setInt(29, 	deviceVO.getMach_25());
+			pstmt.setInt(30,		deviceVO.getMach_26());
+			pstmt.setInt(31,		deviceVO.getMach_27());
+			pstmt.setInt(32,		deviceVO.getMach_28());
+			pstmt.setInt(33,		deviceVO.getMach_29());			
+			
+			pstmt.setString(34, deviceVO.getNumber());
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 	}
 }

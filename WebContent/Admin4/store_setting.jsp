@@ -1203,10 +1203,16 @@
 						$("#storeConsumptionCount"+sid).text(consumptionCount);
 						var  machid = jsonObject.machid;
 						$("#inputMid" + consumptionCount).val( machid );
+						$('#btnUpdateConsumption').show();
+						console.log("btnUpdateConsumption show !" );
+						
 // 						$("#addvalueModal").modal('toggle');
 // 						$("#btnAddAddvalue").hide();
 // 						$("#btnUpdateAddvalue").show();
 // 						$("#dataTableAddvalue1").show();
+					}else if(state == 2){
+						$('#consumptionModal').modal('toggle');
+						alert("已超過店家最多30台限制，無法新增！");
 					}
 				},
 				error : function(e) {

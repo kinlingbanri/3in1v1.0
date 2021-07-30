@@ -13,6 +13,8 @@ import org.json.JSONObject;
 
 import com.machine.model.MachineService;
 import com.machine.model.MachineVO;
+import com.store.model.StoreService;
+import com.store.model.StoreVO;
 
 @WebServlet("/AddMachineServlet")
 public class AddMachineServlet extends HttpServlet {
@@ -37,24 +39,39 @@ public class AddMachineServlet extends HttpServlet {
 		JSONObject jsonObject = new JSONObject();
 		
 		String name = req.getParameter("machinename");
-		System.out.print("name : " + name);
 		String sidStr = req.getParameter("sid");
 		String didStr = req.getParameter("did");
 		int sid = Integer.parseInt(sidStr);
 		int did = Integer.parseInt(didStr);
 		
-		MachineVO newMachineVO = new MachineVO();
-		newMachineVO.setName(name);
-		newMachineVO.setSid(sid);
-		newMachineVO.setDid(did);
-		long machidLong = new MachineService().insertGetMachid(newMachineVO);
+		StoreVO storeVO = new StoreService().getOneStore(sid);
+		int machine_count = storeVO.getMachine_count();
+		System.out.println("machine_count : " + machine_count);
 		
-		int machid = Math.toIntExact(machidLong);
-		MachineVO machineVO = new MachineService().getOneMachine(machid);
-				
-		jsonObject.put("machineVO", machineVO);
-		jsonObject.put("machid", machid);
-		jsonObject.put("state", 1);
+		if(machine_count < 30) {
+			MachineVO newMachineVO = new MachineVO();
+			newMachineVO.setName(name);
+			newMachineVO.setSid(sid);
+			newMachineVO.setDid(did);
+			newMachineVO.setSerial(machine_count);
+			long machidLong = new MachineService().insertGetMachid(newMachineVO);
+			
+			int machid = Math.toIntExact(machidLong);
+			MachineVO machineVO = new MachineService().getOneMachine(machid);
+			
+			int newMachineCount = machine_count + 1;
+			System.out.println("newMachineCount : " + newMachineCount);
+			storeVO.setMachine_count(newMachineCount);
+			new StoreService().updateStore(storeVO);
+					
+			jsonObject.put("machineVO", machineVO);
+			jsonObject.put("machid", machid);
+			jsonObject.put("state", 1);
+		}else if(machine_count >= 30){
+			//一家店最多不超過64台
+			jsonObject.put("state", 2);
+		}
+		
 		
 		out.write(jsonObject.toString());
 		out.flush();

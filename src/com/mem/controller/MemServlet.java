@@ -76,16 +76,27 @@ public class MemServlet extends HttpServlet {
 			System.out.println("state : " + 3);
 		}else if((password.equals(memVO.getPassword()) && (memVO.getVerification() == 10))) {
 			
-			DeviceService deviceService = new DeviceService();
-			DeviceVO deviceVO = deviceService.getOneDevice(DID);
-			deviceVO.setMid(username);
-			deviceService.updateDevice(deviceVO);
+			String type = MACHID.substring(0, 2);
+			
+			System.out.println("type : " + type);
+			
+			if(type.equals("TY")) {
+				System.out.println(" MemServlet Update Add_life_status!");
+				DeviceService deviceService = new DeviceService();
+				DeviceVO deviceVO = deviceService.getOneDevice(DID);
+				deviceVO.setMid(username);
+				deviceService.updateDevice(deviceVO);
+				
+				
+				memVO.setAdd_life_status(1);
+				new MemService().updateMem(memVO);
+			}
+			
+			req.getSession().setAttribute("memVO", memVO);
 			
 			jsonObject.put("state", "1");
-			jsonObject.put("type", machineStr);
-			req.getSession().setAttribute("memVO", memVO);
-			memVO.setAdd_life_status(1);
-			new MemService().updateMem(memVO);
+			jsonObject.put("type", machineStr);			
+			
 			System.out.println("verification OK");
 		}else if((password.equals(memVO.getPassword()) && (memVO.getVerification() != 10))) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
